@@ -7,27 +7,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
-// ─── Ordered-dither overlay for the blueprint button ───────────────────────
-// Classic 4x4 Bayer matrix, rendered as hard-edged 4px navy squares (not
-// soft dots) so it reads as a technical print-screen/pixel texture rather
-// than a photo. Multiply-blended over the button image: it breaks up the
-// source render's smooth gradients (masking its low-res softness) while
-// adding the harsh-edge, schematic grain that matches the blueprint theme.
-const BAYER_4X4 = [
-  [0, 8, 2, 10],
-  [12, 4, 14, 6],
-  [3, 11, 1, 9],
-  [15, 7, 13, 5],
-] as const;
-
-const ditherCellOpacity = (v: number) => (0.12 + (v / 15) * 0.55).toFixed(2);
-
-const DITHER_TILE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">${BAYER_4X4.map((row, y) =>
-  row.map((v, x) => `<rect x="${x * 4}" y="${y * 4}" width="4" height="4" fill="#0C143F" fill-opacity="${ditherCellOpacity(v)}"/>`).join(''),
-).join('')}</svg>`;
-
-const DITHER_BACKGROUND = `url("data:image/svg+xml,${encodeURIComponent(DITHER_TILE_SVG)}")`;
-
 /**
  * The apply CTA: the ACE v1.0 blueprint sheet (ace-group-parts_3) is the
  * button. On desktop it arrives covered by piles of loose Ace parts
@@ -148,20 +127,6 @@ export const CtaSection = () => {
                 height={587}
                 sizes="(max-width: 768px) 92vw, 720px"
                 style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-
-              {/* Ordered-dither texture, always on — masks the source
-                  render's softness and reads as a printed schematic screen */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  backgroundImage: DITHER_BACKGROUND,
-                  backgroundSize: '16px 16px',
-                  backgroundRepeat: 'repeat',
-                  mixBlendMode: 'multiply',
-                  imageRendering: 'pixelated',
-                }}
               />
 
               {/* Red tint sweeps in on hover */}
