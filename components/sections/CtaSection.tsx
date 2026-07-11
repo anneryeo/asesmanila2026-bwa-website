@@ -25,7 +25,13 @@ export const CtaSection = () => {
     const update = () => setDesktop(mq.matches);
     update();
     mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
+    // Some environments (emulated viewports, older WebKit) don't reliably
+    // fire matchMedia change events — resize is the belt to that braces.
+    window.addEventListener('resize', update, { passive: true });
+    return () => {
+      mq.removeEventListener('change', update);
+      window.removeEventListener('resize', update);
+    };
   }, []);
 
   // Parts cover the sheet only on desktop; hover (or keyboard focus) parts them.
@@ -65,17 +71,15 @@ export const CtaSection = () => {
           transition={{ duration: 0.6, ease: easeOut, delay: 0.1 }}
           className="relative mt-[40px] flex items-center justify-center"
         >
-          {/* Left cover parts */}
-          <motion.div
+          {/* Left cover parts — plain CSS transition (framer's animate prop
+              stalls on these after hydration; inline style updates don't). */}
+          <div
             aria-hidden="true"
             className="pointer-events-none absolute left-0 top-1/2 z-20 w-[38%] max-w-[380px] lg:w-[34%]"
-            initial={false}
-            animate={{
-              x: parted ? '-58%' : '-8%',
-              y: '-50%',
-              rotate: parted ? -10 : -4,
+            style={{
+              transform: `translate(${parted ? '-58%' : '-8%'}, -50%) rotate(${parted ? -10 : -4}deg)`,
+              transition: reduceMotion ? 'none' : 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
             }}
-            transition={{ duration: reduceMotion ? 0 : 0.55, ease: easeOut }}
           >
             <Image
               src="/images/ace-group-parts_1.png"
@@ -85,19 +89,16 @@ export const CtaSection = () => {
               sizes="(max-width: 1024px) 40vw, 380px"
               style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}
             />
-          </motion.div>
+          </div>
 
           {/* Right cover parts — mirrored copy */}
-          <motion.div
+          <div
             aria-hidden="true"
             className="pointer-events-none absolute right-0 top-1/2 z-20 w-[38%] max-w-[380px] lg:w-[34%]"
-            initial={false}
-            animate={{
-              x: parted ? '58%' : '8%',
-              y: '-50%',
-              rotate: parted ? 10 : 4,
+            style={{
+              transform: `translate(${parted ? '58%' : '8%'}, -50%) rotate(${parted ? 10 : 4}deg)`,
+              transition: reduceMotion ? 'none' : 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
             }}
-            transition={{ duration: reduceMotion ? 0 : 0.55, ease: easeOut }}
           >
             <Image
               src="/images/ace-group-parts_1.png"
@@ -107,7 +108,7 @@ export const CtaSection = () => {
               sizes="(max-width: 1024px) 40vw, 380px"
               style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}
             />
-          </motion.div>
+          </div>
 
           {/* The button itself */}
           <Link
@@ -119,11 +120,13 @@ export const CtaSection = () => {
             onFocus={() => setHovered(true)}
             onBlur={() => setHovered(false)}
           >
-            <motion.div
+            <div
               className="relative overflow-hidden"
-              animate={{ scale: hovered && !reduceMotion ? 1.02 : 1 }}
-              transition={{ duration: 0.3, ease: easeOut }}
-              style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}
+              style={{
+                boxShadow: '0 30px 80px rgba(0,0,0,0.45)',
+                transform: hovered && !reduceMotion ? 'scale(1.02)' : 'scale(1)',
+                transition: reduceMotion ? 'none' : 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
+              }}
             >
               <Image
                 src="/images/ace-group-parts_3.png"
@@ -166,7 +169,7 @@ export const CtaSection = () => {
                   </svg>
                 </span>
               </div>
-            </motion.div>
+            </div>
           </Link>
         </motion.div>
 
