@@ -13,6 +13,8 @@ const NAV_LINKS = [
   { label: 'Projects',     href: '/#projects' },
   { label: 'FAQs',         href: '/#faqs' },
   { label: 'Ship Tickets', href: '/shiptickets' },
+  // Back to the mothership: the main asesmanila.com site.
+  { label: 'Main',         href: 'https://www.asesmanila.com' },
 ] as const;
 
 const NAV_COLORS = {
@@ -164,13 +166,15 @@ export function Nav() {
             height: NAV_SIZES.headerHeight,
           }}
         >
-          {/* Logo */}
+          {/* Logo: back to this subdomain's hero. From other routes it
+              navigates home; on the home page it smooth-scrolls to the top. */}
           <Link
             href="/"
             aria-label="Build with ASES - back to top"
             onClick={event => {
-              event.preventDefault();
               setOpen(false);
+              if (window.location.pathname !== '/') return; // let Next navigate home
+              event.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
               window.history.replaceState(null, '', '/');
             }}
@@ -396,8 +400,9 @@ export function Nav() {
                   href="/"
                   aria-label="Build with ASES - back to top"
                   onClick={event => {
-                    event.preventDefault();
                     setOpen(false);
+                    if (window.location.pathname !== '/') return; // let Next navigate home
+                    event.preventDefault();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     window.history.replaceState(null, '', '/');
                   }}
