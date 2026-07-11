@@ -3,6 +3,7 @@ import { Footer } from '@/components/sections/Footer';
 import { BwaIntro } from '@/components/sections/BwaIntro';
 import { Hero } from '@/components/sections/Hero';
 import { BuildManifesto } from '@/components/sections/BuildManifesto';
+import { FloatingParts } from '@/components/sections/FloatingParts';
 import { ProjectsSection } from '@/components/sections/ProjectsSection';
 import { FaqSection } from '@/components/sections/FaqSection';
 import { CtaSection } from '@/components/sections/CtaSection';
@@ -139,12 +140,17 @@ export default async function BuildWithASESPage() {
       <BwaIntro />
       <Nav />
       <main>
-        <Hero heading={content.hero.heading} subheading={content.hero.subheading} />
-        <BuildManifesto
-          adjectives={content.manifesto.adjectives}
-          actions={content.manifesto.actions}
-          purposes={content.manifesto.purposes}
-        />
+        {/* Hero + manifesto share one relative wrapper so the floating Ace
+            parts drift seamlessly across BOTH sections (and only those two). */}
+        <div className="relative overflow-hidden">
+          <Hero heading={content.hero.heading} subheading={content.hero.subheading} />
+          <BuildManifesto
+            adjectives={content.manifesto.adjectives}
+            actions={content.manifesto.actions}
+            purposes={content.manifesto.purposes}
+          />
+          <FloatingParts />
+        </div>
         <ProjectsSection
           heading={content.projects.heading}
           items={content.projects.items}
