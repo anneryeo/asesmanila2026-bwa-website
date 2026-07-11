@@ -101,7 +101,7 @@ export const CtaSection = () => {
               width={977}
               height={878}
               sizes="(max-width: 1024px) 40vw, 380px"
-              style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 20px 40px rgba(12,20,63,0.28))' }}
+              style={{ width: '100%', height: 'auto' }}
             />
           </div>
 
@@ -120,7 +120,7 @@ export const CtaSection = () => {
               width={977}
               height={878}
               sizes="(max-width: 1024px) 40vw, 380px"
-              style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)', filter: 'drop-shadow(0 20px 40px rgba(12,20,63,0.28))' }}
+              style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)' }}
             />
           </div>
 
@@ -137,7 +137,6 @@ export const CtaSection = () => {
             <div
               className="relative overflow-hidden"
               style={{
-                boxShadow: '0 30px 80px rgba(12,20,63,0.35)',
                 transform: hovered && !reduceMotion ? 'scale(1.02)' : 'scale(1)',
                 transition: reduceMotion ? 'none' : 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
