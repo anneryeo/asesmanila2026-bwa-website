@@ -5,16 +5,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const SECTION_HREFS = {
-  sessions: '#sessions',
-  form: '#form',
-  gallery: '#gallery',
-} as const;
+// The application form lives on its own /application page now; anchors point
+// at home-page sections and fall back to full navigation from other routes.
+const APPLY_HREF = '/application';
 
 const NAV_LINKS = [
-  { label: 'Sessions', href: SECTION_HREFS.sessions },
-  { label: 'Form',     href: SECTION_HREFS.form },
-  { label: 'Gallery',  href: SECTION_HREFS.gallery },
+  { label: 'Projects',     href: '/#projects' },
+  { label: 'FAQs',         href: '/#faqs' },
+  { label: 'Ship Tickets', href: '/shiptickets' },
 ] as const;
 
 const NAV_COLORS = {
@@ -71,10 +69,19 @@ export function Nav() {
   const [overLightSection, setOverLightSection] = useState(true);
 
   const scrollToSection = (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
-    const targetId = href.replace('#', '');
+    const targetId = href.split('#')[1];
+    if (!targetId) {
+      // Plain route link (e.g. /shiptickets) — let Next handle it.
+      setOpen(false);
+      return;
+    }
     const target = document.getElementById(targetId);
-
-    if (!target) return;
+    // Anchor target isn't on this page (we're on /application etc.) — let the
+    // browser navigate to /#section normally.
+    if (!target) {
+      setOpen(false);
+      return;
+    }
 
     event.preventDefault();
     setOpen(false);
@@ -227,8 +234,8 @@ export function Nav() {
                 brand SVG buttons (#D33C24 fill, white Cocogoose text). */}
             <Link
               className="button-float-hover"
-              href={SECTION_HREFS.form}
-              onClick={scrollToSection(SECTION_HREFS.form)}
+              href={APPLY_HREF}
+              onClick={() => setOpen(false)}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -249,7 +256,7 @@ export function Nav() {
               onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#BF351E'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#D33C24'; }}
             >
-              Register
+              Apply
             </Link>
           </div>
 
@@ -464,8 +471,8 @@ export function Nav() {
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: NAV_SIZES.mobileDrawerActionGap }}
                 >
                   <Link
-                    href={SECTION_HREFS.form}
-                    onClick={scrollToSection(SECTION_HREFS.form)}
+                    href={APPLY_HREF}
+                    onClick={() => setOpen(false)}
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontSize: NAV_SIZES.mobileTextFontSize,
@@ -480,7 +487,7 @@ export function Nav() {
                       cursor: 'pointer',
                     }}
                   >
-                    Register
+                    Apply
                   </Link>
                 </motion.div>
               </div>

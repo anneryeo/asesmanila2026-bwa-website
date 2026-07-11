@@ -1,15 +1,23 @@
 import { Nav } from '@/components/sections/Nav';
-import { BuildWithASES } from '@/components/pages/BuildWithASES';
 import { Footer } from '@/components/sections/Footer';
 import { BwaIntro } from '@/components/sections/BwaIntro';
+import { Hero } from '@/components/sections/Hero';
+import { BuildManifesto } from '@/components/sections/BuildManifesto';
+import { ProjectsSection } from '@/components/sections/ProjectsSection';
+import { FaqSection } from '@/components/sections/FaqSection';
+import { CtaSection } from '@/components/sections/CtaSection';
+import { getBwaContent } from '@/lib/sanity/getBwaContent';
 import { siteConfig, siteUrl } from '@/lib/site';
 import type { Metadata } from 'next';
+
+// Re-check Sanity for fresh content at most once a minute.
+export const revalidate = 60;
 
 // This standalone site's root IS the Build with ASES page.
 const pageUrl = siteUrl;
 
 export const metadata: Metadata = {
-  title: 'Build with ASES — Show Us What You Are Building',
+  title: "Build with ASES — Where Students Show What They're Building",
   description:
     'Build with ASES is a builder session by ASES Manila where students show the projects they are actually building and get honest feedback in a room of founders, operators, and the companies who hire. Apply to present or join as a watcher.',
   keywords: [...siteConfig.keywords],
@@ -29,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: pageUrl,
-    title: 'Build with ASES — Show Us What You Are Building',
+    title: "Build with ASES — Where Students Show What They're Building",
     description:
       'Bring something you are building. A room of founders and operators helps you make it sharper. Apply to present or join as a watcher.',
     siteName: siteConfig.name,
@@ -45,7 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Build with ASES — Show Us What You Are Building',
+    title: "Build with ASES — Where Students Show What They're Building",
     description:
       'Bring something you are building. Get honest feedback from founders, operators, and the people who hire.',
     images: ['/images/bwa/bwa-01.webp'],
@@ -100,7 +108,7 @@ const eventSeriesSchema = {
     price: '0',
     priceCurrency: 'PHP',
     availability: 'https://schema.org/LimitedAvailability',
-    url: pageUrl,
+    url: `${pageUrl}application`,
     description: 'Free for ASES members. Paid entry for non-members.',
   },
 };
@@ -117,7 +125,9 @@ const webPageSchema = {
   inLanguage: 'en-PH',
 };
 
-export default function BuildWithASESPage() {
+export default async function BuildWithASESPage() {
+  const content = await getBwaContent();
+
   return (
     <>
       <script
@@ -129,7 +139,19 @@ export default function BuildWithASESPage() {
       <BwaIntro />
       <Nav />
       <main>
-        <BuildWithASES />
+        <Hero heading={content.hero.heading} subheading={content.hero.subheading} />
+        <BuildManifesto
+          adjectives={content.manifesto.adjectives}
+          steadyLine={content.manifesto.steadyLine}
+          purposes={content.manifesto.purposes}
+        />
+        <ProjectsSection
+          heading={content.projects.heading}
+          subheading={content.projects.subheading}
+          items={content.projects.items}
+        />
+        <FaqSection heading={content.faq.heading} items={content.faq.items} />
+        <CtaSection />
       </main>
       <Footer />
     </>
