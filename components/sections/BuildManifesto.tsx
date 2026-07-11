@@ -155,7 +155,7 @@ export const BuildManifesto = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: easeOut }}
-          className="flex flex-col gap-[18px] text-left font-display text-[clamp(17px,4vw,52px)] font-[350] leading-[1.14] tracking-[-0.015em] text-[#0C143F]"
+          className="flex flex-col gap-[18px] text-left font-display text-[clamp(16px,4vw,52px)] font-[350] leading-[1.14] tracking-[-0.015em] text-[#0C143F]"
         >
           <p className="m-0 whitespace-nowrap">
             Build like <SlotWord words={adjectives} />

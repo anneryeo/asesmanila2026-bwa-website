@@ -86,7 +86,7 @@ export const FALLBACK_CONTENT: BwaContent = {
       'scared',
       'not ready',
       'winging it',
-      'in over your head',
+      'terrified',
     ],
     purposes: [
       'talk is cheap',
