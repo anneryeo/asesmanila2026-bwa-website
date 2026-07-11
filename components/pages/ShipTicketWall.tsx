@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { STATUS_META, TicketCard } from '@/components/ui/TicketCard';
+import { Emphasis } from '@/components/ui/Emphasis';
 import type { ShipTicket } from '@/content/bwaContent';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -155,7 +156,7 @@ const StampPanel = () => {
               >
                 <div className="min-w-0">
                   <p className="m-0 font-display text-[14px] font-[350] leading-[1.5] text-[#0C143F]">
-                    “{t.pledge}”
+                    “<Emphasis text={t.pledge} />”
                   </p>
                   <p className="mb-0 mt-1 font-subhead text-[11px] font-semibold text-[rgba(12,20,63,0.5)]">
                     Pledged at {t.episode}

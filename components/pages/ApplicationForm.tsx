@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Emphasis } from '@/components/ui/Emphasis';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -975,7 +976,7 @@ export function ApplicationForm() {
                             }}
                           >
                             <p style={{ margin: 0, fontFamily: 'var(--font-cocogoose)', fontWeight: 350, fontSize: 14, lineHeight: 1.5, color: NAVY_INK }}>
-                              &ldquo;{t.pledge}&rdquo;
+                              &ldquo;<Emphasis text={t.pledge} />&rdquo;
                             </p>
                             <p style={{ margin: 0, fontFamily: 'var(--font-montserrat)', fontSize: 11, fontWeight: 600, color: 'rgba(12,20,63,0.5)' }}>
                               Pledged at {t.episode}

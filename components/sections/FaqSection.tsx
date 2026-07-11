@@ -60,7 +60,7 @@ export const FaqSection = ({
             FAQ
           </p>
           <h2 className="m-0 font-display text-[clamp(26px,4vw,40px)] font-[350] leading-none tracking-[-0.02em] text-[#071F6B]">
-            {heading}
+            <Emphasis text={heading} />
           </h2>
         </motion.div>
 
