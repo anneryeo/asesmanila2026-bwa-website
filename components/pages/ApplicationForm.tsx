@@ -8,87 +8,108 @@ import { motion, AnimatePresence } from 'framer-motion';
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const PAGE_COPY = {
-  badge: "ASES Manila '25 to '26",
+  badge: 'Build with ASES · ASES Manila',
   heading: "Show us what you're building.",
   subhead:
-    "Bring the thing you've been hacking on at 2am. We'll put it in front of a room that actually gives a damn — founders, operators, and the people who hire — and they'll help you make it sharper.",
-  rolePresent: "I'm presenting",
-  roleWatch: "I'm watching",
-  roleSubPresent: "Show your build live and defend it. Honest feedback, no clapping for the sake of it.",
-  roleSubWatch: "Watch other builders get tested and meet people shipping the same way you are.",
-  submitPresenter: "Send it in",
-  submitWatcher: "Save my spot",
-  stepTrack: "01 — Pick your track",
-  stepSession: "02 — Which session?",
-  stepDetails: "03 — The details",
-  stepShipTicket: "04 — Ship ticket",
+    "Bring the thing you've been hacking on at 2am. We'll put it in front of a room that actually gives a damn: founders, operators, and the people who hire. They'll help you make it sharper.",
+  trackPresent: "I'm presenting",
+  trackWatch: "I'm watching",
+  trackPresentAgain: 'Presenting again',
+  trackWatchAgain: 'Watching again',
+  trackTicket: 'Just posting a ship ticket',
+  beenBefore: 'Been to an episode before?',
+  roleSubPresent: 'Show your build live and defend it. Honest feedback, no clapping for the sake of it.',
+  roleSubWatch: 'Watch other builders get tested and meet people shipping the same way you are.',
+  roleSubPresentAgain: "Back for another round. We'll confirm your email against past episode lists, then it's the usual form.",
+  roleSubWatchAgain: "Good to have you back in the room. We'll confirm your email first, then save your spot.",
+  roleSubTicket: 'A public pledge for the wall: what will you ship by the next episode? For people who have been in the room.',
+  submitPresenter: 'Send it in',
+  submitWatcher: 'Save my spot',
+  submitTicket: 'Put it on the wall',
+  stepTrack: '01 · Pick your track',
+  stepVerify: '02 · Confirm your email',
+  stepSession: (n: string) => `${n} · Which session?`,
+  stepDetails: (n: string) => `${n} · The details`,
+  stepTicket: '03 · Your ticket',
+  verifyLabel: 'Your email',
+  verifyHint: "We'll check it against past episode lists so we know it's really you.",
+  verifyButton: 'Find me',
+  verifyChecking: 'Checking the episode lists…',
+  verifyFoundPrefix: 'Found you',
+  verifyNotFoundAgain:
+    "We couldn't find that email in any past episode. If this is your first time, use I'm presenting or I'm watching above.",
+  verifyNotFoundTicket:
+    "We couldn't find that email on any episode list. Ship tickets are for people who've been in the room. Register above, show up, then come post one.",
+  switchHint: "Looks like you've been to an episode before.",
   successPresenter:
-    "You're in the queue. We'll review what you're building and reach out before the session — come ready to be honest about where you really are. We'll also ping you when the next one drops.",
+    "You're in the queue. We'll review what you're building and reach out before the session. Come ready to be honest about where you really are. We'll also ping you when the next one drops.",
   successWatcher:
-    "Got it. We'll email your confirmation before the session — spots are limited, so hang tight. We'll keep you in the loop for every Build with ASES after this one too.",
-  successTicket: "Your ship ticket is on the wall. See you at the next episode — bring receipts.",
+    "Got it. We'll email your confirmation before the session. Spots are limited, so hang tight. We'll keep you in the loop for every Build with ASES after this one too.",
+  successTicket: "Ticket's on the wall. See you at the next episode. Bring receipts.",
   sessionFallback: "No upcoming sessions just yet. Drop your details below and we'll pull you in for the next one.",
   placeholderCuriosity: 'e.g. "A tool that helps freelancers invoice international clients in USD."',
   placeholderQ1: "e.g. \"Is the problem I'm solving actually real, or am I imagining it?\"",
   placeholderQ2: 'e.g. "Would you pay for this? What would make you not?"',
   placeholderQ3: "e.g. \"What's the one thing that would kill this in 6 months?\"",
-  placeholderShipTicket: 'e.g. "Finish my MVP and put it in front of 5 real users before the next episode."',
+  placeholderPledge: 'e.g. "Finish my MVP and put it in front of 5 real users before the next episode."',
   charLimit: 160,
-  labelSession: "Which session?",
-  labelName: "Name",
-  labelEmail: "Email",
-  labelProjectName: "What are you building?",
-  labelOneLiner: "One-liner",
+  labelName: 'Name',
+  labelEmail: 'Email',
+  labelProjectName: 'What are you building?',
+  labelOneLiner: 'One-liner',
   labelOneLinerHint: "One sentence. What is it and who's it for.",
-  labelStage: "Stage",
-  labelStageIdea: "Idea — no code yet",
-  labelStagePrototype: "Prototype — early build",
-  labelStageLive: "Live — people are using it",
-  labelLink: "Link or deck",
-  labelLinkHint: "Site, deck, repo, or demo — whatever shows the build. This one's required.",
-  labelQuestions: "The question you want answered by the end of the night",
-  labelQuestionsHint: "The whole point of the room. Make it count.",
-  labelMembership: "Are you an ASES member?",
-  labelMembershipMember: "Yes — ASES member",
-  labelMembershipNon: "Not yet",
-  membershipNote: "Watching is free for ASES members. Non-members pay a small door fee — we'll email the details.",
-  labelCuriosity: "What kind of build are you hoping to see? (optional)",
-  labelNotifyFuture: "Notify me when the next Build with ASES drops",
-  labelShipTicket: "Post a public ship ticket (optional)",
-  shipTicketHint:
-    "A public pledge for the wall: what will you have shipped by the next episode? It goes up on the ship ticket wall with your name, and you get to stamp it done next time.",
-  sessionLoading: "Loading sessions…",
-  submitting: "Sending…",
-  errorGeneric: "Something went wrong. Please try again.",
-  errorEmailInvalid: "Please enter a valid email address.",
-  errorRequired: "This field is required.",
-  errorNoSession: "Pick a session so we know where to slot you.",
-  errorMembership: "Let us know so we can sort out entry.",
-  backHome: "← Back to Build with ASES",
-  galleryLabel: "Scenes from past sessions",
+  labelStage: 'Stage',
+  labelStageIdea: 'Idea, no code yet',
+  labelStagePrototype: 'Prototype, early build',
+  labelStageLive: 'Live, people are using it',
+  labelLink: 'Link or deck',
+  labelLinkHint: "Site, deck, repo, or demo. Whatever shows the build. This one's required.",
+  labelQuestions: 'The question you want answered by the end of the night',
+  labelQuestionsHint: 'The whole point of the room. Make it count.',
+  labelMembership: 'Are you an ASES member?',
+  labelMembershipMember: 'Yes, ASES member',
+  labelMembershipNon: 'Not yet',
+  membershipNote: "Watching is free for ASES members. Non-members pay a small door fee. We'll email the details.",
+  labelCuriosity: 'What kind of build are you hoping to see? (optional)',
+  labelNotifyFuture: 'Notify me when the next Build with ASES drops',
+  labelTicketName: 'Your name',
+  labelTicketNameHint: 'Shown publicly on the wall next to your pledge.',
+  labelTicketProject: 'Project (optional)',
+  labelTicketPledge: 'Your pledge',
+  labelTicketPledgeHint: 'One sentence. It goes up on the public wall and you stamp it done next episode.',
+  sessionLoading: 'Loading sessions…',
+  submitting: 'Sending…',
+  errorGeneric: 'Something went wrong. Please try again.',
+  errorEmailInvalid: 'Please enter a valid email address.',
+  errorRequired: 'This field is required.',
+  errorNoSession: 'Pick a session so we know where to slot you.',
+  errorMembership: 'Let us know so we can sort out entry.',
+  errorVerifyFirst: 'Confirm your email above first.',
+  backHome: '← Back to Build with ASES',
+  galleryLabel: 'Scenes from past sessions',
 } as const;
 
 // Playful "I see what you're doing" bubbles for junk in the link/deck field.
-// Always end on a CTA — never a scolding.
+// Always end on a CTA, never a scolding.
 const LINK_JUNK_MESSAGES = [
-  "Hey, I see what you're doing. Drop the real link — we actually want to see it.",
-  "A lone dot? Bold. Now paste the deck or demo so we can geek out over it.",
+  "Hey, I see what you're doing. Drop the real link, we actually want to see it.",
+  'A lone dot? Bold. Now paste the deck or demo so we can geek out over it.',
   "We both know that's not a link. Give us something clickable.",
-  "Nice try. That's not it — show us the build: site, repo, or deck.",
+  "Nice try. That's not it. Show us the build: site, repo, or deck.",
   "C'mon, you built something cool. Link it so the room can see it.",
 ] as const;
 
 const LINK_EMPTY_MESSAGE =
-  "Presenters need a link — site, deck, repo, or demo. Show us the build.";
+  'Presenters need a link: site, deck, repo, or demo. Show us the build.';
 
-// Ace pokes his head out and whispers one of these — rotates each page visit.
+// Ace pokes his head out and whispers one of these. Rotates each page visit.
 const ACE_PEEK_LINES = [
-  "psst… you new here?",
+  'psst… you new here?',
   "psst… don't know what Build with ASES is?",
   "first time? c'mere, I'll explain.",
-  "lost? tap me real quick.",
-  "wanna know what this is?",
-  "10-second rundown? this way.",
+  'lost? tap me real quick.',
+  'wanna know what this is?',
+  '10-second rundown? this way.',
 ] as const;
 
 const GALLERY = [
@@ -168,17 +189,20 @@ const STEP_STYLE: React.CSSProperties = {
 };
 
 type Session = { id: string; label: string };
-type Role = 'presenter' | 'watcher';
+type Track = 'presenter' | 'watcher' | 'presenter-again' | 'watcher-again' | 'shipticket';
 type Membership = '' | 'member' | 'non-member';
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
 
-/** What the lookup endpoint knows about a returning builder. */
-interface ReturningInfo {
-  found: boolean;
-  role?: string;
-  name?: string;
-  lastSession?: string;
+/** Email verification against the Google Sheet episode lists. */
+interface VerifyState {
+  status: 'idle' | 'checking' | 'found' | 'notfound';
+  email: string;
+  name: string;
+  role: string;
+  lastSession: string;
 }
+
+const VERIFY_IDLE: VerifyState = { status: 'idle', email: '', name: '', role: '', lastSession: '' };
 
 interface PresenterFields {
   name: string;
@@ -242,7 +266,7 @@ function Corners() {
 }
 
 export function ApplicationForm() {
-  const [role, setRole] = useState<Role | null>(null);
+  const [track, setTrack] = useState<Track | null>(null);
   const [sessionId, setSessionId] = useState('');
   const [sessions, setSessions] = useState<Session[]>([]);
   const [sessionsLoading, setSessionsLoading] = useState(true);
@@ -250,16 +274,23 @@ export function ApplicationForm() {
   const [errorMessage, setErrorMessage] = useState('');
   const [attempted, setAttempted] = useState(false);
   const [linkBubble, setLinkBubble] = useState('');
-
   const [qCount, setQCount] = useState(1);
 
-  // Duplicate-check / returning-builder flow
-  const [returning, setReturning] = useState<ReturningInfo>({ found: false });
-  const checkedEmail = useRef('');
+  // Email verification for the returning + ship ticket tracks
+  const [verify, setVerify] = useState<VerifyState>(VERIFY_IDLE);
+  const [verifyInput, setVerifyInput] = useState('');
+  const [verifyAttempted, setVerifyAttempted] = useState(false);
 
-  // Public ship ticket (optional, both tracks)
-  const [shipTicket, setShipTicket] = useState('');
-  const [ticketPosted, setTicketPosted] = useState(false);
+  // Gentle hint on the first-timer tracks when the email is recognized
+  const [hintFound, setHintFound] = useState(false);
+  const hintChecked = useRef('');
+
+  // Ship ticket fields (own track)
+  const [ticketName, setTicketName] = useState('');
+  const [ticketProject, setTicketProject] = useState('');
+  const [ticketPledge, setTicketPledge] = useState('');
+  const [ticketAttempted, setTicketAttempted] = useState(false);
+  const [ticketError, setTicketError] = useState('');
 
   const [presenter, setPresenter] = useState<PresenterFields>({
     name: '', contact: '', projectName: '', oneLiner: '',
@@ -282,18 +313,79 @@ export function ApplicationForm() {
 
   const selectedSession = sessions.find(s => s.id === sessionId);
 
-  /** Ask the backend if this email has applied before (any session). */
-  async function checkReturning(email: string) {
+  const isReturning = track === 'presenter-again' || track === 'watcher-again';
+  const needsVerify = isReturning || track === 'shipticket';
+  const verified = verify.status === 'found';
+  const role: 'presenter' | 'watcher' | null =
+    track === 'presenter' || track === 'presenter-again' ? 'presenter'
+    : track === 'watcher' || track === 'watcher-again' ? 'watcher'
+    : null;
+  // Application details show immediately for first-timers, after verification
+  // for the returning tracks.
+  const showApplication = role !== null && (!isReturning || verified);
+
+  const sessionStepLabel = PAGE_COPY.stepSession(needsVerify ? '03' : '02');
+  const detailsStepLabel = PAGE_COPY.stepDetails(needsVerify ? '04' : '03');
+
+  function pickTrack(next: Track) {
+    setTrack(next);
+    setAttempted(false);
+    setTicketAttempted(false);
+    setErrorMessage('');
+    setSubmitState('idle');
+    setTicketError('');
+  }
+
+  /** Look an email up against the sheet lists (returning + ticket tracks). */
+  async function runVerify() {
+    const email = verifyInput.trim().toLowerCase();
+    setVerifyAttempted(true);
+    if (!EMAIL_REGEX.test(email)) return;
+    setVerify({ ...VERIFY_IDLE, status: 'checking', email });
+    try {
+      const res = await fetch(`/api/bwa-lookup?email=${encodeURIComponent(email)}`);
+      const data = await res.json() as { found?: boolean; role?: string; name?: string; lastSession?: string };
+      if (data?.found) {
+        setVerify({ status: 'found', email, name: data.name ?? '', role: data.role ?? '', lastSession: data.lastSession ?? '' });
+        // Identify them: prefill the editable name fields.
+        if (data.name) {
+          setTicketName(n => n || data.name!);
+          setPresenter(p => ({ ...p, name: p.name || data.name!, contact: email }));
+          setWatcher(w => ({ ...w, name: w.name || data.name!, email }));
+        } else {
+          setPresenter(p => ({ ...p, contact: email }));
+          setWatcher(w => ({ ...w, email }));
+        }
+      } else {
+        setVerify({ ...VERIFY_IDLE, status: 'notfound', email });
+      }
+    } catch {
+      setVerify({ ...VERIFY_IDLE, status: 'notfound', email });
+    }
+  }
+
+  /** First-timer tracks: quietly check the email on blur and offer a switch. */
+  async function hintCheck(email: string) {
     const clean = email.trim().toLowerCase();
-    if (!EMAIL_REGEX.test(clean) || checkedEmail.current === clean) return;
-    checkedEmail.current = clean;
+    if (!EMAIL_REGEX.test(clean) || hintChecked.current === clean) return;
+    hintChecked.current = clean;
     try {
       const res = await fetch(`/api/bwa-lookup?email=${encodeURIComponent(clean)}`);
-      const data = await res.json() as ReturningInfo;
-      setReturning(data?.found ? data : { found: false });
+      const data = await res.json() as { found?: boolean; name?: string; role?: string; lastSession?: string };
+      setHintFound(!!data?.found);
+      if (data?.found) {
+        setVerify({ status: 'found', email: clean, name: data.name ?? '', role: data.role ?? '', lastSession: data.lastSession ?? '' });
+        setVerifyInput(clean);
+      }
     } catch {
-      setReturning({ found: false });
+      setHintFound(false);
     }
+  }
+
+  function switchToReturning() {
+    if (!role) return;
+    pickTrack(role === 'presenter' ? 'presenter-again' : 'watcher-again');
+    setHintFound(false);
   }
 
   function flagLink() {
@@ -306,10 +398,11 @@ export function ApplicationForm() {
 
   function isValid(): boolean {
     if (!role || !sessionId) return false;
+    if (isReturning && !verified) return false;
     if (role === 'presenter') {
       return (
         presenter.name.trim().length > 0 &&
-        EMAIL_REGEX.test(presenter.contact) &&
+        EMAIL_REGEX.test(isReturning ? verify.email : presenter.contact) &&
         presenter.projectName.trim().length > 0 &&
         presenter.oneLiner.trim().length > 0 &&
         isPlausibleLink(presenter.link) &&
@@ -318,13 +411,14 @@ export function ApplicationForm() {
     }
     return (
       watcher.name.trim().length > 0 &&
-      EMAIL_REGEX.test(watcher.email) &&
+      EMAIL_REGEX.test(isReturning ? verify.email : watcher.email) &&
       watcher.membership !== ''
     );
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!role) return;
     setAttempted(true);
     if (role === 'presenter' && !isPlausibleLink(presenter.link)) flagLink();
     if (!isValid()) return;
@@ -332,8 +426,8 @@ export function ApplicationForm() {
     setSubmitState('submitting');
     setErrorMessage('');
 
-    const name = role === 'presenter' ? presenter.name : watcher.name;
-    const email = role === 'presenter' ? presenter.contact : watcher.email;
+    const email = isReturning ? verify.email : role === 'presenter' ? presenter.contact : watcher.email;
+    const returning = isReturning || hintFound;
 
     const payload =
       role === 'presenter'
@@ -342,7 +436,7 @@ export function ApplicationForm() {
             sessionId,
             sessionLabel: selectedSession?.label ?? '',
             name: presenter.name,
-            contact: presenter.contact,
+            contact: email,
             projectName: presenter.projectName,
             oneLiner: presenter.oneLiner,
             stage: presenter.stage,
@@ -350,20 +444,18 @@ export function ApplicationForm() {
             questions: [presenter.q1, presenter.q2, presenter.q3].filter(Boolean),
             questionsText: [presenter.q1, presenter.q2, presenter.q3].filter(Boolean).join(' | '),
             notifyFuture: presenter.notifyFuture,
-            returning: returning.found,
-            shipTicket: shipTicket.trim(),
+            returning,
           }
         : {
             role,
             sessionId,
             sessionLabel: selectedSession?.label ?? '',
             name: watcher.name,
-            email: watcher.email,
+            email,
             membership: watcher.membership,
             curiosity: watcher.curiosity,
             notifyFuture: watcher.notifyFuture,
-            returning: returning.found,
-            shipTicket: shipTicket.trim(),
+            returning,
           };
 
     try {
@@ -374,28 +466,10 @@ export function ApplicationForm() {
       });
       const data = await res.json() as { success?: boolean; duplicate?: boolean; message?: string };
       if (data.success) {
-        // Fire-and-forget: put the ship ticket on the public wall.
-        if (shipTicket.trim()) {
-          setTicketPosted(true);
-          fetch('/api/ship-ticket', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name,
-              email,
-              project: role === 'presenter' ? presenter.projectName : '',
-              episode: selectedSession?.label ?? '',
-              pledge: shipTicket.trim(),
-            }),
-          }).catch(() => { /* wall write is best-effort */ });
-        }
         setSubmitState('success');
       } else if (data.duplicate) {
-        // Already on the list for THIS session — treat as a returning builder,
-        // not an error wall.
-        setReturning(r => ({ ...r, found: true, lastSession: selectedSession?.label ?? r.lastSession }));
         setSubmitState('error');
-        setErrorMessage(data.message ?? 'You\'re already on the list for this session — pick a different one, or just post a ship ticket below.');
+        setErrorMessage(data.message ?? "You're already on the list for this session. Pick a different one, or post a ship ticket instead.");
       } else {
         setSubmitState('error');
         setErrorMessage(data.message ?? PAGE_COPY.errorGeneric);
@@ -403,6 +477,38 @@ export function ApplicationForm() {
     } catch {
       setSubmitState('error');
       setErrorMessage(PAGE_COPY.errorGeneric);
+    }
+  }
+
+  /** Ship ticket track: verified email, name, pledge. Posts to the wall. */
+  async function submitTicket() {
+    setTicketAttempted(true);
+    setTicketError('');
+    if (!verified || !ticketName.trim() || !ticketPledge.trim()) return;
+
+    setSubmitState('submitting');
+    try {
+      const res = await fetch('/api/ship-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: ticketName.trim(),
+          email: verify.email,
+          project: ticketProject.trim(),
+          episode: verify.lastSession,
+          pledge: ticketPledge.trim(),
+        }),
+      });
+      const data = await res.json() as { success?: boolean; message?: string };
+      if (data.success) {
+        setSubmitState('success');
+      } else {
+        setSubmitState('idle');
+        setTicketError(data.message ?? PAGE_COPY.errorGeneric);
+      }
+    } catch {
+      setSubmitState('idle');
+      setTicketError(PAGE_COPY.errorGeneric);
     }
   }
 
@@ -422,6 +528,10 @@ export function ApplicationForm() {
 
   /* ── success screen ── */
   if (submitState === 'success') {
+    const successCopy =
+      track === 'shipticket' ? PAGE_COPY.successTicket
+      : role === 'presenter' ? PAGE_COPY.successPresenter
+      : PAGE_COPY.successWatcher;
     return (
       <div
         className="bwa-surface"
@@ -449,24 +559,15 @@ export function ApplicationForm() {
               fontWeight: 300,
               color: NAVY_INK,
               lineHeight: 1.6,
-              marginBottom: ticketPosted ? 16 : 40,
+              marginBottom: 24,
             }}
           >
-            {role === 'presenter' ? PAGE_COPY.successPresenter : PAGE_COPY.successWatcher}
+            {successCopy}
           </p>
-          {ticketPosted && (
-            <p
-              style={{
-                fontFamily: 'var(--font-montserrat)',
-                fontSize: 14,
-                color: 'rgba(12,20,63,0.75)',
-                lineHeight: 1.6,
-                marginBottom: 28,
-              }}
-            >
-              {PAGE_COPY.successTicket}{' '}
+          {track === 'shipticket' && (
+            <p style={{ fontFamily: 'var(--font-montserrat)', fontSize: 14, marginBottom: 28 }}>
               <Link href="/shiptickets" style={{ color: '#C03418', fontWeight: 600 }}>
-                See the wall →
+                See it on the wall →
               </Link>
             </p>
           )}
@@ -485,6 +586,63 @@ export function ApplicationForm() {
       </div>
     );
   }
+
+  const trackButton = (t: Track, label: string, style: 'solid' | 'outline' | 'dashed') => {
+    const selected = track === t;
+    const base: React.CSSProperties = {
+      flex: 1,
+      padding: style === 'solid' ? '16px 20px' : '12px 16px',
+      borderRadius: 0,
+      cursor: 'pointer',
+      textAlign: 'center',
+      fontFamily: 'var(--font-cocogoose)',
+      fontSize: style === 'solid' ? 'clamp(14px, 2vw, 17px)' : 'clamp(12px, 1.7vw, 14px)',
+      fontWeight: 350,
+      letterSpacing: '0.03em',
+      lineHeight: 1,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    };
+    if (style === 'solid') {
+      Object.assign(base, {
+        background: selected ? '#D33C24' : 'rgba(211,60,36,0.72)',
+        border: selected ? `2px solid ${NAVY_INK}` : '2px solid rgba(12,20,63,0.2)',
+        color: '#ffffff',
+      });
+    } else if (style === 'outline') {
+      Object.assign(base, {
+        background: selected ? NAVY_INK : 'transparent',
+        border: selected ? `2px solid ${NAVY_INK}` : '2px solid rgba(12,20,63,0.35)',
+        color: selected ? '#ffffff' : NAVY_INK,
+      });
+    } else {
+      Object.assign(base, {
+        background: selected ? 'rgba(211,60,36,0.1)' : 'transparent',
+        border: '2px dashed rgba(211,60,36,0.65)',
+        color: '#C03418',
+      });
+    }
+    return (
+      <button key={t} type="button" onClick={() => pickTrack(t)} className="button-float-hover" style={base}>
+        {selected && (
+          <svg aria-hidden="true" viewBox="0 0 16 16" style={{ width: '0.95em', height: '0.95em', flexShrink: 0 }}>
+            <path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+        {label}
+      </button>
+    );
+  };
+
+  const trackSubcopy =
+    track === 'presenter' ? PAGE_COPY.roleSubPresent
+    : track === 'watcher' ? PAGE_COPY.roleSubWatch
+    : track === 'presenter-again' ? PAGE_COPY.roleSubPresentAgain
+    : track === 'watcher-again' ? PAGE_COPY.roleSubWatchAgain
+    : track === 'shipticket' ? PAGE_COPY.roleSubTicket
+    : '';
 
   /* ── main form ── */
   return (
@@ -516,7 +674,7 @@ export function ApplicationForm() {
               fontWeight: 700,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              color: 'rgba(12,20,63,0.55)',
+              color: '#D33C24',
               marginBottom: 10,
             }}
           >
@@ -549,7 +707,7 @@ export function ApplicationForm() {
             {PAGE_COPY.subhead}
           </p>
 
-          {/* Ace gives the rundown — collapsible, remembered so returning users aren't nagged */}
+          {/* Ace gives the rundown. Collapsible, remembered so returning users aren't nagged */}
           <AceRundown />
 
           {/* The form card: white panel with blueprint corner marks */}
@@ -566,62 +724,274 @@ export function ApplicationForm() {
 
             <form id="form" onSubmit={handleSubmit} noValidate style={{ scrollMarginTop: 96 }}>
 
-              {/* ── Role Toggle ── */}
+              {/* ── 01 · Track picker ── */}
               <div id="sessions" style={{ marginBottom: 32, scrollMarginTop: 96 }}>
                 <div style={STEP_STYLE}>{PAGE_COPY.stepTrack}</div>
-                <div
-                  style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
-                  className="sm-role-row"
-                >
-                  {(['presenter', 'watcher'] as Role[]).map(r => {
-                    const selected = role === r;
-                    return (
-                      <button
-                        key={r}
-                        type="button"
-                        onClick={() => setRole(r)}
-                        className="button-float-hover"
-                        style={{
-                          flex: 1,
-                          padding: '16px 20px',
-                          borderRadius: 0,
-                          cursor: 'pointer',
-                          textAlign: 'center',
-                          background: selected ? '#D33C24' : 'rgba(211,60,36,0.72)',
-                          border: selected ? `2px solid ${NAVY_INK}` : '2px solid rgba(12,20,63,0.2)',
-                          color: '#ffffff',
-                          fontFamily: 'var(--font-cocogoose)',
-                          fontSize: 'clamp(14px, 2vw, 17px)',
-                          fontWeight: 350,
-                          letterSpacing: '0.03em',
-                          lineHeight: 1,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 8,
-                        }}
-                      >
-                        {selected && (
-                          <svg aria-hidden="true" viewBox="0 0 16 16" style={{ width: '0.95em', height: '0.95em', flexShrink: 0 }}>
-                            <path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        )}
-                        {r === 'presenter' ? PAGE_COPY.rolePresent : PAGE_COPY.roleWatch}
-                      </button>
-                    );
-                  })}
+
+                {/* First-timer tracks */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }} className="sm-role-row">
+                  {trackButton('presenter', PAGE_COPY.trackPresent, 'solid')}
+                  {trackButton('watcher', PAGE_COPY.trackWatch, 'solid')}
                 </div>
-                {role && (
+
+                {/* Returning tracks */}
+                <div
+                  style={{
+                    marginTop: 14,
+                    fontFamily: 'var(--font-montserrat)',
+                    fontSize: 11,
+                    fontWeight: 600,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(12,20,63,0.5)',
+                    marginBottom: 8,
+                  }}
+                >
+                  {PAGE_COPY.beenBefore}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }} className="sm-role-row">
+                  {trackButton('presenter-again', PAGE_COPY.trackPresentAgain, 'outline')}
+                  {trackButton('watcher-again', PAGE_COPY.trackWatchAgain, 'outline')}
+                </div>
+
+                {/* Ship ticket, its own thing entirely */}
+                <div style={{ display: 'flex', marginTop: 10 }}>
+                  {trackButton('shipticket', PAGE_COPY.trackTicket, 'dashed')}
+                </div>
+
+                {track && (
                   <p style={{ ...HINT_STYLE, marginTop: 12, fontSize: 13, color: 'rgba(12,20,63,0.7)', lineHeight: 1.55 }}>
-                    {role === 'presenter' ? PAGE_COPY.roleSubPresent : PAGE_COPY.roleSubWatch}
+                    {trackSubcopy}
                   </p>
                 )}
               </div>
 
-              {/* ── Session ── */}
-              {role && (
+              {/* ── 02 · Email verification (returning + ship ticket) ── */}
+              {needsVerify && (
                 <div style={{ marginBottom: 32 }}>
-                  <div style={STEP_STYLE}>{PAGE_COPY.stepSession}</div>
+                  <div style={STEP_STYLE}>{PAGE_COPY.stepVerify}</div>
+                  <label style={LABEL_STYLE}>
+                    {PAGE_COPY.verifyLabel}
+                    <span style={{ color: '#D33C24', marginLeft: 3 }}>*</span>
+                  </label>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <input
+                      type="email"
+                      autoComplete="email"
+                      value={verifyInput}
+                      onChange={e => {
+                        setVerifyInput(e.target.value);
+                        if (verify.status !== 'idle') setVerify(VERIFY_IDLE);
+                      }}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') { e.preventDefault(); runVerify(); }
+                      }}
+                      style={{
+                        ...TEXT_FIELD,
+                        flex: 1,
+                        border:
+                          verifyAttempted && !EMAIL_REGEX.test(verifyInput.trim())
+                            ? '1px solid #D33C24'
+                            : '1px solid rgba(7,31,107,0.2)',
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={runVerify}
+                      disabled={verify.status === 'checking'}
+                      style={{
+                        flexShrink: 0,
+                        padding: '10px 18px',
+                        border: 'none',
+                        borderRadius: 0,
+                        background: verify.status === 'checking' ? '#B7331D' : '#D33C24',
+                        color: '#ffffff',
+                        fontFamily: 'var(--font-cocogoose)',
+                        fontWeight: 350,
+                        fontSize: 13,
+                        letterSpacing: '0.03em',
+                        cursor: verify.status === 'checking' ? 'wait' : 'pointer',
+                      }}
+                    >
+                      {PAGE_COPY.verifyButton}
+                    </button>
+                  </div>
+                  {verify.status === 'idle' && <p style={HINT_STYLE}>{PAGE_COPY.verifyHint}</p>}
+                  {verifyAttempted && verify.status === 'idle' && !EMAIL_REGEX.test(verifyInput.trim()) && (
+                    <p style={ERROR_STYLE}>{PAGE_COPY.errorEmailInvalid}</p>
+                  )}
+                  {verify.status === 'checking' && (
+                    <p style={{ ...HINT_STYLE, color: 'rgba(12,20,63,0.6)' }}>{PAGE_COPY.verifyChecking}</p>
+                  )}
+
+                  <AnimatePresence>
+                    {verify.status === 'found' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        style={{
+                          display: 'flex',
+                          gap: 12,
+                          alignItems: 'center',
+                          background: NAVY_INK,
+                          backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
+                          backgroundSize: '24px 24px',
+                          padding: '14px 16px',
+                          marginTop: 12,
+                        }}
+                      >
+                        <Image
+                          src="/images/ace-parts_6.png"
+                          alt=""
+                          aria-hidden="true"
+                          width={1000}
+                          height={1000}
+                          style={{ width: 40, height: 'auto', flexShrink: 0 }}
+                        />
+                        <p style={{ margin: 0, fontFamily: 'var(--font-montserrat)', fontSize: 13, color: '#ffffff', lineHeight: 1.6 }}>
+                          <strong style={{ fontFamily: 'var(--font-cocogoose)', fontWeight: 350 }}>
+                            {PAGE_COPY.verifyFoundPrefix}{verify.name ? `, ${verify.name.split(' ')[0]}` : ''}.
+                          </strong>{' '}
+                          {verify.role === 'presenter' ? 'You presented at ' : 'You were at '}
+                          {verify.lastSession || 'a past episode'}. Welcome back.
+                        </p>
+                      </motion.div>
+                    )}
+                    {verify.status === 'notfound' && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        style={{ ...ERROR_STYLE, fontSize: 13, lineHeight: 1.6, marginTop: 10 }}
+                      >
+                        {track === 'shipticket' ? PAGE_COPY.verifyNotFoundTicket : PAGE_COPY.verifyNotFoundAgain}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+
+              {/* ── Ship ticket track ── */}
+              {track === 'shipticket' && verified && (
+                <div style={{ marginBottom: 8 }}>
+                  <div style={STEP_STYLE}>{PAGE_COPY.stepTicket}</div>
+                  <div
+                    style={{
+                      border: '1px dashed rgba(211,60,36,0.5)',
+                      background: 'rgba(211,60,36,0.03)',
+                      padding: '16px 16px 14px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 16,
+                    }}
+                  >
+                    {verify.lastSession && (
+                      <p style={{ ...HINT_STYLE, margin: 0, fontSize: 12 }}>
+                        Posting for: <strong style={{ color: NAVY_INK }}>{verify.lastSession}</strong>
+                      </p>
+                    )}
+                    <FieldRow
+                      label={PAGE_COPY.labelTicketName}
+                      required
+                      hint={PAGE_COPY.labelTicketNameHint}
+                      error={ticketAttempted && !ticketName.trim()}
+                      errorMsg={PAGE_COPY.errorRequired}
+                    >
+                      <input
+                        type="text"
+                        value={ticketName}
+                        onChange={e => setTicketName(e.target.value)}
+                        style={{
+                          ...TEXT_FIELD,
+                          border: ticketAttempted && !ticketName.trim() ? '1px solid #D33C24' : '1px solid rgba(7,31,107,0.2)',
+                        }}
+                      />
+                    </FieldRow>
+                    <FieldRow label={PAGE_COPY.labelTicketProject}>
+                      <input
+                        type="text"
+                        value={ticketProject}
+                        onChange={e => setTicketProject(e.target.value)}
+                        style={TEXT_FIELD}
+                      />
+                    </FieldRow>
+                    <div>
+                      <label style={LABEL_STYLE}>
+                        {PAGE_COPY.labelTicketPledge}
+                        <span style={{ color: '#D33C24', marginLeft: 3 }}>*</span>
+                      </label>
+                      <p style={{ ...HINT_STYLE, marginTop: 0, marginBottom: 8 }}>
+                        {PAGE_COPY.labelTicketPledgeHint}{' '}
+                        <Link href="/shiptickets" style={{ color: '#C03418', fontWeight: 600 }}>
+                          See the wall →
+                        </Link>
+                      </p>
+                      <textarea
+                        value={ticketPledge}
+                        placeholder={PAGE_COPY.placeholderPledge}
+                        maxLength={200}
+                        rows={3}
+                        onChange={e => setTicketPledge(e.target.value)}
+                        style={{
+                          ...TEXT_FIELD,
+                          resize: 'vertical',
+                          lineHeight: 1.6,
+                          border: ticketAttempted && !ticketPledge.trim() ? '1px solid #D33C24' : '1px solid rgba(7,31,107,0.2)',
+                        }}
+                      />
+                      <div style={{ textAlign: 'right', fontFamily: 'var(--font-montserrat)', fontSize: 11, color: 'rgba(12,20,63,0.45)', marginTop: 4 }}>
+                        {ticketPledge.length}/200
+                      </div>
+                      {ticketAttempted && !ticketPledge.trim() && (
+                        <p style={ERROR_STYLE}>{PAGE_COPY.errorRequired}</p>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={submitTicket}
+                      disabled={submitState === 'submitting'}
+                      className="button-float-hover"
+                      style={{
+                        width: '100%',
+                        border: 'none',
+                        background: submitState === 'submitting' ? '#B7331D' : '#D33C24',
+                        padding: '14px 20px',
+                        cursor: submitState === 'submitting' ? 'wait' : 'pointer',
+                        fontFamily: 'var(--font-cocogoose)',
+                        fontSize: 'clamp(14px, 2vw, 16px)',
+                        fontWeight: 350,
+                        lineHeight: 1,
+                        color: '#ffffff',
+                        letterSpacing: '0.04em',
+                        borderRadius: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 10,
+                      }}
+                    >
+                      {submitState === 'submitting' ? PAGE_COPY.submitting : (
+                        <>
+                          <span>{PAGE_COPY.submitTicket}</span>
+                          <svg aria-hidden="true" viewBox="0 0 16 16" style={{ width: '1em', height: '1em', display: 'block', flexShrink: 0 }}>
+                            <path d="M3 8h8.5M8.5 4l4 4-4 4" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="square" strokeLinejoin="miter" />
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                    {ticketError && (
+                      <p style={{ ...ERROR_STYLE, fontSize: 13, marginTop: 0 }}>{ticketError}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ── Session picker (application tracks) ── */}
+              {showApplication && (
+                <div style={{ marginBottom: 32 }}>
+                  <div style={STEP_STYLE}>{sessionStepLabel}</div>
                   {sessionsLoading ? (
                     <p style={{ ...HINT_STYLE, color: 'rgba(12,20,63,0.45)', marginTop: 10 }}>{PAGE_COPY.sessionLoading}</p>
                   ) : sessions.length === 0 ? (
@@ -668,53 +1038,54 @@ export function ApplicationForm() {
                 </div>
               )}
 
-              {role && <div style={STEP_STYLE}>{PAGE_COPY.stepDetails}</div>}
+              {showApplication && <div style={STEP_STYLE}>{detailsStepLabel}</div>}
 
-              {/* ── Returning-builder banner (appears once the email is recognized) ── */}
+              {/* ── First-timer hint: this email has been here before ── */}
               <AnimatePresence>
-                {role && returning.found && (
+                {showApplication && !isReturning && hintFound && (
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     style={{
                       display: 'flex',
-                      gap: 12,
-                      alignItems: 'flex-start',
-                      background: '#0C143F',
-                      backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-                      backgroundSize: '24px 24px',
-                      padding: '16px 18px',
-                      marginBottom: 24,
+                      flexWrap: 'wrap',
+                      gap: 10,
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      background: 'rgba(7,31,107,0.05)',
+                      border: '1px solid rgba(7,31,107,0.15)',
+                      padding: '12px 14px',
+                      marginBottom: 20,
                     }}
                   >
-                    <Image
-                      src="/images/ace-parts_5.png"
-                      alt=""
-                      aria-hidden="true"
-                      width={1000}
-                      height={1000}
-                      style={{ width: 44, height: 'auto', flexShrink: 0 }}
-                    />
-                    <div style={{ minWidth: 0 }}>
-                      <p style={{ margin: 0, fontFamily: 'var(--font-cocogoose)', fontWeight: 350, fontSize: 14, color: '#ffffff', lineHeight: 1.5 }}>
-                        Welcome back{returning.name ? `, ${returning.name.split(' ')[0]}` : ''}. We remember you.
-                      </p>
-                      <p style={{ margin: '6px 0 0', fontFamily: 'var(--font-montserrat)', fontSize: 12.5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6 }}>
-                        You {returning.role === 'presenter' ? 'presented' : 'were'} at{' '}
-                        {returning.lastSession || 'a past episode'}. Got a ship ticket from last time?{' '}
-                        <Link href="/shiptickets" style={{ color: '#F8AA9A', textDecoration: 'underline' }}>
-                          Check the wall
-                        </Link>{' '}
-                        — and post a new one below before you lock in this session.
-                      </p>
-                    </div>
+                    <p style={{ margin: 0, fontFamily: 'var(--font-montserrat)', fontSize: 12.5, color: 'rgba(12,20,63,0.8)', lineHeight: 1.5 }}>
+                      {PAGE_COPY.switchHint}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={switchToReturning}
+                      style={{
+                        padding: '7px 14px',
+                        border: `1px solid ${NAVY_INK}`,
+                        background: 'transparent',
+                        color: NAVY_INK,
+                        fontFamily: 'var(--font-cocogoose)',
+                        fontWeight: 350,
+                        fontSize: 12,
+                        letterSpacing: '0.03em',
+                        cursor: 'pointer',
+                        borderRadius: 0,
+                      }}
+                    >
+                      Switch to {role === 'presenter' ? PAGE_COPY.trackPresentAgain : PAGE_COPY.trackWatchAgain}
+                    </button>
                   </motion.div>
                 )}
               </AnimatePresence>
 
               {/* ── Presenter Fields ── */}
-              {role === 'presenter' && (
+              {showApplication && role === 'presenter' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                   <FieldRow label={PAGE_COPY.labelName} required error={attempted && !presenter.name.trim()} errorMsg={PAGE_COPY.errorRequired}>
                     <input
@@ -727,17 +1098,20 @@ export function ApplicationForm() {
                     />
                   </FieldRow>
 
-                  <FieldRow label={PAGE_COPY.labelEmail} required error={attempted && !EMAIL_REGEX.test(presenter.contact)} errorMsg={PAGE_COPY.errorEmailInvalid}>
-                    <input
-                      type="email"
-                      required
-                      autoComplete="email"
-                      value={presenter.contact}
-                      onChange={e => setPresenter(p => ({ ...p, contact: e.target.value }))}
-                      onBlur={e => checkReturning(e.target.value)}
-                      style={ef(presenter.contact)}
-                    />
-                  </FieldRow>
+                  {/* Returning presenters already confirmed their email in step 02 */}
+                  {!isReturning && (
+                    <FieldRow label={PAGE_COPY.labelEmail} required error={attempted && !EMAIL_REGEX.test(presenter.contact)} errorMsg={PAGE_COPY.errorEmailInvalid}>
+                      <input
+                        type="email"
+                        required
+                        autoComplete="email"
+                        value={presenter.contact}
+                        onChange={e => setPresenter(p => ({ ...p, contact: e.target.value }))}
+                        onBlur={e => hintCheck(e.target.value)}
+                        style={ef(presenter.contact)}
+                      />
+                    </FieldRow>
+                  )}
 
                   <FieldRow label={PAGE_COPY.labelProjectName} required error={attempted && !presenter.projectName.trim()} errorMsg={PAGE_COPY.errorRequired}>
                     <input
@@ -770,7 +1144,7 @@ export function ApplicationForm() {
                     ]}
                   />
 
-                  {/* Link / deck — required, with playful junk-detection bubble */}
+                  {/* Link / deck. Required, with playful junk-detection bubble */}
                   <div style={{ position: 'relative' }}>
                     <AnimatePresence>
                       {linkBubble && (
@@ -936,7 +1310,7 @@ export function ApplicationForm() {
               )}
 
               {/* ── Watcher Fields ── */}
-              {role === 'watcher' && (
+              {showApplication && role === 'watcher' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                   <FieldRow label={PAGE_COPY.labelName} required error={attempted && !watcher.name.trim()} errorMsg={PAGE_COPY.errorRequired}>
                     <input
@@ -949,19 +1323,22 @@ export function ApplicationForm() {
                     />
                   </FieldRow>
 
-                  <FieldRow label={PAGE_COPY.labelEmail} required error={attempted && !EMAIL_REGEX.test(watcher.email)} errorMsg={PAGE_COPY.errorEmailInvalid}>
-                    <input
-                      type="email"
-                      required
-                      autoComplete="email"
-                      value={watcher.email}
-                      onChange={e => setWatcher(w => ({ ...w, email: e.target.value }))}
-                      onBlur={e => checkReturning(e.target.value)}
-                      style={ef(watcher.email)}
-                    />
-                  </FieldRow>
+                  {/* Returning watchers already confirmed their email in step 02 */}
+                  {!isReturning && (
+                    <FieldRow label={PAGE_COPY.labelEmail} required error={attempted && !EMAIL_REGEX.test(watcher.email)} errorMsg={PAGE_COPY.errorEmailInvalid}>
+                      <input
+                        type="email"
+                        required
+                        autoComplete="email"
+                        value={watcher.email}
+                        onChange={e => setWatcher(w => ({ ...w, email: e.target.value }))}
+                        onBlur={e => hintCheck(e.target.value)}
+                        style={ef(watcher.email)}
+                      />
+                    </FieldRow>
+                  )}
 
-                  {/* Membership — free for ASES members, paid for non-members */}
+                  {/* Membership. Free for ASES members, paid for non-members */}
                   <div>
                     <label style={LABEL_STYLE}>
                       {PAGE_COPY.labelMembership}
@@ -1013,41 +1390,8 @@ export function ApplicationForm() {
                 </div>
               )}
 
-              {/* ── Ship ticket (both tracks) ── */}
-              {role && (
-                <div style={{ marginTop: 32 }}>
-                  <div style={STEP_STYLE}>{PAGE_COPY.stepShipTicket}</div>
-                  <div
-                    style={{
-                      border: '1px dashed rgba(211,60,36,0.5)',
-                      background: 'rgba(211,60,36,0.03)',
-                      padding: '16px 16px 14px',
-                    }}
-                  >
-                    <label style={LABEL_STYLE}>{PAGE_COPY.labelShipTicket}</label>
-                    <p style={{ ...HINT_STYLE, marginTop: 0, marginBottom: 10 }}>
-                      {PAGE_COPY.shipTicketHint}{' '}
-                      <Link href="/shiptickets" style={{ color: '#C03418', fontWeight: 600 }}>
-                        See the wall →
-                      </Link>
-                    </p>
-                    <textarea
-                      value={shipTicket}
-                      placeholder={PAGE_COPY.placeholderShipTicket}
-                      maxLength={200}
-                      rows={3}
-                      onChange={e => setShipTicket(e.target.value)}
-                      style={{ ...TEXT_FIELD, resize: 'vertical', lineHeight: 1.6 }}
-                    />
-                    <div style={{ textAlign: 'right', fontFamily: 'var(--font-montserrat)', fontSize: 11, color: 'rgba(12,20,63,0.45)', marginTop: 4 }}>
-                      {shipTicket.length}/200
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ── Submit ── */}
-              {role && (
+              {/* ── Submit (application tracks) ── */}
+              {showApplication && (
                 <div style={{ marginTop: 36, position: 'relative' }}>
                   <button
                     type="submit"
@@ -1260,7 +1604,7 @@ function AceRundown() {
             />
           </motion.div>
 
-          {/* Comic speech bubble — wraps instead of forcing overflow on mobile */}
+          {/* Comic speech bubble. Wraps instead of forcing overflow on mobile */}
           <motion.span
             variants={{ rest: { scale: 1 }, peek: { scale: 1.05 } }}
             transition={{ type: 'spring', stiffness: 300, damping: 18 }}
@@ -1337,7 +1681,7 @@ function AceRundown() {
           margin: 0,
         }}>
           <strong style={{ fontWeight: 600 }}>Hey, I&apos;m Ace.</strong> Quick rundown: Build with ASES is our session
-          for people who actually make things. Pick a track below — <strong style={{ fontWeight: 600 }}>present</strong> to
+          for people who actually make things. Pick a track below: <strong style={{ fontWeight: 600 }}>present</strong> to
           put your build in front of the room, or <strong style={{ fontWeight: 600 }}>watch</strong> to see what everyone&apos;s
           shipping. That&apos;s the whole thing. Go.
         </p>
@@ -1614,7 +1958,7 @@ function GalleryScroll({ images }: { images: ReadonlyArray<{ src: string; tall: 
             whiteSpace: 'nowrap',
           }}
         >
-          paused — click to resume
+          paused. click to resume
         </div>
       )}
 
