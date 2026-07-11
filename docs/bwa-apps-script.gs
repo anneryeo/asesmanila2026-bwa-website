@@ -10,13 +10,17 @@
  *   GET                          -> doGet()  : upcoming sessions [{ id, label }]
  *   GET ?action=lookup&email=…   -> doGet()  : returning-builder check
  *                                   { found, role, name, lastSession }
- *   POST                         -> doPost() : stores a presenter or watcher
- *                                   application (now with a Ship ticket column)
+ *   POST role=presenter|watcher  -> doPost() : stores an application
+ *   POST role=shipticket         -> doPost() : stores a public ship ticket
+ *                                   (email must exist in Presenters/Watchers;
+ *                                   dedupes identical pledges; max 5 per day
+ *                                   per email to keep spam off the wall)
  *
  * Consumed by:
  *   app/api/bwa-sessions/route.ts  (GET sessions)
  *   app/api/bwa-lookup/route.ts    (GET lookup)
- *   app/api/bwa-submit/route.ts    (POST)
+ *   app/api/bwa-submit/route.ts    (POST applications)
+ *   app/api/ship-ticket/route.ts   (POST ship tickets)
  *
  * Deploy:  Extensions > Apps Script > Deploy > Manage deployments
  *          > (edit existing) > Version: New version > Deploy
@@ -37,6 +41,7 @@
  *   Watchers     : Timestamp | Session ID | Session | Name | Email |
  *                  Membership | Hoping to see | Notify future | Returning |
  *                  Ship ticket
+ *   ShipTickets  : Timestamp | Email | Name | Project | Episode | Pledge
  *   MailingList  : Email | Name | Role | Last session | Notify future | Updated
  */
 
@@ -44,6 +49,7 @@ const SHEETS = {
   sessions: 'Sessions',
   presenters: 'Presenters',
   watchers: 'Watchers',
+  shiptickets: 'ShipTickets',
   mailing: 'MailingList',
 };
 
@@ -54,8 +60,12 @@ const HEADERS = {
                'Question 3', 'Notify future', 'Returning', 'Ship ticket'],
   watchers:   ['Timestamp', 'Session ID', 'Session', 'Name', 'Email', 'Membership',
                'Hoping to see', 'Notify future', 'Returning', 'Ship ticket'],
+  shiptickets: ['Timestamp', 'Email', 'Name', 'Project', 'Episode', 'Pledge'],
   mailing:    ['Email', 'Name', 'Role', 'Last session', 'Notify future', 'Updated'],
 };
+
+// Anti-spam: max ship tickets per email per rolling 24h.
+const SHIP_TICKETS_PER_DAY = 5;
 
 /** GET -> sessions list, or a returning-builder lookup when action=lookup. */
 function doGet(e) {
@@ -113,8 +123,9 @@ function doPost(e) {
 
   try {
     const d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
-    if (d.role === 'presenter') return handlePresenter(d);
-    if (d.role === 'watcher')   return handleWatcher(d);
+    if (d.role === 'presenter')  return handlePresenter(d);
+    if (d.role === 'watcher')    return handleWatcher(d);
+    if (d.role === 'shipticket') return handleShipTicket(d);
     return json({ success: false, message: 'Unknown application type.' });
   } catch (err) {
     return json({ success: false, message: 'Could not read submission: ' + err });
@@ -155,6 +166,65 @@ function handleWatcher(d) {
   ]);
   if (d.notifyFuture) upsertMailing(d.email, d.name, 'watcher', d.sessionLabel);
   return json({ success: true });
+}
+
+/**
+ * Public ship ticket: a pledge for the wall. Guarded three ways:
+ *   1. the email must exist in Presenters or Watchers (been in the room),
+ *   2. identical pledge from the same email -> duplicate,
+ *   3. more than SHIP_TICKETS_PER_DAY tickets in 24h -> throttled.
+ */
+function handleShipTicket(d) {
+  const email = String(d.email || '').trim().toLowerCase();
+  const name = String(d.name || '').trim();
+  const pledge = String(d.pledge || '').trim();
+  if (!email || !name || !pledge) {
+    return json({ success: false, message: 'Name, email, and pledge are required.' });
+  }
+  if (!emailExists(email)) {
+    return json({ success: false, notFound: true,
+                  message: "That email hasn't been to a BWA episode yet. Register for a session first." });
+  }
+
+  const sheet = sheetOf(SHEETS.shiptickets, HEADERS.shiptickets);
+  const rows = sheet.getDataRange().getValues();
+  const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+  let recent = 0;
+  for (let i = 1; i < rows.length; i++) {
+    const rowEmail = String(rows[i][1]).trim().toLowerCase();
+    if (rowEmail !== email) continue;
+    if (String(rows[i][5]).trim().toLowerCase() === pledge.toLowerCase()) {
+      return json({ success: false, duplicate: true,
+                    message: "That exact pledge is already on the wall. Post a new one." });
+    }
+    const ts = rows[i][0] instanceof Date ? rows[i][0].getTime() : Date.parse(rows[i][0]);
+    if (ts && ts > dayAgo) recent++;
+  }
+  if (recent >= SHIP_TICKETS_PER_DAY) {
+    return json({ success: false, throttled: true,
+                  message: 'Easy there. That email has posted enough tickets for today. Ship one of them instead.' });
+  }
+
+  sheet.appendRow([
+    new Date(), email, name, String(d.project || '').trim(), String(d.episode || '').trim(), pledge,
+  ]);
+  return json({ success: true });
+}
+
+/** Is this email anywhere in the Presenters or Watchers lists? */
+function emailExists(email) {
+  const target = String(email || '').trim().toLowerCase();
+  if (!target) return false;
+  const sheetsToScan = [SHEETS.presenters, SHEETS.watchers];
+  for (let s = 0; s < sheetsToScan.length; s++) {
+    const sheet = ss().getSheetByName(sheetsToScan[s]);
+    if (!sheet) continue;
+    const rows = sheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][4]).trim().toLowerCase() === target) return true;
+    }
+  }
+  return false;
 }
 
 /** Same email + same session already in the sheet -> duplicate. */
@@ -209,6 +279,7 @@ function setup() {
   sheetOf(SHEETS.sessions, HEADERS.sessions);
   sheetOf(SHEETS.presenters, HEADERS.presenters);
   sheetOf(SHEETS.watchers, HEADERS.watchers);
+  sheetOf(SHEETS.shiptickets, HEADERS.shiptickets);
   sheetOf(SHEETS.mailing, HEADERS.mailing);
   const sx = ss().getSheetByName(SHEETS.sessions);
   if (sx.getLastRow() < 2) {
