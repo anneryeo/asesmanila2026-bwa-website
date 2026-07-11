@@ -6,14 +6,14 @@ import { FALLBACK_CONTENT, type FaqNote } from '@/content/bwaContent';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
-// Sticky-note palette — same alternating yellow/light-blue notes as the main
-// asesmanila.com FAQ, slapped on the white blueprint. Each note rests at a
-// slight tilt; hovering skirts it (lifts + straightens toward the other side).
+// Sticky-note palette: vivid brand red and blue notes with white text,
+// slapped on the white blueprint. Each note rests at a slight tilt;
+// hovering skirts it (lifts + straightens toward the other side).
 const NOTE_STYLES = [
-  { bg: '#FBEFC3', edge: '#E8D68F', tilt: -1.4 },  // yellow
-  { bg: '#DCEAFE', edge: '#B5CFF4', tilt: 1.2 },   // light blue
-  { bg: '#FBEFC3', edge: '#E8D68F', tilt: 1.6 },   // yellow
-  { bg: '#DCEAFE', edge: '#B5CFF4', tilt: -1.1 },  // light blue
+  { bg: '#D33C24', edge: '#9A2917', tilt: -1.4 },  // vivid red
+  { bg: '#2B4BD1', edge: '#112F7F', tilt: 1.2 },   // vivid blue
+  { bg: '#D33C24', edge: '#9A2917', tilt: 1.6 },   // vivid red
+  { bg: '#2B4BD1', edge: '#112F7F', tilt: -1.1 },  // vivid blue
 ] as const;
 
 // Every question AND answer is always in the DOM and always visible —
@@ -80,10 +80,10 @@ export const FaqSection = ({
                 className="rounded-none px-[26px] pb-[26px] pt-[30px] shadow-[0_14px_36px_rgba(7,31,107,0.14)]"
                 style={{ background: note.bg, borderTop: `10px solid ${note.edge}` }}
               >
-                <h3 className="m-0 font-display text-[clamp(15px,2vw,18px)] font-[350] leading-[1.3] tracking-[-0.01em] text-[#071F6B]">
+                <h3 className="m-0 font-display text-[clamp(15px,2vw,18px)] font-[350] leading-[1.3] tracking-[-0.01em] text-white">
                   <Emphasis text={question} />
                 </h3>
-                <p className="mb-0 mt-3 font-body text-[clamp(14px,1.7vw,16px)] font-normal leading-[1.65] text-navy-800">
+                <p className="mb-0 mt-3 font-body text-[clamp(14px,1.7vw,16px)] font-normal leading-[1.65] text-[rgba(255,255,255,0.92)]">
                   {answer}
                 </p>
               </motion.div>
