@@ -77,6 +77,7 @@ export async function getBwaContent(): Promise<BwaContent> {
         heading: pick(s.faqHeading, f.faq.heading),
         items: data?.faqItems?.length ? data.faqItems : f.faq.items,
       },
+      ticketsHeading: pick(s.ticketsHeading, f.ticketsHeading),
       shipTickets: f.shipTickets,
     };
   } catch (error) {

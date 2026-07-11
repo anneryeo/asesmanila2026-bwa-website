@@ -62,6 +62,8 @@ export interface BwaContent {
     heading: string;
     items: FaqNote[];
   };
+  /** Single-line heading for the home page's top-5 ship ticket preview, aligned with its see-more button. */
+  ticketsHeading: string;
   shipTickets: ShipTicket[];
 }
 
@@ -213,6 +215,8 @@ export const FALLBACK_CONTENT: BwaContent = {
       },
     ],
   },
+
+  ticketsHeading: "Say what you'll ship, then come back and prove it.",
 
   // Dummy tickets until the Sanity shipTicket documents land.
   shipTickets: [

@@ -51,6 +51,12 @@ export const bwaSettings = {
       title: 'FAQ heading',
       type: 'string',
     },
+    {
+      name: 'ticketsHeading',
+      title: 'Ship tickets heading',
+      type: 'string',
+      description: 'Single line, shown beside the see-more-tickets button on the home page preview.',
+    },
   ],
   preview: {
     prepare: () => ({ title: 'BWA site settings' }),
