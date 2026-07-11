@@ -10,6 +10,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/client": "^7.23.0",
+    "@sanity/image-url": "^2.1.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.16.0",
