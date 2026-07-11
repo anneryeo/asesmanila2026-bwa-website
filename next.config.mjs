@@ -28,7 +28,8 @@ const csp = [
   "font-src 'self' data:",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  "img-src 'self' data: blob:",
+  // cdn.sanity.io: Studio-uploaded images (project previews)
+  "img-src 'self' data: blob: https://cdn.sanity.io",
   "media-src 'self'",
   "object-src 'none'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
@@ -49,6 +50,7 @@ const securityHeaders = [
 const nextConfig = {
   images: {
     qualities: [100, 75],
+    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
