@@ -41,15 +41,8 @@ export const CtaSection = () => {
   return (
     <section
       id="apply"
-      data-nav-theme="dark"
-      className="relative w-full overflow-hidden px-[24px] py-[80px] sm:px-[48px] lg:py-[112px]"
-      style={{
-        // Parent site's navy CTA surface: light-blue grid on a deep radial navy.
-        backgroundImage:
-          'linear-gradient(rgba(163,205,254,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(163,205,254,0.12) 1px, transparent 1px), radial-gradient(ellipse at 50% 30%, #0D3B8B 0%, #071F6B 40%, #030E3D 70%)',
-        backgroundSize: '48px 48px, 48px 48px, 100% 100%',
-        backgroundAttachment: 'fixed, fixed, scroll',
-      }}
+      data-nav-theme="light"
+      className="bwa-surface relative w-full overflow-hidden px-[24px] py-[80px] sm:px-[48px] lg:py-[112px]"
     >
       <div className="relative z-10 mx-auto w-full max-w-[1152px]">
 
@@ -58,7 +51,7 @@ export const CtaSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: easeOut }}
-          className="m-0 text-center font-subhead text-[12px] font-bold uppercase tracking-[0.2em] text-[rgba(255,255,255,0.6)]"
+          className="m-0 text-center font-subhead text-[12px] font-bold uppercase tracking-[0.2em] text-[rgba(12,20,63,0.6)]"
         >
           Your seat in the room is one form away
         </motion.p>
@@ -87,7 +80,7 @@ export const CtaSection = () => {
               width={977}
               height={878}
               sizes="(max-width: 1024px) 40vw, 380px"
-              style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}
+              style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 20px 40px rgba(12,20,63,0.28))' }}
             />
           </div>
 
@@ -106,7 +99,7 @@ export const CtaSection = () => {
               width={977}
               height={878}
               sizes="(max-width: 1024px) 40vw, 380px"
-              style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}
+              style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)', filter: 'drop-shadow(0 20px 40px rgba(12,20,63,0.28))' }}
             />
           </div>
 
@@ -123,7 +116,7 @@ export const CtaSection = () => {
             <div
               className="relative overflow-hidden"
               style={{
-                boxShadow: '0 30px 80px rgba(0,0,0,0.45)',
+                boxShadow: '0 30px 80px rgba(12,20,63,0.35)',
                 transform: hovered && !reduceMotion ? 'scale(1.02)' : 'scale(1)',
                 transition: reduceMotion ? 'none' : 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
@@ -181,7 +174,7 @@ export const CtaSection = () => {
           transition={{ duration: 0.5, ease: easeOut, delay: 0.2 }}
           className="mt-[64px] flex flex-col items-center gap-4 text-center"
         >
-          <p className="m-0 font-display text-[clamp(16px,2.4vw,24px)] font-light leading-[1.4] text-[rgba(255,255,255,0.9)]">
+          <p className="m-0 font-display text-[clamp(16px,2.4vw,24px)] font-light leading-[1.4] text-[#0C143F]">
             Liked the room?
           </p>
           <a
