@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Emphasis } from '@/components/ui/Emphasis';
 import { FALLBACK_CONTENT } from '@/content/bwaContent';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -128,29 +127,29 @@ export const Hero = ({
     <section
       id="top"
       data-nav-theme="light"
-      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-[24px] pb-[64px] pt-[96px] text-center sm:px-[40px]"
-      style={{
-        backgroundColor: '#FFFFFF',
-        backgroundImage:
-          'radial-gradient(ellipse at 50% 40%, transparent 0%, rgba(128,128,128,0.08) 100%), linear-gradient(rgba(7,31,107,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(7,31,107,0.06) 1px, transparent 1px)',
-        backgroundSize: '100% 100%, 48px 48px, 48px 48px',
-        backgroundAttachment: 'scroll, fixed, fixed',
-      }}
+      className="bwa-surface relative flex min-h-[100svh] w-full flex-col items-center justify-center px-[24px] pb-[64px] pt-[96px] text-center sm:px-[40px]"
     >
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: easeOut }}
-        className="flex flex-col items-center"
+        className="relative z-10 flex flex-col items-center"
       >
         <GlitchFace />
 
-        <p className="mb-4 mt-8 font-subhead text-[12px] font-bold uppercase tracking-[0.16em] text-[rgba(12,20,63,0.55)]">
-          Build with ASES — ASES Manila &apos;25 to &apos;26
+        <p className="mb-4 mt-8 font-subhead text-[12px] font-bold uppercase tracking-[0.16em] text-[#D33C24]">
+          Build with ASES · ASES Manila
         </p>
 
         <h1 className="m-0 max-w-[16ch] font-display text-[clamp(38px,7.5vw,88px)] font-[350] leading-[1.02] tracking-[-0.02em] text-[#0C143F]">
-          <Emphasis text={heading} boldWeight={900} />
+          {/* *Starred* span renders bold AND red */}
+          {heading.split('*').map((part, i) =>
+            i % 2 === 1 ? (
+              <b key={i} className="text-[#D33C24]" style={{ fontWeight: 900 }}>{part}</b>
+            ) : (
+              <Fragment key={i}>{part}</Fragment>
+            )
+          )}
         </h1>
 
         <p className="mt-6 max-w-[52ch] font-body text-[clamp(14px,1.7vw,17px)] font-normal leading-[1.7] text-[rgba(12,20,63,0.75)]">
