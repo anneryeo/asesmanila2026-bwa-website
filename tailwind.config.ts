@@ -1,0 +1,82 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        navy: {
+          950: "var(--color-navy-950)",
+          900: "var(--color-navy-900)",
+          800: "var(--color-navy-800)",
+          700: "var(--color-navy-700)",
+          600: "var(--color-navy-600)",
+          500: "var(--color-navy-500)",
+          400: "var(--color-navy-400)",
+          300: "var(--color-navy-300)",
+          200: "var(--color-navy-200)",
+          100: "var(--color-navy-100)",
+          50: "var(--color-navy-50)",
+          25: "var(--color-navy-25)",
+          10: "var(--color-navy-10)",
+          5: "var(--color-navy-5)",
+        },
+        red: {
+          900: "var(--color-red-900)",
+          800: "var(--color-red-800)",
+          700: "var(--color-red-700)",
+          600: "var(--color-red-600)",
+          500: "var(--color-red-500)",
+          400: "var(--color-red-400)",
+          300: "var(--color-red-300)",
+          100: "var(--color-red-100)",
+        },
+        neutral: {
+          900: "var(--color-neutral-900)",
+          800: "var(--color-neutral-800)",
+          700: "var(--color-neutral-700)",
+          600: "var(--color-neutral-600)",
+          500: "var(--color-neutral-500)",
+          400: "var(--color-neutral-400)",
+          300: "var(--color-neutral-300)",
+          200: "var(--color-neutral-200)",
+          100: "var(--color-neutral-100)",
+          50: "var(--color-neutral-50)",
+          25: "var(--color-neutral-25)",
+        },
+        accent: "var(--accent)",
+        "accent-hover": "var(--accent-hover)",
+      },
+      fontFamily: {
+        display: ["var(--font-display)", "sans-serif"],
+        subhead: ["var(--font-subhead)", "sans-serif"],
+        body: ["var(--font-body)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
+      },
+      fontSize: {
+        'display-xl': ['96px', { lineHeight: '0.92', letterSpacing: '-0.02em' }],
+        'display-lg': ['64px', { lineHeight: '0.95', letterSpacing: '-0.02em' }],
+        'display-md': ['44px', { lineHeight: '1.05', letterSpacing: '-0.01em' }],
+        'body-lg':    ['20px', { lineHeight: '1.6' }],
+      },
+      spacing: {
+        1: "var(--space-1)",
+        2: "var(--space-2)",
+        3: "var(--space-3)",
+        4: "var(--space-4)",
+        6: "var(--space-6)",
+        8: "var(--space-8)",
+        12: "var(--space-12)",
+        16: "var(--space-16)",
+        24: "var(--space-24)",
+        32: "var(--space-32)",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;

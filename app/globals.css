@@ -1,0 +1,156 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  /* Primary — Navy (the blueprint) */
+  --color-navy-950: #0C143F;   /* deepest backgrounds */
+  --color-navy-900: #181A49;
+  --color-navy-800: #212F7D;
+  --color-navy-700: #333586;   /* primary brand navy */
+  --color-navy-600: #394EBD;
+  --color-navy-500: #5157BE;   /* interactive primary */
+  --color-navy-400: #6279CC;
+  --color-navy-300: #7781CD;
+  --color-navy-200: #8A9ED9;
+  --color-navy-100: #9DA6DB;
+  --color-navy-50:  #B9C5E8;
+  --color-navy-25:  #C9CFEB;
+  --color-navy-10:  #E9EDF8;
+  --color-navy-5:   #F6F7FC;   /* lightest tint, near-white surfaces */
+
+  /* Typography */
+  --font-display: var(--font-cocogoose), "Mona Sans", "Public Sans", system-ui, sans-serif;
+  /* Subhead is Montserrat: it doubles as the numeral font, since Cocogoose's
+     numeral glyphs are off-brand — ALL numbers render via font-subhead. */
+  --font-subhead: var(--font-montserrat), "Segoe UI", system-ui, sans-serif;
+  --font-body: var(--font-montserrat), "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+
+  /* Accent — Red (the marker, the underline, the alert) */
+  --color-red-900:  #2D0602;
+  --color-red-800:  #61160B;
+  --color-red-700:  #9A2917;
+  --color-red-600:  #C03418;
+  --color-red-500:  #D33C24;   /* primary red — use for accents only */
+  --color-red-400:  #F46951;
+  --color-red-300:  #F8AA9A;
+  --color-red-100:  #FCE0DA;
+
+  /* Neutral — Warm grey */
+  --color-neutral-900: #191B1C;
+  --color-neutral-800: #383B3D;
+  --color-neutral-700: #595F61;
+  --color-neutral-600: #7B8285;
+  --color-neutral-500: #726967;   /* primary body neutral */
+  --color-neutral-400: #948986;
+  --color-neutral-300: #9BA3A8;
+  --color-neutral-200: #B6AFAD;
+  --color-neutral-100: #C2C9CC;
+  --color-neutral-50:  #D9D6D5;
+  --color-neutral-25:  #EDEFF0;
+
+  /* Semantic aliases — WHITE-PRIMARY variant.
+     This site behaves like the parent's data-nav-theme="light" sections
+     applied globally: true white surface, dark-navy grid lines. Navy and red
+     stay available as accent surfaces (nav drawer, footer, CTAs). */
+  --bg-primary:        #FFFFFF;                /* default page bg — true white */
+  --bg-primary-dark:   var(--color-navy-950);  /* dark accent surfaces */
+  --bg-blueprint:      var(--color-navy-800);  /* the signature blueprint blue */
+  --text-primary:      var(--color-navy-900);
+  --text-on-dark:      var(--color-navy-5);
+  --text-muted:        var(--color-neutral-500);
+  --accent:            var(--color-red-500);
+  --accent-hover:      var(--color-red-600);
+  --border-subtle:     var(--color-neutral-25);
+  --border-blueprint:  rgba(255, 255, 255, 0.08);  /* grid line color on navy surfaces */
+  --border-blueprint-light: rgba(7, 31, 107, 0.06); /* grid line color on the white surface */
+
+  /* Spacing Scale (8px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    background-color: var(--bg-primary);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+  }
+}
+
+/* Custom visual utilities from Brand Guide 2.4 */
+.bg-blueprint {
+  background-color: var(--bg-blueprint);
+  background-image:
+    linear-gradient(var(--border-blueprint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-blueprint) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+}
+
+/* White-primary blueprint grid — dark-navy hairlines on the white surface. */
+.bg-blueprint-light {
+  background-color: var(--bg-primary);
+  background-image:
+    linear-gradient(var(--border-blueprint-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-blueprint-light) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+}
+
+.button-float-hover {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, background 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transform: translateY(0) scale(1);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.button-float-hover:hover,
+.button-float-hover:focus-visible {
+  transform: translateY(-4px) scale(1.05);
+}
+
+.button-float-hover:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-float-hover {
+    transition: opacity 0.2s ease, background 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .button-float-hover:hover,
+  .button-float-hover:focus-visible,
+  .button-float-hover:active {
+    transform: none;
+  }
+}
