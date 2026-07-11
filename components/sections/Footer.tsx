@@ -27,12 +27,8 @@ const SOCIAL_ICONS = [
 export function Footer() {
   return (
     <footer
-      style={{
-        backgroundImage: 'linear-gradient(rgba(163,205,254,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(163,205,254,0.12) 1px, transparent 1px), radial-gradient(ellipse at 50% 30%, #0D3B8B 0%, #071F6B 40%, #030E3D 70%)',
-        backgroundSize: '48px 48px, 48px 48px, 100% 100%',
-        backgroundAttachment: 'fixed, fixed, scroll',
-      }}
-      className="relative overflow-hidden px-[24px] pb-[0px] pt-[48px] sm:px-[48px] lg:px-[80px]"
+      data-nav-theme="light"
+      className="bwa-surface relative overflow-hidden border-t border-[rgba(7,31,107,0.1)] px-[24px] pb-[0px] pt-[48px] sm:px-[48px] lg:px-[80px]"
     >
       <div className="mx-auto w-full max-w-[1152px]">
         <motion.div
@@ -46,20 +42,20 @@ export function Footer() {
             {/* Logo + tagline */}
             <div className="flex flex-col items-center gap-[12px]">
               <Image
-                src="/images/ases-logotext-white.png"
+                src="/images/ases-logotext-blue.png"
                 alt="ASES Manila"
                 width={1541}
                 height={512}
                 className="h-[60px] w-auto max-w-[320px]"
               />
-              <p className="font-display font-extralight text-[16px] leading-[1.6] text-white max-w-[240px] whitespace-pre-line">
+              <p className="font-display font-extralight text-[16px] leading-[1.6] text-[#0C143F] max-w-[240px] whitespace-pre-line">
                 {`Anyone can build.\nStart before you're ready`}
               </p>
             </div>
 
             {/* Social icons */}
             <div className="flex flex-col items-center gap-[12px]">
-              <span className="font-subhead text-[20px] font-[350] uppercase tracking-[0.14em] text-white">
+              <span className="font-subhead text-[20px] font-[350] uppercase tracking-[0.14em] text-[#0C143F]">
                 Connect
               </span>
               <div className="flex gap-[20px]">
@@ -74,7 +70,7 @@ export function Footer() {
                     onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.65'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '1'; }}
                   >
-                    <svg viewBox={viewBox} width={36} height={36} fill="white" aria-hidden="true">
+                    <svg viewBox={viewBox} width={36} height={36} fill="#112F7F" aria-hidden="true">
                       <path d={path} />
                     </svg>
                   </a>
@@ -100,20 +96,20 @@ export function Footer() {
             {/* Left — logo + tagline */}
             <div className="flex flex-col items-start gap-[16px] pb-[48px]">
               <Image
-                src="/images/ases-logotext-white.png"
+                src="/images/ases-logotext-blue.png"
                 alt="ASES Manila"
                 width={1541}
                 height={512}
                 className="h-[60px] w-auto max-w-[400px]"
               />
-              <p className="font-display font-extralight text-[16px] leading-[1.6] text-white max-w-[260px] whitespace-pre-line">
+              <p className="font-display font-extralight text-[16px] leading-[1.6] text-[#0C143F] max-w-[260px] whitespace-pre-line">
                 {`Anyone can build.\nStart before you're ready`}
               </p>
             </div>
 
             {/* Center — Connect + social icons */}
             <div className="flex flex-col items-start gap-[16px] pb-[48px]">
-              <span className="font-subhead text-[22px] font-[350] uppercase tracking-[0.14em] text-white">
+              <span className="font-subhead text-[22px] font-[350] uppercase tracking-[0.14em] text-[#0C143F]">
                 Connect
               </span>
               <div className="flex gap-[20px]">
@@ -128,7 +124,7 @@ export function Footer() {
                     onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.65'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '1'; }}
                   >
-                    <svg viewBox={viewBox} width={36} height={36} fill="white" aria-hidden="true">
+                    <svg viewBox={viewBox} width={36} height={36} fill="#112F7F" aria-hidden="true">
                       <path d={path} />
                     </svg>
                   </a>
