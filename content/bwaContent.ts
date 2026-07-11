@@ -46,11 +46,11 @@ export interface BwaContent {
     subheading: string;
   };
   manifesto: {
-    /** "Build like ___" — rotating endings */
+    /** "Build like ___" slot-machine endings. Keep each short so the line stays on one line. */
     adjectives: string[];
-    /** Static middle line */
-    steadyLine: string;
-    /** "Build cause ___" — rotating endings */
+    /** "Build even if you're ___" slot-machine endings */
+    actions: string[];
+    /** "Build cause ___" slot-machine endings */
     purposes: string[];
   };
   projects: {
@@ -72,22 +72,27 @@ export const FALLBACK_CONTENT: BwaContent = {
       'Twice a month, ASES Manila fills a room with founders, operators, and builders — and hands students the mic.',
   },
 
-  // "Build like (adjective) / Build even if you're scared / Build cause (purpose)"
+  // "Build like (adjective) / Build even if you're (action) / Build cause (purpose)"
+  // Every ending is short enough that each line holds on ONE line at the
+  // manifesto's font size, even on small screens.
   manifesto: {
     adjectives: [
       'a misfit',
       'you mean it',
       "it's 2am",
       "no one's watching",
-      "you've got something to prove",
     ],
-    steadyLine: "Build even if you're scared",
+    actions: [
+      'scared',
+      'not ready',
+      'winging it',
+      'in over your head',
+    ],
     purposes: [
       'talk is cheap',
       'the problem is real',
       'no one else will',
-      'your bad first draft deserves an audience',
-      'waiting never shipped anything',
+      'waiting ships nothing',
     ],
   },
 

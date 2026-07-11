@@ -142,7 +142,7 @@ export default async function BuildWithASESPage() {
         <Hero heading={content.hero.heading} subheading={content.hero.subheading} />
         <BuildManifesto
           adjectives={content.manifesto.adjectives}
-          steadyLine={content.manifesto.steadyLine}
+          actions={content.manifesto.actions}
           purposes={content.manifesto.purposes}
         />
         <ProjectsSection

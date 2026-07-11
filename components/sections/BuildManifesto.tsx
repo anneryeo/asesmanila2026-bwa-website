@@ -1,38 +1,67 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Emphasis } from '@/components/ui/Emphasis';
 import { FALLBACK_CONTENT } from '@/content/bwaContent';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
-// ─── Floating Ace parts ──────────────────────────────────────────────────────
-// parts 1–4 hover on both sides of the section: arm + gear left, boot + brick
-// right, each with its own drift cadence and a slow scroll parallax.
-const SIDE_PARTS = [
-  { src: '/images/ace-parts_1.png', side: 'left', top: '12%', width: 'clamp(120px, 16vw, 260px)', drift: 14, duration: 5.2, rotate: -8, parallax: -40 },
-  { src: '/images/ace-parts_3.png', side: 'left', top: '58%', width: 'clamp(80px, 10vw, 170px)', drift: 10, duration: 4.1, rotate: 12, parallax: -90 },
-  { src: '/images/ace-parts_2.png', side: 'right', top: '18%', width: 'clamp(110px, 14vw, 230px)', drift: 12, duration: 4.7, rotate: 6, parallax: -70 },
-  { src: '/images/ace-parts_4.png', side: 'right', top: '62%', width: 'clamp(90px, 11vw, 180px)', drift: 16, duration: 5.8, rotate: -10, parallax: -30 },
-] as const;
+// ─── Slot-machine word ──────────────────────────────────────────────────────
+// The ending of each manifesto line spins like a slot reel: hold on a word,
+// then rip through the list with hard cuts until it lands on the next one.
+// Same flash-cut mechanic as the "Build" wordmark, but the WORD changes while
+// the style stays put.
+const SLOT_HOLD_MS_MIN = 2100;
+const SLOT_HOLD_MS_MAX = 3200;
+const SLOT_STEP_MS = 75;
 
-// ─── Word rotation (left-aligned lines) ─────────────────────────────────────
-const WORD_INTERVAL_MS = 2200;
-
-function RotatingWord({ words }: { words: string[] }) {
+function SlotWord({ words }: { words: string[] }) {
   const [idx, setIdx] = useState(0);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const id = setInterval(() => setIdx(i => (i + 1) % words.length), WORD_INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [words.length]);
+    const schedule = () => {
+      const hold = SLOT_HOLD_MS_MIN + Math.random() * (SLOT_HOLD_MS_MAX - SLOT_HOLD_MS_MIN);
+      timer.current = setTimeout(() => {
+        if (reduceMotion) {
+          // Reduced motion: clean single swap, no reel spin.
+          setIdx(i => (i + 1) % words.length);
+          schedule();
+          return;
+        }
+        // Spin one full lap plus one so the reel visibly rolls through
+        // every word and lands on the NEXT one.
+        let steps = words.length + 1;
+        const spin = () => {
+          setIdx(i => (i + 1) % words.length);
+          steps -= 1;
+          if (steps > 0) {
+            timer.current = setTimeout(spin, SLOT_STEP_MS);
+          } else {
+            schedule();
+          }
+        };
+        spin();
+      }, hold);
+    };
+    schedule();
+    return () => { if (timer.current) clearTimeout(timer.current); };
+  }, [words.length, reduceMotion]);
+
+  const longest = words.reduce((a, b) => (b.length > a.length ? b : a), '');
 
   return (
-    // Hard swap on a key change — flash cut, not a fade. The red keeps the
-    // changing word reading as the marker-accented part of the line.
-    <span key={idx} className="text-[#D33C24]">
-      {words[idx]}
+    // Fixed-slot inline stack sized by the longest word so the line never
+    // reflows while the reel spins. Keyed hard swap = the cut.
+    <span className="relative inline-grid text-left align-baseline" style={{ whiteSpace: 'nowrap' }}>
+      <span aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1' }}>
+        <Emphasis text={longest} />
+      </span>
+      <span key={idx} className="text-[#D33C24]" style={{ gridArea: '1 / 1' }}>
+        <Emphasis text={words[idx]} />
+      </span>
     </span>
   );
 }
@@ -92,7 +121,7 @@ function FlashCutBuild({ word }: { word: string }) {
       <span aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1', ...BUILD_STYLES[0] }}>
         {word}
       </span>
-      {/* No AnimatePresence, no transition — a keyed hard swap is the cut. */}
+      {/* No AnimatePresence, no transition. A keyed hard swap is the cut. */}
       <span key={idx} style={{ gridArea: '1 / 1', ...BUILD_STYLES[idx] }}>
         {word}
       </span>
@@ -101,53 +130,41 @@ function FlashCutBuild({ word }: { word: string }) {
 }
 
 // ─── Section ────────────────────────────────────────────────────────────────
+// The floating Ace parts live in FloatingParts.tsx now, overlaid across the
+// hero AND this section from page.tsx so they read as one continuous field.
 export const BuildManifesto = ({
   adjectives = FALLBACK_CONTENT.manifesto.adjectives,
-  steadyLine = FALLBACK_CONTENT.manifesto.steadyLine,
+  actions = FALLBACK_CONTENT.manifesto.actions,
   purposes = FALLBACK_CONTENT.manifesto.purposes,
 }: {
   adjectives?: string[];
-  steadyLine?: string;
+  actions?: string[];
   purposes?: string[];
 }) => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const reduceMotion = useReducedMotion();
-
   return (
     <section
-      ref={sectionRef}
       id="manifesto"
       data-nav-theme="light"
-      className="relative w-full overflow-hidden py-[120px] lg:py-[180px]"
-      style={{
-        backgroundColor: '#FFFFFF',
-        backgroundImage:
-          'linear-gradient(rgba(7,31,107,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(7,31,107,0.06) 1px, transparent 1px)',
-        backgroundSize: '48px 48px',
-        backgroundAttachment: 'fixed',
-      }}
+      className="bwa-surface relative w-full py-[120px] lg:py-[180px]"
     >
-      {/* Hovering Ace parts on both sides */}
-      {SIDE_PARTS.map(part => (
-        <FloatingPart key={part.src} part={part} progress={scrollYProgress} reduceMotion={!!reduceMotion} />
-      ))}
-
-      {/* Left-aligned manifesto lines */}
+      {/* Left-aligned manifesto lines. Each line holds ONE line: the slot
+          holds the longest word's width so nothing ever wraps mid-spin. */}
       <div className="relative z-10 mx-auto w-full max-w-[1280px] px-[24px] sm:px-[48px] lg:px-[80px]">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: easeOut }}
-          className="flex flex-col gap-[18px] text-left font-display text-[clamp(26px,4.6vw,56px)] font-[350] leading-[1.12] tracking-[-0.015em] text-[#0C143F]"
+          className="flex flex-col gap-[18px] text-left font-display text-[clamp(17px,4vw,52px)] font-[350] leading-[1.14] tracking-[-0.015em] text-[#0C143F]"
         >
-          <p className="m-0">
-            Build like <RotatingWord words={adjectives} />
+          <p className="m-0 whitespace-nowrap">
+            Build like <SlotWord words={adjectives} />
           </p>
-          <p className="m-0">{steadyLine}</p>
-          <p className="m-0">
-            Build cause <RotatingWord words={purposes} />
+          <p className="m-0 whitespace-nowrap">
+            Build even if you&apos;re <SlotWord words={actions} />
+          </p>
+          <p className="m-0 whitespace-nowrap">
+            Build cause <SlotWord words={purposes} />
           </p>
         </motion.div>
 
@@ -167,47 +184,3 @@ export const BuildManifesto = ({
     </section>
   );
 };
-
-function FloatingPart({
-  part,
-  progress,
-  reduceMotion,
-}: {
-  part: (typeof SIDE_PARTS)[number];
-  progress: ReturnType<typeof useScroll>['scrollYProgress'];
-  reduceMotion: boolean;
-}) {
-  // Slow upward parallax as the section scrolls through the viewport.
-  const y = useTransform(progress, [0, 1], [0, part.parallax]);
-
-  return (
-    <motion.div
-      aria-hidden="true"
-      className="pointer-events-none absolute z-0"
-      style={{
-        top: part.top,
-        width: part.width,
-        y: reduceMotion ? 0 : y,
-        // Parts bleed slightly off-screen on mobile so text keeps the room.
-        ...(part.side === 'left'
-          ? { left: 'clamp(-48px, -2vw, 0px)' }
-          : { right: 'clamp(-48px, -2vw, 0px)' }),
-      }}
-    >
-      <motion.div
-        animate={reduceMotion ? undefined : { y: [0, -part.drift, 0], rotate: [part.rotate, part.rotate + 3, part.rotate] }}
-        transition={{ duration: part.duration, ease: 'easeInOut', repeat: Infinity }}
-        style={{ rotate: part.rotate }}
-      >
-        <Image
-          src={part.src}
-          alt=""
-          width={600}
-          height={600}
-          sizes="260px"
-          style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 18px 36px rgba(12,20,63,0.18))' }}
-        />
-      </motion.div>
-    </motion.div>
-  );
-}

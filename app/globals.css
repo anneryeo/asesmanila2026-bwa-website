@@ -117,6 +117,18 @@
   background-position: -1px -1px;
 }
 
+/* The one shared white surface: true white + dark-navy hairline grid with
+   fixed attachment, so every section using it reads as ONE seamless sheet.
+   No per-section washes or vignettes — those are what created visible seams. */
+.bwa-surface {
+  background-color: #FFFFFF;
+  background-image:
+    linear-gradient(rgba(7, 31, 107, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(7, 31, 107, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-attachment: fixed;
+}
+
 /* White-primary blueprint grid — dark-navy hairlines on the white surface. */
 .bg-blueprint-light {
   background-color: var(--bg-primary);

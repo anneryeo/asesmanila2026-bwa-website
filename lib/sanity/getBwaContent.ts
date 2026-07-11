@@ -54,7 +54,7 @@ export async function getBwaContent(): Promise<BwaContent> {
       },
       manifesto: {
         adjectives: s.manifestoAdjectives?.length ? s.manifestoAdjectives : f.manifesto.adjectives,
-        steadyLine: pick(s.manifestoSteadyLine, f.manifesto.steadyLine),
+        actions: s.manifestoActions?.length ? s.manifestoActions : f.manifesto.actions,
         purposes: s.manifestoPurposes?.length ? s.manifestoPurposes : f.manifesto.purposes,
       },
       projects: {
