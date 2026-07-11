@@ -147,7 +147,6 @@ export default async function BuildWithASESPage() {
         />
         <ProjectsSection
           heading={content.projects.heading}
-          subheading={content.projects.subheading}
           items={content.projects.items}
         />
         <FaqSection heading={content.faq.heading} items={content.faq.items} />

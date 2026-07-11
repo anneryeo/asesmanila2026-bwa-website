@@ -59,7 +59,6 @@ export async function getBwaContent(): Promise<BwaContent> {
       },
       projects: {
         heading: pick(s.projectsHeading, f.projects.heading),
-        subheading: pick(s.projectsSubheading, f.projects.subheading),
         items: data?.projects?.length
           ? data.projects.map((p: {
               title: string; description: string; previewImage?: unknown;

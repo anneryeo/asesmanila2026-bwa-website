@@ -115,11 +115,9 @@ const FilterPill = ({
 // ─── Section ────────────────────────────────────────────────────────────────
 export const ProjectsSection = ({
   heading = FALLBACK_CONTENT.projects.heading,
-  subheading = FALLBACK_CONTENT.projects.subheading,
   items = FALLBACK_CONTENT.projects.items,
 }: {
   heading?: string;
-  subheading?: string;
   items?: BwaProject[];
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -157,13 +155,11 @@ export const ProjectsSection = ({
     >
       {/* Header — left aligned to the page gutter, like the parent site */}
       <div className="relative z-10 flex w-full flex-wrap items-end justify-between gap-6 px-[24px] sm:px-[40px] lg:px-[64px]">
-        <motion.div {...fadeUp(0)}>
-          <h2 className="m-0 font-display text-[clamp(24px,4vw,50px)] font-extralight leading-[1.06] tracking-[-0.02em] text-[#112F7F]">
-            {heading}
+        <motion.div {...fadeUp(0)} className="min-w-0">
+          {/* One line on desktop, sitting on the same baseline as the button. */}
+          <h2 className="m-0 font-display text-[clamp(16px,2vw,26px)] font-light leading-[1.3] tracking-[-0.01em] text-[#112F7F] lg:whitespace-nowrap">
+            <Emphasis text={heading} boldWeight={700} />
           </h2>
-          <p className="mb-0 mt-5 max-w-[64ch] font-display text-[clamp(12px,1.25vw,17px)] font-light leading-[1.55] text-[#112F7F]">
-            <Emphasis text={subheading} boldWeight={700} />
-          </p>
         </motion.div>
 
         <motion.div {...fadeUp(0.15)} className="shrink-0">

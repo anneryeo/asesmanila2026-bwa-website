@@ -54,8 +54,8 @@ export interface BwaContent {
     purposes: string[];
   };
   projects: {
+    /** Single-line heading, aligned with the see-more button. *Starred* spans render bold. */
     heading: string;
-    subheading: string;
     items: BwaProject[];
   };
   faq: {
@@ -97,9 +97,7 @@ export const FALLBACK_CONTENT: BwaContent = {
   },
 
   projects: {
-    heading: 'Built in the room',
-    subheading:
-      'Every one of these started as a shaky pitch at a *Build with ASES* night. Presented, picked apart, and shipped anyway.',
+    heading: 'Every project here started as a shaky pitch in the *BWA* room.',
     // Placeholder cards until real projects land in Sanity. Batches map to
     // BWA episode runs; industries drive the see-more filter.
     items: [

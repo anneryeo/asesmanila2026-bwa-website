@@ -44,13 +44,7 @@ export const bwaSettings = {
       name: 'projectsHeading',
       title: 'Projects heading',
       type: 'string',
-    },
-    {
-      name: 'projectsSubheading',
-      title: 'Projects subheading',
-      type: 'text',
-      rows: 2,
-      description: '*Starred* spans render bold.',
+      description: 'Single line, shown beside the see-more button. *Starred* spans render bold.',
     },
     {
       name: 'faqHeading',
