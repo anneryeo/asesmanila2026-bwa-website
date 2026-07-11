@@ -9,75 +9,120 @@ import { FALLBACK_CONTENT } from '@/content/bwaContent';
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
 // Every so often the headline turns personal: "students" -> "you",
-// "they're" -> "you're", then reverts. A brief "wait, that's you" beat
-// before snapping back to the general pitch.
+// "they're" -> "you're", then reverts. Each transition is a quick glitch
+// burst (same mechanic as GlitchFace below), not a hard instant cut, so it
+// reads as the headline briefly losing signal rather than snapping.
 const PERSONALIZE_INTERVAL_MS = 8000;
 const PERSONALIZE_DURATION_MS_MIN = 3000;
 const PERSONALIZE_DURATION_MS_MAX = 4000;
+const PERSONALIZE_BURST_CUTS_MIN = 3;
+const PERSONALIZE_BURST_CUTS_MAX = 6;
+const PERSONALIZE_BURST_STEP_MS = 70;
 
-/** True for a few seconds every ~8s, false the rest of the time. */
-function usePersonalizeCycle(): boolean {
-  const [active, setActive] = useState(false);
-  const onTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const offTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+/**
+ * Drives the headline personalization: `shown` is the word currently
+ * displayed (false = base, true = swapped); `bursting` is true only during
+ * the brief flicker between states. Every transition flickers rapidly
+ * between base/swapped a few times before landing on the target — a hard
+ * keyed swap each step (never a crossfade), so exactly one text node is
+ * ever in the DOM, same guarantee as the manifesto's SlotWord.
+ */
+function usePersonalizeGlitch(): { shown: boolean; bursting: boolean } {
+  const [shown, setShown] = useState(false);
+  const [bursting, setBursting] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const glitchTo = (target: boolean, onDone: () => void) => {
+      if (media.matches) {
+        // Reduced motion: single clean swap, no flicker burst.
+        setShown(target);
+        onDone();
+        return;
+      }
+      setBursting(true);
+      const cuts = PERSONALIZE_BURST_CUTS_MIN + Math.floor(Math.random() * (PERSONALIZE_BURST_CUTS_MAX - PERSONALIZE_BURST_CUTS_MIN + 1));
+      let i = 0;
+      const cut = () => {
+        i += 1;
+        // Every intermediate cut flickers; the final cut always lands on target.
+        setShown(i >= cuts ? target : s => !s);
+        if (i < cuts) {
+          timer.current = setTimeout(cut, PERSONALIZE_BURST_STEP_MS + Math.random() * 40);
+        } else {
+          setBursting(false);
+          onDone();
+        }
+      };
+      cut();
+    };
+
     const cycle = () => {
-      onTimer.current = setTimeout(() => {
-        setActive(true);
-        const duration = PERSONALIZE_DURATION_MS_MIN + Math.random() * (PERSONALIZE_DURATION_MS_MAX - PERSONALIZE_DURATION_MS_MIN);
-        offTimer.current = setTimeout(() => {
-          setActive(false);
-          cycle();
-        }, duration);
+      timer.current = setTimeout(() => {
+        glitchTo(true, () => {
+          const duration = PERSONALIZE_DURATION_MS_MIN + Math.random() * (PERSONALIZE_DURATION_MS_MAX - PERSONALIZE_DURATION_MS_MIN);
+          timer.current = setTimeout(() => glitchTo(false, cycle), duration);
+        });
       }, PERSONALIZE_INTERVAL_MS);
     };
+
     cycle();
-    return () => {
-      if (onTimer.current) clearTimeout(onTimer.current);
-      if (offTimer.current) clearTimeout(offTimer.current);
-    };
+    return () => { if (timer.current) clearTimeout(timer.current); };
   }, []);
 
-  return active;
+  return { shown, bursting };
 }
 
 /**
  * A word that swaps to an alternate for a beat, then reverts. Reserves a
  * fixed-width slot sized to the longer of the two variants so the swap
- * never reflows the surrounding headline, and uses a hard keyed swap (no
- * crossfade library) so exactly one text node is ever in the DOM — same
- * technique as the manifesto's SlotWord, which avoids AnimatePresence
- * leaving a stale opacity:0 node behind mid-cycle.
+ * never reflows the surrounding headline. While `bursting`, it reuses the
+ * same shake animation as GlitchFace and adds a red/blue chromatic
+ * text-shadow so the flicker reads as a glitch, not a stutter.
  */
 function SwapWord({
   base,
   swapped,
-  active,
+  shown,
+  bursting,
   className,
   style,
 }: {
   base: string;
   swapped: string;
-  active: boolean;
+  shown: boolean;
+  bursting: boolean;
   className?: string;
   style?: React.CSSProperties;
 }) {
   const longest = base.length >= swapped.length ? base : swapped;
   return (
-    <span className="relative inline-grid align-baseline" style={{ whiteSpace: 'nowrap' }}>
+    <span
+      className={`relative inline-grid align-baseline${bursting ? ' bwa-glitch-burst' : ''}`}
+      style={{ whiteSpace: 'nowrap' }}
+    >
       <span aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1', ...style }}>
         {longest}
       </span>
-      <span key={active ? 'swapped' : 'base'} className={className} style={{ gridArea: '1 / 1', ...style }}>
-        {active ? swapped : base}
+      <span
+        key={shown ? 'swapped' : 'base'}
+        className={className}
+        style={{
+          gridArea: '1 / 1',
+          ...style,
+          textShadow: bursting ? '2px 0 0 rgba(211,60,36,0.55), -2px 0 0 rgba(57,78,189,0.55)' : undefined,
+        }}
+      >
+        {shown ? swapped : base}
       </span>
     </span>
   );
 }
 
-/** Renders a plain heading segment, swapping "they're" -> "you're" mid-flow when active. */
-function PronounSegment({ text, active }: { text: string; active: boolean }) {
+/** Renders a plain heading segment, swapping "they're" -> "you're" mid-flow when shown. */
+function PronounSegment({ text, shown, bursting }: { text: string; shown: boolean; bursting: boolean }) {
   const match = text.match(/they're/i);
   if (!match || match.index === undefined) return <>{text}</>;
   const before = text.slice(0, match.index);
@@ -86,7 +131,7 @@ function PronounSegment({ text, active }: { text: string; active: boolean }) {
   return (
     <>
       {before}
-      <SwapWord base={word} swapped="you're" active={active} />
+      <SwapWord base={word} swapped="you're" shown={shown} bursting={bursting} />
       {after}
     </>
   );
@@ -207,7 +252,7 @@ export const Hero = ({
   heading?: string;
   subheading?: string;
 }) => {
-  const personalized = usePersonalizeCycle();
+  const { shown: personalized, bursting: personalizing } = usePersonalizeGlitch();
 
   return (
     <section
@@ -229,7 +274,7 @@ export const Hero = ({
 
         <h1 className="m-0 max-w-[16ch] font-display text-[clamp(38px,7.5vw,88px)] font-[350] leading-[1.02] tracking-[-0.02em] text-[#0C143F]">
           {/* *Starred* span renders bold AND red. "students"/"they're" briefly
-              swap to "you"/"you're" on a timer (usePersonalizeCycle above). */}
+              glitch into "you"/"you're" on a timer (usePersonalizeGlitch above). */}
           {heading.split('*').map((part, i) =>
             i % 2 === 1 ? (
               /^students$/i.test(part) ? (
@@ -237,7 +282,8 @@ export const Hero = ({
                   key={i}
                   base={part}
                   swapped="you"
-                  active={personalized}
+                  shown={personalized}
+                  bursting={personalizing}
                   className="text-[#D33C24]"
                   style={{ fontWeight: 900 }}
                 />
@@ -246,7 +292,7 @@ export const Hero = ({
               )
             ) : (
               <Fragment key={i}>
-                <PronounSegment text={part} active={personalized} />
+                <PronounSegment text={part} shown={personalized} bursting={personalizing} />
               </Fragment>
             )
           )}
