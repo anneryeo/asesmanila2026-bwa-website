@@ -11,7 +11,7 @@ export const revalidate = 60;
 const pageUrl = `${siteUrl}/shiptickets`;
 
 export const metadata: Metadata = {
-  title: 'Ship Tickets — Build with ASES',
+  title: 'Ship Tickets | Build with ASES',
   description:
     'Public pledges from Build with ASES episodes. Builders say what they will ship by the next session, then come back and stamp it done. Post yours with your application.',
   alternates: {
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: pageUrl,
-    title: 'Ship Tickets — Build with ASES',
+    title: 'Ship Tickets | Build with ASES',
     description:
       'The public wall of builder pledges from Build with ASES episodes. Say what you will ship. The wall remembers.',
     siteName: siteConfig.name,

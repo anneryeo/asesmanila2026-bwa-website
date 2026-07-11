@@ -18,7 +18,7 @@ export const revalidate = 60;
 const pageUrl = siteUrl;
 
 export const metadata: Metadata = {
-  title: "Build with ASES — Where Students Show What They're Building",
+  title: "Build with ASES: Where Students Show What They're Building",
   description:
     'Build with ASES is a builder session by ASES Manila where students show the projects they are actually building and get honest feedback in a room of founders, operators, and the companies who hire. Apply to present or join as a watcher.',
   keywords: [...siteConfig.keywords],
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: pageUrl,
-    title: "Build with ASES — Where Students Show What They're Building",
+    title: "Build with ASES: Where Students Show What They're Building",
     description:
       'Bring something you are building. A room of founders and operators helps you make it sharper. Apply to present or join as a watcher.',
     siteName: siteConfig.name,
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Build with ASES — Where Students Show What They're Building",
+    title: "Build with ASES: Where Students Show What They're Building",
     description:
       'Bring something you are building. Get honest feedback from founders, operators, and the people who hire.',
     images: ['/images/bwa/bwa-01.webp'],

@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 const pageUrl = `${siteUrl}/application`;
 
 export const metadata: Metadata = {
-  title: 'Apply — Build with ASES',
+  title: 'Apply to Build with ASES',
   description:
     'Apply to present what you are building at a Build with ASES session, or save a spot as a watcher. Honest feedback from founders, operators, and the companies who hire.',
   alternates: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: pageUrl,
-    title: 'Apply — Build with ASES',
+    title: 'Apply to Build with ASES',
     description:
       'Pick your track: present your build to the room, or watch other builders get tested. Post a public ship ticket while you are at it.',
     siteName: siteConfig.name,

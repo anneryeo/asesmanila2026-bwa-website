@@ -28,7 +28,7 @@ const ProjectCard = ({ project, tilt }: { project: BwaProject; tilt: number }) =
       href={project.url}
       target={isExternal ? '_blank' : undefined}
       rel={isExternal ? 'noopener noreferrer' : undefined}
-      aria-label={`${project.title} — check this out`}
+      aria-label={`${project.title}: check this out`}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -224,7 +224,7 @@ export const ProjectsSection = ({
 
               {filtered.length === 0 && (
                 <p className="mt-[32px] font-body text-[14px] text-[rgba(12,20,63,0.6)]">
-                  Nothing in that combo yet — the slot is open. Maybe it&apos;s yours.
+                  Nothing in that combo yet. The slot is open, maybe it&apos;s yours.
                 </p>
               )}
             </div>

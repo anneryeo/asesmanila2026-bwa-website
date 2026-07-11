@@ -122,7 +122,7 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
               </h1>
               <p className="mb-0 mt-5 max-w-[58ch] font-body text-[clamp(14px,1.6vw,16px)] leading-[1.7] text-[rgba(12,20,63,0.75)]">
                 Public pledges posted at Build with ASES episodes. Say what you&apos;ll ship,
-                come back next episode, and stamp it done — or carry it over and try again.
+                come back next episode, and stamp it done, or carry it over and try again.
                 No shame either way; the wall just remembers.
               </p>
             </div>
@@ -193,7 +193,7 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
             Got something you keep saying you&apos;ll finish?
           </p>
           <p className="m-0 max-w-[48ch] font-body text-[14px] leading-[1.65] text-[rgba(12,20,63,0.7)]">
-            Post a ship ticket with your application — presenting or watching, doesn&apos;t matter.
+            Post a ship ticket with your application. Presenting or watching, doesn&apos;t matter.
             The wall holds you to it, gently.
           </p>
           <Link

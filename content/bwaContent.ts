@@ -69,7 +69,7 @@ export const FALLBACK_CONTENT: BwaContent = {
   hero: {
     heading: "Where *students* show what they're building",
     subheading:
-      'Twice a month, ASES Manila fills a room with founders, operators, and builders — and hands students the mic.',
+      'Twice a month, ASES Manila fills a room with founders, operators, and builders, then hands students the mic.',
   },
 
   // "Build like (adjective) / Build even if you're (action) / Build cause (purpose)"
@@ -179,32 +179,32 @@ export const FALLBACK_CONTENT: BwaContent = {
       {
         question: 'Do I need to apply? Is this the same as joining ASES?',
         answer:
-          'There\'s an application, but it\'s not membership — different thing entirely. You\'re applying for a seat in the room at a standing event, not applying to join a club. Fill the form, pick a session, show up.',
+          'There\'s an application, but it\'s not membership. Different thing entirely. You\'re applying for a seat in the room at a standing event, not applying to join a club. Fill the form, pick a session, show up.',
       },
       {
         question: 'Who\'s allowed in the room?',
         answer:
-          'Anyone. Free if you\'re an ASES member, a small door fee if you\'re not — either way you get the same seat and the same brutally useful feedback. Nobody checks your resume at the door.',
+          'Anyone. Free if you\'re an ASES member, a small door fee if you\'re not. Either way you get the same seat and the same brutally useful feedback. Nobody checks your resume at the door.',
       },
       {
         question: 'Do I need a polished product to present?',
         answer:
-          'No. A rough prototype, a landing page, even a well-argued idea with zero code — all fair game. We built BWA because most people hide their rough drafts. We\'d rather put them in front of a room that helps make them less rough.',
+          'No. A rough prototype, a landing page, even a well-argued idea with zero code. All fair game. We built BWA because most people hide their rough drafts. We\'d rather put them in front of a room that helps make them less rough.',
       },
       {
         question: 'What happens on a problem hunt night?',
         answer:
-          'Instead of demos, the room digs for problems actually worth solving — in your campus, your city, your industry. You leave with a target and, if you want, a public ship ticket: a pledge of what you\'ll have built by the next episode.',
+          'Instead of demos, the room digs for problems actually worth solving in your campus, your city, your industry. You leave with a target and, if you want, a public ship ticket: a pledge of what you\'ll have built by the next episode.',
       },
       {
         question: 'What\'s a ship ticket?',
         answer:
-          'A public promise. At any episode you can post one — "finish my MVP", "get 10 users", "rebuild the onboarding" — and it goes up on this site for everyone to see. Come back next episode and either stamp it shipped or carry it over. Gentle public pressure, the productive kind.',
+          'A public promise. At any episode you can post one, like "finish my MVP", "get 10 users", or "rebuild the onboarding", and it goes up on this site for everyone to see. Come back next episode and either stamp it shipped or carry it over. Gentle public pressure, the productive kind.',
       },
       {
         question: 'What if I just want to watch?',
         answer:
-          'Totally fine — there\'s a watcher track in the application. Watch other builders get tested, meet people shipping the same way you are, and post a ship ticket of your own if the night gets to you.',
+          'Totally fine. There\'s a watcher track in the application. Watch other builders get tested, meet people shipping the same way you are, and post a ship ticket of your own if the night gets to you.',
       },
       {
         question: 'How do I reach a human?',

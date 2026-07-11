@@ -156,7 +156,7 @@ export const CtaSection = () => {
                   Apply to build with ASES
                 </span>
                 <span className="inline-flex items-center gap-2 font-subhead text-[clamp(10px,1.4vw,13px)] font-bold uppercase tracking-[0.16em] text-[rgba(255,255,255,0.85)]">
-                  <span>Present or watch — pick your track</span>
+                  <span>Present or watch. Pick your track</span>
                   <svg aria-hidden="true" viewBox="0 0 16 16" className="block h-[1em] w-[1em] shrink-0 transition-transform duration-300 group-hover:translate-x-[4px]">
                     <path d="M3 8h8.5M8.5 4l4 4-4 4" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="square" strokeLinejoin="miter" />
                   </svg>

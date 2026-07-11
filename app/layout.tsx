@@ -162,7 +162,7 @@ const organizationSchema = {
   },
   parentOrganization: {
     "@type": "Organization",
-    name: "ASES — Association for the Advancement of Student Entrepreneurship and Startups",
+    name: "ASES (Association for the Advancement of Student Entrepreneurship and Startups)",
     url: "https://www.ases.stanford.edu",
     sameAs: "https://www.ases.stanford.edu",
   },
@@ -180,7 +180,7 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${siteUrl}/#website`,
-  name: `Build with ASES — ${siteConfig.name}`,
+  name: `Build with ASES | ${siteConfig.name}`,
   url: siteUrl,
   description: siteConfig.description,
   about: {
