@@ -145,13 +145,7 @@ export const ProjectsSection = ({
     <section
       id="projects"
       data-nav-theme="light"
-      className="relative w-full overflow-hidden bg-white py-[72px] lg:py-[96px]"
-      style={{
-        backgroundImage:
-          'radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(128,128,128,0.08) 100%), linear-gradient(rgba(7,31,107,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(7,31,107,0.06) 1px, transparent 1px)',
-        backgroundSize: '100% 100%, 48px 48px, 48px 48px',
-        backgroundAttachment: 'scroll, fixed, fixed',
-      }}
+      className="bwa-surface relative w-full overflow-hidden py-[72px] lg:py-[96px]"
     >
       {/* Header — left aligned to the page gutter, like the parent site */}
       <div className="relative z-10 flex w-full flex-wrap items-end justify-between gap-6 px-[24px] sm:px-[40px] lg:px-[64px]">

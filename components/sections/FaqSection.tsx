@@ -39,15 +39,7 @@ export const FaqSection = ({
     <section
       id="faqs"
       data-nav-theme="light"
-      style={{
-        backgroundColor: '#ffffff',
-        backgroundImage:
-          'radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(128,128,128,0.08) 100%), linear-gradient(rgba(7,31,107,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(7,31,107,0.06) 1px, transparent 1px)',
-        backgroundSize: '100% 100%, 48px 48px, 48px 48px',
-        backgroundAttachment: 'scroll, fixed, fixed',
-        position: 'relative',
-      }}
-      className="flex w-full justify-center overflow-hidden px-[24px] py-[80px] sm:px-[40px] lg:px-[80px] lg:py-[96px]"
+      className="bwa-surface relative flex w-full justify-center overflow-hidden px-[24px] py-[80px] sm:px-[40px] lg:px-[80px] lg:py-[96px]"
     >
       <script
         type="application/ld+json"

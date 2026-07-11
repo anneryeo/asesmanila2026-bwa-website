@@ -103,15 +103,6 @@ const GALLERY = [
   { src: '/images/bwa/bwa-09.webp', tall: false, width: 1600, height: 1200 },
 ] as const;
 
-// White-primary blueprint surface: dark-navy hairlines on true white, same
-// 48px cell and fixed attachment as the parent's grid system.
-const BG = {
-  backgroundColor: '#FFFFFF',
-  backgroundImage: 'linear-gradient(rgba(7,31,107,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(7,31,107,0.06) 1px, transparent 1px)',
-  backgroundSize: '48px 48px, 48px 48px',
-  backgroundAttachment: 'fixed, fixed',
-} as const;
-
 const NAVY_INK = '#0C143F';
 
 const BASE_FIELD: React.CSSProperties = {
@@ -433,9 +424,9 @@ export function ApplicationForm() {
   if (submitState === 'success') {
     return (
       <div
+        className="bwa-surface"
         style={{
           minHeight: '100svh',
-          ...BG,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -498,9 +489,9 @@ export function ApplicationForm() {
   /* ── main form ── */
   return (
     <div
+      className="bwa-surface"
       style={{
         minHeight: '100svh',
-        ...BG,
         padding: 'clamp(96px, 12vh, 136px) clamp(24px, 6vw, 80px) clamp(64px, 8vh, 96px)',
       }}
     >

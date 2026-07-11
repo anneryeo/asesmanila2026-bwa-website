@@ -103,16 +103,7 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
   const shippedCount = tickets.filter(t => t.status === 'shipped').length;
 
   return (
-    <div
-      className="min-h-[100svh] px-[24px] pb-[96px] pt-[128px] sm:px-[40px] lg:px-[80px]"
-      style={{
-        backgroundColor: '#FFFFFF',
-        backgroundImage:
-          'linear-gradient(rgba(7,31,107,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(7,31,107,0.06) 1px, transparent 1px)',
-        backgroundSize: '48px 48px',
-        backgroundAttachment: 'fixed',
-      }}
-    >
+    <div className="bwa-surface min-h-[100svh] px-[24px] pb-[96px] pt-[128px] sm:px-[40px] lg:px-[80px]">
       <div className="mx-auto w-full max-w-[1040px]">
 
         {/* Header */}
