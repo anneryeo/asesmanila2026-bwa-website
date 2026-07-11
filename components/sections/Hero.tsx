@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FALLBACK_CONTENT } from '@/content/bwaContent';
+import { withMontserratNumbers } from '@/components/ui/Emphasis';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -121,18 +122,22 @@ function SwapWord({
   );
 }
 
-/** Renders a plain heading segment, swapping "they're" -> "you're" mid-flow when shown. */
+/**
+ * Renders a plain heading segment, swapping "they're" -> "you're" mid-flow
+ * when shown. Numbers (this heading is CMS-editable) still render in
+ * Montserrat per the brand rule — see components/ui/Emphasis.
+ */
 function PronounSegment({ text, shown, bursting }: { text: string; shown: boolean; bursting: boolean }) {
   const match = text.match(/they're/i);
-  if (!match || match.index === undefined) return <>{text}</>;
+  if (!match || match.index === undefined) return <>{withMontserratNumbers(text, 'ps')}</>;
   const before = text.slice(0, match.index);
   const word = match[0];
   const after = text.slice(match.index + word.length);
   return (
     <>
-      {before}
+      {withMontserratNumbers(before, 'ps-before')}
       <SwapWord base={word} swapped="you're" shown={shown} bursting={bursting} />
-      {after}
+      {withMontserratNumbers(after, 'ps-after')}
     </>
   );
 }
@@ -288,7 +293,9 @@ export const Hero = ({
                   style={{ fontWeight: 900 }}
                 />
               ) : (
-                <b key={i} className="text-[#D33C24]" style={{ fontWeight: 900 }}>{part}</b>
+                <b key={i} className="text-[#D33C24]" style={{ fontWeight: 900 }}>
+                  {withMontserratNumbers(part, `b${i}`)}
+                </b>
               )
             ) : (
               <Fragment key={i}>

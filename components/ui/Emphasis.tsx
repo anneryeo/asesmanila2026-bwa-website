@@ -6,9 +6,9 @@ import { Fragment } from 'react';
  * via font-subhead, matching the parent site's "50+ active student builders"
  * treatment.
  */
-const NUMBER_RUN = /(\d[\d,.+%–-]*\+?)/g;
+export const NUMBER_RUN = /(\d[\d,.+%–-]*\+?)/g;
 
-const withMontserratNumbers = (text: string, keyPrefix: string) =>
+export const withMontserratNumbers = (text: string, keyPrefix: string) =>
   text.split(NUMBER_RUN).map((chunk, i) =>
     i % 2 === 1 ? (
       // 1.15em: Montserrat numerals run visually smaller than Cocogoose caps,

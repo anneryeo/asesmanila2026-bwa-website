@@ -919,7 +919,8 @@ export function ApplicationForm() {
                         />
                         <p style={{ margin: 0, fontFamily: 'var(--font-montserrat)', fontSize: 13, color: '#ffffff', lineHeight: 1.6 }}>
                           <strong style={{ fontFamily: 'var(--font-cocogoose)', fontWeight: 350 }}>
-                            {PAGE_COPY.verifyFoundPrefix}{verify.name ? `, ${verify.name.split(' ')[0]}` : ''}.
+                            {PAGE_COPY.verifyFoundPrefix}
+                            {verify.name && <>, <Emphasis text={verify.name.split(' ')[0]} /></>}.
                           </strong>{' '}
                           {verify.role === 'presenter' ? 'You presented at ' : 'You were at '}
                           {verify.lastSession || 'a past episode'}. Welcome back.
