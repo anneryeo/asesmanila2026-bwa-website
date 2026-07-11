@@ -5,9 +5,10 @@ import { Hero } from '@/components/sections/Hero';
 import { BuildManifesto } from '@/components/sections/BuildManifesto';
 import { FloatingParts } from '@/components/sections/FloatingParts';
 import { ProjectsSection } from '@/components/sections/ProjectsSection';
+import { ShipTicketPreview } from '@/components/sections/ShipTicketPreview';
 import { FaqSection } from '@/components/sections/FaqSection';
 import { CtaSection } from '@/components/sections/CtaSection';
-import { getBwaContent } from '@/lib/sanity/getBwaContent';
+import { getBwaContent, getShipTickets } from '@/lib/sanity/getBwaContent';
 import { siteConfig, siteUrl } from '@/lib/site';
 import type { Metadata } from 'next';
 
@@ -127,7 +128,7 @@ const webPageSchema = {
 };
 
 export default async function BuildWithASESPage() {
-  const content = await getBwaContent();
+  const [content, tickets] = await Promise.all([getBwaContent(), getShipTickets()]);
 
   return (
     <>
@@ -155,6 +156,7 @@ export default async function BuildWithASESPage() {
           heading={content.projects.heading}
           items={content.projects.items}
         />
+        <ShipTicketPreview heading={content.ticketsHeading} tickets={tickets} />
         <FaqSection heading={content.faq.heading} items={content.faq.items} />
         <CtaSection />
       </main>
