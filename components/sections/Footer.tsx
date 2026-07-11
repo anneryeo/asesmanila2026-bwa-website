@@ -28,7 +28,7 @@ export function Footer() {
   return (
     <footer
       data-nav-theme="light"
-      className="bwa-surface relative overflow-hidden border-t border-[rgba(7,31,107,0.1)] px-[24px] pb-[0px] pt-[48px] sm:px-[48px] lg:px-[80px]"
+      className="bwa-surface relative overflow-hidden px-[24px] pb-[0px] pt-[48px] sm:px-[48px] lg:px-[80px]"
     >
       <div className="mx-auto w-full max-w-[1152px]">
         <motion.div

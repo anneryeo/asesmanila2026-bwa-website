@@ -175,16 +175,6 @@ export const Hero = ({
         </div>
       </motion.div>
 
-      {/* Scroll cue */}
-      <motion.div
-        aria-hidden="true"
-        className="absolute bottom-7 left-1/2 -translate-x-1/2 font-subhead text-[10px] font-bold uppercase tracking-[0.22em] text-[rgba(12,20,63,0.4)]"
-        animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 2.2, ease: 'easeInOut', repeat: Infinity }}
-      >
-        scroll
-      </motion.div>
-
       <style>{`
         @keyframes bwa-glitch-shake {
           0% { transform: translate(0, 0); }

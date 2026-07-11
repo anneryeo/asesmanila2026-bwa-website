@@ -145,7 +145,7 @@ export const BuildManifesto = ({
     <section
       id="manifesto"
       data-nav-theme="light"
-      className="bwa-surface relative w-full py-[120px] lg:py-[180px]"
+      className="bwa-surface relative w-full py-[120px] lg:py-[200px]"
     >
       {/* Left-aligned manifesto lines. Each line holds ONE line: the slot
           holds the longest word's width so nothing ever wraps mid-spin. */}
@@ -155,7 +155,7 @@ export const BuildManifesto = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: easeOut }}
-          className="flex flex-col gap-[18px] text-left font-display text-[clamp(16px,4vw,52px)] font-[350] leading-[1.14] tracking-[-0.015em] text-[#0C143F]"
+          className="flex flex-col gap-[22px] text-left font-display text-[clamp(16px,4vw,52px)] font-[350] leading-[1.14] tracking-[-0.015em] text-[#0C143F] sm:gap-[28px]"
         >
           <p className="m-0 whitespace-nowrap">
             Build like <SlotWord words={adjectives} />
@@ -174,7 +174,7 @@ export const BuildManifesto = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: easeOut, delay: 0.15 }}
-          className="mt-[100px] text-center lg:mt-[160px]"
+          className="mt-[140px] text-center sm:mt-[180px] lg:mt-[240px]"
         >
           <h2 className="m-0 font-display text-[clamp(40px,8.5vw,110px)] font-[700] leading-[1.02] tracking-[-0.02em] text-[#0C143F]">
             <FlashCutBuild word="Build" /> with ASES

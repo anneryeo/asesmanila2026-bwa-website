@@ -46,15 +46,15 @@ export const CtaSection = () => {
     >
       <div className="relative z-10 mx-auto w-full max-w-[1152px]">
 
-        <motion.p
+        <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: easeOut }}
-          className="m-0 text-center font-subhead text-[12px] font-bold uppercase tracking-[0.2em] text-[rgba(12,20,63,0.6)]"
+          className="m-0 text-center font-display text-[clamp(24px,4.5vw,44px)] font-[350] leading-[1.15] tracking-[-0.01em] text-[#0C143F]"
         >
           Your seat in the room is one form away
-        </motion.p>
+        </motion.h2>
 
         {/* ── The blueprint button, flanked/covered by loose parts ── */}
         <motion.div
