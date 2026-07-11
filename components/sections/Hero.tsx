@@ -8,6 +8,90 @@ import { FALLBACK_CONTENT } from '@/content/bwaContent';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
+// Every so often the headline turns personal: "students" -> "you",
+// "they're" -> "you're", then reverts. A brief "wait, that's you" beat
+// before snapping back to the general pitch.
+const PERSONALIZE_INTERVAL_MS = 8000;
+const PERSONALIZE_DURATION_MS_MIN = 3000;
+const PERSONALIZE_DURATION_MS_MAX = 4000;
+
+/** True for a few seconds every ~8s, false the rest of the time. */
+function usePersonalizeCycle(): boolean {
+  const [active, setActive] = useState(false);
+  const onTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const offTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => {
+    const cycle = () => {
+      onTimer.current = setTimeout(() => {
+        setActive(true);
+        const duration = PERSONALIZE_DURATION_MS_MIN + Math.random() * (PERSONALIZE_DURATION_MS_MAX - PERSONALIZE_DURATION_MS_MIN);
+        offTimer.current = setTimeout(() => {
+          setActive(false);
+          cycle();
+        }, duration);
+      }, PERSONALIZE_INTERVAL_MS);
+    };
+    cycle();
+    return () => {
+      if (onTimer.current) clearTimeout(onTimer.current);
+      if (offTimer.current) clearTimeout(offTimer.current);
+    };
+  }, []);
+
+  return active;
+}
+
+/**
+ * A word that swaps to an alternate for a beat, then reverts. Reserves a
+ * fixed-width slot sized to the longer of the two variants so the swap
+ * never reflows the surrounding headline, and uses a hard keyed swap (no
+ * crossfade library) so exactly one text node is ever in the DOM — same
+ * technique as the manifesto's SlotWord, which avoids AnimatePresence
+ * leaving a stale opacity:0 node behind mid-cycle.
+ */
+function SwapWord({
+  base,
+  swapped,
+  active,
+  className,
+  style,
+}: {
+  base: string;
+  swapped: string;
+  active: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const longest = base.length >= swapped.length ? base : swapped;
+  return (
+    <span className="relative inline-grid align-baseline" style={{ whiteSpace: 'nowrap' }}>
+      <span aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1', ...style }}>
+        {longest}
+      </span>
+      <span key={active ? 'swapped' : 'base'} className={className} style={{ gridArea: '1 / 1', ...style }}>
+        {active ? swapped : base}
+      </span>
+    </span>
+  );
+}
+
+/** Renders a plain heading segment, swapping "they're" -> "you're" mid-flow when active. */
+function PronounSegment({ text, active }: { text: string; active: boolean }) {
+  const match = text.match(/they're/i);
+  if (!match || match.index === undefined) return <>{text}</>;
+  const before = text.slice(0, match.index);
+  const word = match[0];
+  const after = text.slice(match.index + word.length);
+  return (
+    <>
+      {before}
+      <SwapWord base={word} swapped="you're" active={active} />
+      {after}
+    </>
+  );
+}
+
 // The two head frames Ace glitches between — calm and grinning.
 const FACE_FRAMES = ['/images/ace-parts_5.png', '/images/ace-parts_6.png'] as const;
 
@@ -123,6 +207,8 @@ export const Hero = ({
   heading?: string;
   subheading?: string;
 }) => {
+  const personalized = usePersonalizeCycle();
+
   return (
     <section
       id="top"
@@ -142,12 +228,26 @@ export const Hero = ({
         </p>
 
         <h1 className="m-0 max-w-[16ch] font-display text-[clamp(38px,7.5vw,88px)] font-[350] leading-[1.02] tracking-[-0.02em] text-[#0C143F]">
-          {/* *Starred* span renders bold AND red */}
+          {/* *Starred* span renders bold AND red. "students"/"they're" briefly
+              swap to "you"/"you're" on a timer (usePersonalizeCycle above). */}
           {heading.split('*').map((part, i) =>
             i % 2 === 1 ? (
-              <b key={i} className="text-[#D33C24]" style={{ fontWeight: 900 }}>{part}</b>
+              /^students$/i.test(part) ? (
+                <SwapWord
+                  key={i}
+                  base={part}
+                  swapped="you"
+                  active={personalized}
+                  className="text-[#D33C24]"
+                  style={{ fontWeight: 900 }}
+                />
+              ) : (
+                <b key={i} className="text-[#D33C24]" style={{ fontWeight: 900 }}>{part}</b>
+              )
             ) : (
-              <Fragment key={i}>{part}</Fragment>
+              <Fragment key={i}>
+                <PronounSegment text={part} active={personalized} />
+              </Fragment>
             )
           )}
         </h1>
