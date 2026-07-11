@@ -30,11 +30,15 @@ export interface ShipTicket {
   name: string;
   /** Optional project the pledge belongs to */
   project?: string;
-  /** Episode where the ticket was posted, e.g. "Episode 03" */
+  /** Episode where the ticket was posted, e.g. "Episode 03". Never changes. */
   episode: string;
   /** The public pledge — what they promise to ship by the next episode */
   pledge: string;
   status: 'pledged' | 'shipped' | 'carried-over';
+  /** Episode where it was stamped shipped, if different from where it was pledged */
+  shippedEpisode?: string;
+  /** How many times the pledge was carried over before shipping (or so far) */
+  carriedCount?: number;
   /** Display date, e.g. "Jun 2026" */
   date: string;
 }
@@ -222,7 +226,7 @@ export const FALLBACK_CONTENT: BwaContent = {
   shipTickets: [
     { id: 'st-01', name: 'Mika R.', project: 'Presyo', episode: 'Episode 03', pledge: 'Finish the MVP and get it in front of 5 sari-sari store owners.', status: 'pledged', date: 'Jun 2026' },
     { id: 'st-02', name: 'Paolo D.', project: 'NotaBene', episode: 'Episode 03', pledge: 'Ship the reviewer-sharing feature my blockmates keep asking for.', status: 'pledged', date: 'Jun 2026' },
-    { id: 'st-03', name: 'Ella S.', episode: 'Episode 02', pledge: 'Stop redesigning the landing page and actually launch it.', status: 'shipped', date: 'May 2026' },
+    { id: 'st-03', name: 'Ella S.', episode: 'Episode 01', pledge: 'Stop redesigning the landing page and actually launch it.', status: 'shipped', shippedEpisode: 'Episode 03', carriedCount: 1, date: 'May 2026' },
     { id: 'st-04', name: 'JC V.', project: 'Byahe', episode: 'Episode 02', pledge: 'Interview 10 commuters and kill or confirm the idea.', status: 'shipped', date: 'May 2026' },
     { id: 'st-05', name: 'Andrea L.', episode: 'Episode 02', pledge: 'Write the first line of code instead of the tenth business plan.', status: 'carried-over', date: 'May 2026' },
     { id: 'st-06', name: 'Ram G.', project: 'Kita', episode: 'Episode 01', pledge: 'Get one real freelancer to invoice through the prototype.', status: 'shipped', date: 'Apr 2026' },

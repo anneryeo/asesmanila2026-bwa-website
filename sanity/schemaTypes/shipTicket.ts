@@ -26,9 +26,9 @@ export const shipTicket = {
     },
     {
       name: 'episode',
-      title: 'Episode',
+      title: 'Pledged at episode',
       type: 'string',
-      description: 'Episode where the ticket was posted, e.g. "Episode 03".',
+      description: 'Episode where the ticket was posted, e.g. "Episode 03". Never changes — carry-overs and the ship stamp are tracked in the history below.',
       validation: (Rule: { required: () => unknown }) => Rule.required(),
     },
     {
@@ -54,9 +54,51 @@ export const shipTicket = {
       initialValue: 'pledged',
     },
     {
+      name: 'shippedEpisode',
+      title: 'Shipped at episode',
+      type: 'string',
+      description: 'Episode where the pledge was stamped shipped. Empty until then. A ticket pledged at Episode 01 and shipped at Episode 05 keeps both.',
+    },
+    {
+      name: 'history',
+      title: 'Status history',
+      type: 'array',
+      description: 'One entry per stamp: every carry-over and the final ship. Written by the site when a builder updates their ticket.',
+      of: [
+        {
+          type: 'object',
+          name: 'ticketStamp',
+          fields: [
+            {
+              name: 'action',
+              title: 'Action',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Shipped', value: 'shipped' },
+                  { title: 'Carried over', value: 'carried-over' },
+                ],
+              },
+            },
+            { name: 'episode', title: 'Episode', type: 'string' },
+            { name: 'at', title: 'Stamped at', type: 'datetime' },
+          ],
+          preview: {
+            select: { title: 'action', subtitle: 'episode' },
+          },
+        },
+      ],
+    },
+    {
       name: 'postedAt',
       title: 'Posted at',
       type: 'datetime',
+    },
+    {
+      name: 'updatedAt',
+      title: 'Last updated',
+      type: 'datetime',
+      description: 'Set when the builder stamps the ticket shipped or carries it over.',
     },
     {
       name: 'email',

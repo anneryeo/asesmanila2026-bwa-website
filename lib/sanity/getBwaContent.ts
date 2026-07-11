@@ -14,7 +14,8 @@ const SITE_QUERY = /* groq */ `{
 }`;
 
 const TICKETS_QUERY = /* groq */ `*[_type == "shipTicket"] | order(postedAt desc) {
-  "id": _id, name, project, episode, pledge, status, postedAt
+  "id": _id, name, project, episode, pledge, status, postedAt, shippedEpisode,
+  "carriedCount": count(history[action == "carried-over"])
 }`;
 
 const urlFor = (source: unknown): string | undefined => {
@@ -97,6 +98,7 @@ export async function getShipTickets(): Promise<ShipTicket[]> {
     return rows.map((t: {
       id: string; name: string; project?: string; episode?: string;
       pledge: string; status?: string; postedAt?: string;
+      shippedEpisode?: string; carriedCount?: number;
     }): ShipTicket => ({
       id: t.id,
       name: t.name,
@@ -104,6 +106,8 @@ export async function getShipTickets(): Promise<ShipTicket[]> {
       episode: t.episode ?? '',
       pledge: t.pledge,
       status: t.status === 'shipped' || t.status === 'carried-over' ? t.status : 'pledged',
+      shippedEpisode: t.shippedEpisode || undefined,
+      carriedCount: t.carriedCount || undefined,
       date: t.postedAt
         ? new Date(t.postedAt).toLocaleDateString('en-PH', { month: 'short', year: 'numeric' })
         : '',

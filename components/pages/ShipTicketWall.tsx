@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -8,6 +8,207 @@ import { STATUS_META, TicketCard } from '@/components/ui/TicketCard';
 import type { ShipTicket } from '@/content/bwaContent';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
+
+// ─── Stamp panel: come back and mark your ticket ────────────────────────────
+interface OpenTicket {
+  id: string;
+  pledge: string;
+  project?: string;
+  episode: string;
+  status: 'pledged' | 'carried-over';
+  carriedCount: number;
+}
+
+const StampPanel = () => {
+  const [email, setEmail] = useState('');
+  const [phase, setPhase] = useState<'idle' | 'looking' | 'found' | 'none' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+  const [openTickets, setOpenTickets] = useState<OpenTicket[]>([]);
+  const [currentEpisode, setCurrentEpisode] = useState('');
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [stamped, setStamped] = useState<Record<string, 'shipped' | 'carried-over'>>({});
+
+  // The stamp is tagged with the current episode; sessions come from the same
+  // endpoint the application form uses. First active session = the one now.
+  useEffect(() => {
+    fetch('/api/bwa-sessions')
+      .then(res => res.json())
+      .then((data: { sessions?: { id: string; label: string }[] }) => {
+        setCurrentEpisode(data.sessions?.[0]?.label ?? '');
+      })
+      .catch(() => {});
+  }, []);
+
+  const lookUp = async () => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setPhase('error');
+      setMessage('Enter the email you posted your ticket with.');
+      return;
+    }
+    setPhase('looking');
+    setMessage('');
+    try {
+      const res = await fetch('/api/ship-ticket/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = (await res.json()) as { success?: boolean; message?: string; tickets?: OpenTicket[] };
+      if (!data.success) {
+        setPhase('error');
+        setMessage(data.message ?? 'Something went wrong. Please try again.');
+        return;
+      }
+      if (!data.tickets?.length) {
+        setPhase('none');
+        return;
+      }
+      setOpenTickets(data.tickets);
+      setStamped({});
+      setPhase('found');
+    } catch {
+      setPhase('error');
+      setMessage('Could not reach the wall. Please try again.');
+    }
+  };
+
+  const stamp = async (ticketId: string, action: 'shipped' | 'carried-over') => {
+    setBusyId(ticketId);
+    setMessage('');
+    try {
+      const res = await fetch('/api/ship-ticket/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), ticketId, action, episode: currentEpisode }),
+      });
+      const data = (await res.json()) as { success?: boolean; message?: string };
+      if (data.success) {
+        setStamped(prev => ({ ...prev, [ticketId]: action }));
+      } else {
+        setMessage(data.message ?? 'Could not stamp that ticket. Please try again.');
+      }
+    } catch {
+      setMessage('Could not reach the wall. Please try again.');
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: easeOut }}
+      className="mt-[72px] border border-[rgba(7,31,107,0.2)] bg-white px-6 py-8 shadow-[0_14px_36px_rgba(7,31,107,0.1)] sm:px-8"
+    >
+      <p className="m-0 font-subhead text-[11px] font-bold uppercase tracking-[0.16em] text-[rgba(12,20,63,0.5)]">
+        Back with receipts?
+      </p>
+      <h2 className="mb-0 mt-2 font-display text-[clamp(18px,2.6vw,26px)] font-[350] leading-[1.3] text-[#0C143F]">
+        Stamp your ticket
+      </h2>
+      <p className="mb-0 mt-3 max-w-[56ch] font-body text-[14px] leading-[1.65] text-[rgba(12,20,63,0.7)]">
+        Enter the email you posted with and mark your pledge shipped — or carry it
+        over to {currentEpisode || 'the next episode'} and take another swing. Shipping at
+        episode five what you pledged at episode one still counts. The wall keeps the whole story.
+      </p>
+
+      {/* Email lookup */}
+      <div className="mt-5 flex max-w-[480px] flex-col gap-2 sm:flex-row">
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter') lookUp(); }}
+          placeholder="you@example.com"
+          className="min-w-0 flex-1 rounded-none border border-[rgba(12,20,63,0.3)] bg-white px-4 py-[11px] font-body text-[14px] text-[#0C143F] outline-none focus:border-[#112F7F]"
+        />
+        <button
+          type="button"
+          onClick={lookUp}
+          disabled={phase === 'looking'}
+          className="cursor-pointer rounded-none bg-[#112F7F] px-6 py-[11px] font-display text-[14px] font-[350] tracking-[0.03em] text-white transition-colors hover:bg-[#0C2461] disabled:cursor-wait disabled:opacity-60"
+        >
+          {phase === 'looking' ? 'Checking…' : 'Find my tickets'}
+        </button>
+      </div>
+
+      {phase === 'none' && (
+        <p className="mb-0 mt-4 font-body text-[13px] leading-[1.6] text-[rgba(12,20,63,0.65)]">
+          No open tickets under that email — either they&apos;re all stamped shipped already
+          (nice), or the pledge went up under a different address.
+        </p>
+      )}
+      {phase === 'error' && message && (
+        <p className="mb-0 mt-4 font-body text-[13px] text-[#D33C24]">{message}</p>
+      )}
+
+      {/* Open tickets */}
+      {phase === 'found' && (
+        <div className="mt-6 flex flex-col gap-3">
+          {openTickets.map(t => {
+            const done = stamped[t.id];
+            return (
+              <div
+                key={t.id}
+                className="flex flex-col gap-3 border border-[rgba(12,20,63,0.15)] bg-[rgba(7,31,107,0.02)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="min-w-0">
+                  <p className="m-0 font-display text-[14px] font-[350] leading-[1.5] text-[#0C143F]">
+                    “{t.pledge}”
+                  </p>
+                  <p className="mb-0 mt-1 font-subhead text-[11px] font-semibold text-[rgba(12,20,63,0.5)]">
+                    Pledged at {t.episode}
+                    {t.carriedCount > 0 && ` · carried over ${t.carriedCount}×`}
+                    {t.project && ` · ${t.project}`}
+                  </p>
+                </div>
+                {done ? (
+                  <span
+                    className="shrink-0 self-start px-3 py-[6px] font-display text-[11px] font-[700] uppercase tracking-[0.08em] sm:self-center"
+                    style={{
+                      color: done === 'shipped' ? '#ffffff' : '#B98A00',
+                      background: done === 'shipped' ? '#112F7F' : 'transparent',
+                      border: `2px solid ${done === 'shipped' ? '#112F7F' : '#B98A00'}`,
+                    }}
+                  >
+                    {done === 'shipped' ? 'Shipped ✓' : 'Carried over'}
+                  </span>
+                ) : (
+                  <div className="flex shrink-0 gap-2">
+                    <button
+                      type="button"
+                      disabled={busyId === t.id}
+                      onClick={() => stamp(t.id, 'shipped')}
+                      className="cursor-pointer rounded-none bg-[#112F7F] px-4 py-[8px] font-display text-[12px] font-[350] text-white transition-colors hover:bg-[#0C2461] disabled:cursor-wait disabled:opacity-60"
+                    >
+                      Shipped it
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busyId === t.id}
+                      onClick={() => stamp(t.id, 'carried-over')}
+                      className="cursor-pointer rounded-none border border-[#B98A00] bg-transparent px-4 py-[8px] font-display text-[12px] font-[350] text-[#B98A00] transition-colors hover:bg-[rgba(185,138,0,0.08)] disabled:cursor-wait disabled:opacity-60"
+                    >
+                      Carry it over
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {message && <p className="mb-0 mt-1 font-body text-[13px] text-[#D33C24]">{message}</p>}
+          {Object.keys(stamped).length > 0 && (
+            <p className="mb-0 mt-1 font-body text-[13px] text-[rgba(12,20,63,0.65)]">
+              Stamped. The wall refreshes within a minute.
+            </p>
+          )}
+        </div>
+      )}
+    </motion.section>
+  );
+};
 
 // ─── The wall ───────────────────────────────────────────────────────────────
 export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
@@ -105,6 +306,9 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
             No tickets in that combo yet. The wall has room.
           </p>
         )}
+
+        {/* Stamp-your-ticket panel for returning builders */}
+        <StampPanel />
 
         {/* Post-your-own CTA */}
         <motion.div

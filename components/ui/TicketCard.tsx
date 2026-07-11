@@ -54,6 +54,22 @@ export const TicketCard = ({ ticket, index }: { ticket: ShipTicket; index: numbe
             </>
           )}
         </div>
+
+        {/* Journey line — only when the ticket has one. A pledge that took
+            four episodes to ship wears that as a badge, not a stain. */}
+        {(Boolean(ticket.carriedCount) ||
+          (ticket.shippedEpisode && ticket.shippedEpisode !== ticket.episode)) && (
+          <p className="mb-0 mt-2 font-subhead text-[11px] font-semibold text-[rgba(12,20,63,0.5)]">
+            {[
+              ticket.carriedCount ? `Carried over ${ticket.carriedCount}×` : null,
+              ticket.shippedEpisode && ticket.shippedEpisode !== ticket.episode
+                ? `Shipped at ${ticket.shippedEpisode}`
+                : null,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
+          </p>
+        )}
       </div>
 
       {/* Perforated stub with the status stamp */}

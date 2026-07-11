@@ -15,6 +15,10 @@
  *                                   (email must exist in Presenters/Watchers;
  *                                   dedupes identical pledges; max 5 per day
  *                                   per email to keep spam off the wall)
+ *   POST role=shipticket-update  -> doPost() : logs a status stamp on an
+ *                                   existing ticket (shipped / carried-over).
+ *                                   Sanity is the record for status; this
+ *                                   keeps the sheet row in sync.
  *
  * Consumed by:
  *   app/api/bwa-sessions/route.ts  (GET sessions)
@@ -41,7 +45,10 @@
  *   Watchers     : Timestamp | Session ID | Session | Name | Email |
  *                  Membership | Hoping to see | Notify future | Returning |
  *                  Ship ticket
- *   ShipTickets  : Timestamp | Email | Name | Project | Episode | Pledge
+ *   ShipTickets  : Timestamp | Email | Name | Project | Episode | Pledge |
+ *                  Status | Shipped episode | Updated
+ *                  (Status columns are written by index G:I — an existing
+ *                  sheet keeps working; add the three header labels once.)
  *   MailingList  : Email | Name | Role | Last session | Notify future | Updated
  */
 
@@ -60,7 +67,8 @@ const HEADERS = {
                'Question 3', 'Notify future', 'Returning', 'Ship ticket'],
   watchers:   ['Timestamp', 'Session ID', 'Session', 'Name', 'Email', 'Membership',
                'Hoping to see', 'Notify future', 'Returning', 'Ship ticket'],
-  shiptickets: ['Timestamp', 'Email', 'Name', 'Project', 'Episode', 'Pledge'],
+  shiptickets: ['Timestamp', 'Email', 'Name', 'Project', 'Episode', 'Pledge',
+                'Status', 'Shipped episode', 'Updated'],
   mailing:    ['Email', 'Name', 'Role', 'Last session', 'Notify future', 'Updated'],
 };
 
@@ -126,6 +134,7 @@ function doPost(e) {
     if (d.role === 'presenter')  return handlePresenter(d);
     if (d.role === 'watcher')    return handleWatcher(d);
     if (d.role === 'shipticket') return handleShipTicket(d);
+    if (d.role === 'shipticket-update') return handleShipTicketUpdate(d);
     return json({ success: false, message: 'Unknown application type.' });
   } catch (err) {
     return json({ success: false, message: 'Could not read submission: ' + err });
@@ -209,6 +218,36 @@ function handleShipTicket(d) {
     new Date(), email, name, String(d.project || '').trim(), String(d.episode || '').trim(), pledge,
   ]);
   return json({ success: true });
+}
+
+/**
+ * Status stamp on an existing ticket: shipped or carried-over. Finds the row
+ * by email + pledge (the pair the site posted with) and writes Status /
+ * Shipped episode / Updated in columns G:I. The Sanity document is already
+ * patched by the time this runs — this only keeps the sheet mirror honest.
+ */
+function handleShipTicketUpdate(d) {
+  const email = String(d.email || '').trim().toLowerCase();
+  const pledge = String(d.pledge || '').trim();
+  const action = String(d.action || '').trim();
+  const episode = String(d.episode || '').trim();
+  if (!email || !pledge || (action !== 'shipped' && action !== 'carried-over')) {
+    return json({ success: false, message: 'Email, pledge, and a valid action are required.' });
+  }
+
+  const sheet = sheetOf(SHEETS.shiptickets, HEADERS.shiptickets);
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][1]).trim().toLowerCase() !== email) continue;
+    if (String(rows[i][5]).trim().toLowerCase() !== pledge.toLowerCase()) continue;
+    sheet.getRange(i + 1, 7, 1, 3).setValues([[
+      action,
+      action === 'shipped' ? episode : '',
+      new Date(),
+    ]]);
+    return json({ success: true });
+  }
+  return json({ success: false, notFound: true, message: 'Ticket row not found in the sheet.' });
 }
 
 /** Is this email anywhere in the Presenters or Watchers lists? */
