@@ -3,8 +3,8 @@
 export const siteConfig = {
   name: "ASES Manila",
   shortName: "ASES",
-  domain: "bwa.asesmanila.com",
-  url: "https://bwa.asesmanila.com/",
+  domain: "buildwithases.asesmanila.com",
+  url: "https://buildwithases.asesmanila.com/",
   title: "Build with ASES — Show Us What You Are Building",
   description:
     "Build with ASES is a builder session by ASES Manila where students show the projects they are actually building and get honest feedback in a room of founders, operators, and the companies who hire. Apply to present or join as a watcher.",
