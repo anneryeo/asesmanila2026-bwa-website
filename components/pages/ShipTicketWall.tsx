@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { Emphasis } from '@/components/ui/Emphasis';
 import type { ShipTicket } from '@/content/bwaContent';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -41,8 +42,10 @@ const TicketCard = ({ ticket, index }: { ticket: ShipTicket; index: number }) =>
           </span>
         </div>
 
+        {/* Pledges are Cocogoose, so digits inside must fall back to
+            Montserrat. Emphasis enforces the numeral brand rule. */}
         <p className="mb-0 mt-3 font-display text-[clamp(15px,1.8vw,18px)] font-[350] leading-[1.45] text-[#0C143F]">
-          “{ticket.pledge}”
+          “<Emphasis text={ticket.pledge} />”
         </p>
 
         <div className="mt-4 flex items-center gap-2">
