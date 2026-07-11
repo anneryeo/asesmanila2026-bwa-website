@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { STATUS_META, TicketCard } from '@/components/ui/TicketCard';
 import type { ShipTicket } from '@/content/bwaContent';
@@ -238,29 +237,18 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: easeOut }}
         >
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <p className="mb-3 font-subhead text-[13px] font-normal uppercase tracking-[0.18em] text-navy-700 opacity-70">
-                The wall
-              </p>
-              <h1 className="m-0 font-display text-[clamp(28px,5vw,52px)] font-[350] leading-[1.05] tracking-[-0.02em] text-[#0C143F]">
-                Ship tickets
-              </h1>
-              <p className="mb-0 mt-5 max-w-[58ch] font-body text-[clamp(14px,1.6vw,16px)] leading-[1.7] text-[rgba(12,20,63,0.75)]">
-                Public pledges posted at Build with ASES episodes. Say what you&apos;ll ship,
-                come back next episode, and stamp it done, or carry it over and try again.
-                No shame either way; the wall just remembers.
-              </p>
-            </div>
-            <Image
-              src="/images/ace-parts_1.png"
-              alt=""
-              aria-hidden="true"
-              width={893}
-              height={582}
-              className="hidden w-[180px] shrink-0 md:block"
-              style={{ height: 'auto', transform: 'rotate(8deg)', filter: 'drop-shadow(0 14px 28px rgba(12,20,63,0.18))' }}
-            />
+          <div>
+            <p className="mb-3 font-subhead text-[13px] font-normal uppercase tracking-[0.18em] text-navy-700 opacity-70">
+              The wall
+            </p>
+            <h1 className="m-0 font-display text-[clamp(28px,5vw,52px)] font-[350] leading-[1.05] tracking-[-0.02em] text-[#0C143F]">
+              Ship tickets
+            </h1>
+            <p className="mb-0 mt-5 max-w-[58ch] font-body text-[clamp(14px,1.6vw,16px)] leading-[1.7] text-[rgba(12,20,63,0.75)]">
+              Public pledges posted at Build with ASES episodes. Say what you&apos;ll ship,
+              come back next episode, and stamp it done, or carry it over and try again.
+              No shame either way; the wall just remembers.
+            </p>
           </div>
 
           {/* Count line — numerals in Montserrat per brand rule */}

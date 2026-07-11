@@ -204,6 +204,16 @@ interface VerifyState {
 
 const VERIFY_IDLE: VerifyState = { status: 'idle', email: '', name: '', role: '', lastSession: '' };
 
+/** A returning builder's open (not-yet-shipped) ship ticket. */
+interface OpenTicket {
+  id: string;
+  pledge: string;
+  project?: string;
+  episode: string;
+  status: 'pledged' | 'carried-over';
+  carriedCount: number;
+}
+
 interface PresenterFields {
   name: string;
   contact: string;
@@ -292,6 +302,15 @@ export function ApplicationForm() {
   const [ticketAttempted, setTicketAttempted] = useState(false);
   const [ticketError, setTicketError] = useState('');
 
+  // Open tickets for a verified returning builder — stamp shipped/carried-over
+  // right here instead of re-typing everything on the /shiptickets wall.
+  const [openTickets, setOpenTickets] = useState<OpenTicket[]>([]);
+  const [openTicketsLoading, setOpenTicketsLoading] = useState(false);
+  const [stampedTickets, setStampedTickets] = useState<Record<string, 'shipped' | 'carried-over'>>({});
+  const [stampBusyId, setStampBusyId] = useState<string | null>(null);
+  const [stampError, setStampError] = useState('');
+  const openTicketsChecked = useRef('');
+
   const [presenter, setPresenter] = useState<PresenterFields>({
     name: '', contact: '', projectName: '', oneLiner: '',
     stage: 'idea', link: '', q1: '', q2: '', q3: '',
@@ -316,6 +335,54 @@ export function ApplicationForm() {
   const isReturning = track === 'presenter-again' || track === 'watcher-again';
   const needsVerify = isReturning || track === 'shipticket';
   const verified = verify.status === 'found';
+
+  // Once the ship-ticket track verifies an email, look up their open tickets
+  // so they can stamp shipped/carried-over without retyping anything, or skip
+  // straight to posting a new pledge below.
+  useEffect(() => {
+    if (track !== 'shipticket' || !verified || !verify.email) return;
+    if (openTicketsChecked.current === verify.email) return;
+    openTicketsChecked.current = verify.email;
+    setOpenTicketsLoading(true);
+    fetch('/api/ship-ticket/lookup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: verify.email }),
+    })
+      .then(res => res.json())
+      .then((data: { success?: boolean; tickets?: OpenTicket[] }) => {
+        setOpenTickets(data.success ? data.tickets ?? [] : []);
+      })
+      .catch(() => setOpenTickets([]))
+      .finally(() => setOpenTicketsLoading(false));
+  }, [track, verified, verify.email]);
+
+  async function stampOpenTicket(ticketId: string, action: 'shipped' | 'carried-over') {
+    setStampBusyId(ticketId);
+    setStampError('');
+    try {
+      const res = await fetch('/api/ship-ticket/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: verify.email,
+          ticketId,
+          action,
+          episode: sessions[0]?.label ?? verify.lastSession,
+        }),
+      });
+      const data = (await res.json()) as { success?: boolean; message?: string };
+      if (data.success) {
+        setStampedTickets(prev => ({ ...prev, [ticketId]: action }));
+      } else {
+        setStampError(data.message ?? PAGE_COPY.errorGeneric);
+      }
+    } catch {
+      setStampError(PAGE_COPY.errorGeneric);
+    } finally {
+      setStampBusyId(null);
+    }
+  }
   const role: 'presenter' | 'watcher' | null =
     track === 'presenter' || track === 'presenter-again' ? 'presenter'
     : track === 'watcher' || track === 'watcher-again' ? 'watcher'
@@ -876,6 +943,79 @@ export function ApplicationForm() {
               {track === 'shipticket' && verified && (
                 <div style={{ marginBottom: 8 }}>
                   <div style={STEP_STYLE}>{PAGE_COPY.stepTicket}</div>
+
+                  {/* Open tickets for this email — stamp them here, no retyping. */}
+                  {!openTicketsLoading && openTickets.length > 0 && (
+                    <div
+                      style={{
+                        border: '1px solid rgba(7,31,107,0.16)',
+                        background: 'rgba(7,31,107,0.02)',
+                        padding: '16px 16px 14px',
+                        marginBottom: 16,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 12,
+                      }}
+                    >
+                      <p style={{ margin: 0, fontFamily: 'var(--font-montserrat)', fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(12,20,63,0.55)' }}>
+                        You&apos;ve got open tickets
+                      </p>
+                      {openTickets.map(t => {
+                        const done = stampedTickets[t.id];
+                        return (
+                          <div
+                            key={t.id}
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: 10,
+                              border: '1px solid rgba(12,20,63,0.12)',
+                              background: '#fff',
+                              padding: '12px 14px',
+                            }}
+                          >
+                            <p style={{ margin: 0, fontFamily: 'var(--font-cocogoose)', fontWeight: 350, fontSize: 14, lineHeight: 1.5, color: NAVY_INK }}>
+                              &ldquo;{t.pledge}&rdquo;
+                            </p>
+                            <p style={{ margin: 0, fontFamily: 'var(--font-montserrat)', fontSize: 11, fontWeight: 600, color: 'rgba(12,20,63,0.5)' }}>
+                              Pledged at {t.episode}
+                              {t.carriedCount > 0 && ` · carried over ${t.carriedCount}×`}
+                              {t.project && ` · ${t.project}`}
+                            </p>
+                            {done ? (
+                              <span style={{ alignSelf: 'flex-start', fontFamily: 'var(--font-cocogoose)', fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '5px 10px', border: `2px solid ${done === 'shipped' ? '#112F7F' : '#B98A00'}`, color: done === 'shipped' ? '#fff' : '#B98A00', background: done === 'shipped' ? '#112F7F' : 'transparent' }}>
+                                {done === 'shipped' ? 'Shipped ✓' : 'Carried over'}
+                              </span>
+                            ) : (
+                              <div style={{ display: 'flex', gap: 8 }}>
+                                <button
+                                  type="button"
+                                  disabled={stampBusyId === t.id}
+                                  onClick={() => stampOpenTicket(t.id, 'shipped')}
+                                  style={{ cursor: stampBusyId === t.id ? 'wait' : 'pointer', border: 'none', background: '#112F7F', color: '#fff', fontFamily: 'var(--font-cocogoose)', fontWeight: 350, fontSize: 12, padding: '7px 14px', opacity: stampBusyId === t.id ? 0.6 : 1 }}
+                                >
+                                  Shipped it
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={stampBusyId === t.id}
+                                  onClick={() => stampOpenTicket(t.id, 'carried-over')}
+                                  style={{ cursor: stampBusyId === t.id ? 'wait' : 'pointer', border: '1px solid #B98A00', background: 'transparent', color: '#B98A00', fontFamily: 'var(--font-cocogoose)', fontWeight: 350, fontSize: 12, padding: '7px 14px', opacity: stampBusyId === t.id ? 0.6 : 1 }}
+                                >
+                                  Carry it over
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                      {stampError && <p style={{ ...ERROR_STYLE, margin: 0 }}>{stampError}</p>}
+                      <p style={{ margin: 0, fontFamily: 'var(--font-montserrat)', fontSize: 12, color: 'rgba(12,20,63,0.55)' }}>
+                        Shipping something new instead? Post a fresh pledge below.
+                      </p>
+                    </div>
+                  )}
+
                   <div
                     style={{
                       border: '1px dashed rgba(211,60,36,0.5)',
