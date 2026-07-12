@@ -2035,7 +2035,7 @@ function GalleryColumn({
             aria-hidden="true"
             width={g.width}
             height={g.height}
-            loading="lazy"
+            loading={i === 0 ? 'eager' : 'lazy'}
             style={{
               width: '100%',
               height: 'auto',
