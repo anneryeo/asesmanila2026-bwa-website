@@ -846,6 +846,8 @@ export function ApplicationForm() {
                     <input
                       type="email"
                       autoComplete="email"
+                      required
+                      aria-required="true"
                       value={verifyInput}
                       onChange={e => {
                         setVerifyInput(e.target.value);
@@ -1330,6 +1332,8 @@ export function ApplicationForm() {
                     <input
                       type="text"
                       inputMode="url"
+                      required
+                      aria-required="true"
                       value={presenter.link}
                       onChange={e => {
                         setPresenter(p => ({ ...p, link: e.target.value }));
