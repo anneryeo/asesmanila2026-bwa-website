@@ -2041,6 +2041,7 @@ function GalleryColumn({
             width={g.width}
             height={g.height}
             loading={i === 0 ? 'eager' : 'lazy'}
+            sizes="(max-width: 960px) 42vw, 300px"
             style={{
               width: '100%',
               height: 'auto',
