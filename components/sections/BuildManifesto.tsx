@@ -50,15 +50,18 @@ function SlotWord({ words }: { words: string[] }) {
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, [words.length, reduceMotion]);
 
-  const longest = words.reduce((a, b) => (b.length > a.length ? b : a), '');
-
   return (
-    // Fixed-slot inline stack sized by the longest word so the line never
-    // reflows while the reel spins. Keyed hard swap = the cut.
+    // Fixed-slot inline stack: every word is stacked invisibly in the same
+    // grid cell so the box sizes to the widest ACTUAL rendered word (numerals
+    // get bumped to a bigger Montserrat span via Emphasis, so char-length is
+    // not a reliable proxy for width). The line never reflows while the reel
+    // spins. Keyed hard swap = the cut.
     <span className="relative inline-grid text-left align-baseline" style={{ whiteSpace: 'nowrap' }}>
-      <span aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1' }}>
-        <Emphasis text={longest} />
-      </span>
+      {words.map((word, i) => (
+        <span key={i} aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1' }}>
+          <Emphasis text={word} />
+        </span>
+      ))}
       <span key={idx} className="text-[#D33C24]" style={{ gridArea: '1 / 1' }}>
         <Emphasis text={words[idx]} />
       </span>
@@ -115,12 +118,17 @@ function FlashCutBuild({ word }: { word: string }) {
   }, [reduceMotion]);
 
   return (
-    // Fixed-slot inline stack sized by the widest style so the line never
+    // Fixed-slot inline stack: every style is stacked invisibly in the same
+    // grid cell so the box sizes to the widest ACTUAL rendered style (the
+    // styles swap fonts entirely — serif, mono with letter-spacing, Comic
+    // Sans — so no single style is reliably the widest). The line never
     // reflows while the word cuts between universes.
     <span className="relative inline-grid align-baseline" style={{ whiteSpace: 'nowrap' }}>
-      <span aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1', ...BUILD_STYLES[0] }}>
-        {word}
-      </span>
+      {BUILD_STYLES.map((style, i) => (
+        <span key={i} aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1', ...style }}>
+          {word}
+        </span>
+      ))}
       {/* No AnimatePresence, no transition. A keyed hard swap is the cut. */}
       <span key={idx} style={{ gridArea: '1 / 1', ...BUILD_STYLES[idx] }}>
         {word}
