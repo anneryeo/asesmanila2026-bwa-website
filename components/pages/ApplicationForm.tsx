@@ -1823,9 +1823,9 @@ function AceRundown() {
           margin: 0,
         }}>
           <strong style={{ fontWeight: 600 }}>Hey, I&apos;m Ace.</strong> Quick rundown: Build with ASES is our session
-          for people who actually make things. Pick a track below: <strong style={{ fontWeight: 600 }}>present</strong> to
-          put your build in front of the room, or <strong style={{ fontWeight: 600 }}>watch</strong> to see what everyone&apos;s
-          shipping. That&apos;s the whole thing. Go.
+          for people who actually make things. Pick a track below: <strong style={{ fontWeight: 600 }}>present</strong>{' '}
+          to put your build in front of the room, or <strong style={{ fontWeight: 600 }}>watch</strong>{' '}
+          to see what everyone&apos;s shipping. That&apos;s the whole thing. Go.
         </p>
         <button
           type="button"
