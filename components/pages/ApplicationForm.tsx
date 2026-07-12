@@ -729,7 +729,7 @@ export function ApplicationForm() {
           display: 'flex',
           flexDirection: 'row',
           gap: 'clamp(32px, 5vw, 72px)',
-          alignItems: 'flex-start',
+          alignItems: 'stretch',
         }}
       >
 
@@ -1632,6 +1632,8 @@ export function ApplicationForm() {
             position: 'sticky',
             top: 80,
             scrollMarginTop: 96,
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           <div
@@ -1657,17 +1659,21 @@ export function ApplicationForm() {
           from { transform: translate3d(0, 0, 0); }
           to   { transform: translate3d(0, -50%, 0); }
         }
-        /* Gallery fills the viewport height on desktop, capped for ultra-tall screens */
+        /* Gallery stretches to match the form's height (.bwa-layout is
+           align-items: stretch, #gallery is a flex column) — no max-height
+           cap here, since capping it recreates the dead-space bug one level
+           deeper. min-height is just a floor so the marquee still has room
+           to animate when the form is short. */
         .bwa-gallery {
-          height: calc(100vh - 112px);
+          flex: 1 1 auto;
+          height: auto;
           min-height: 560px;
-          max-height: 900px;
         }
         @media (max-width: 960px) {
-          .bwa-layout { flex-direction: column !important; }
+          .bwa-layout { flex-direction: column !important; align-items: stretch !important; }
           .bwa-form { flex: 1 1 auto !important; max-width: none !important; width: 100% !important; }
           .bwa-info { flex: none !important; width: 100% !important; position: static !important; }
-          .bwa-gallery { height: 72vh; min-height: 480px; max-height: 760px; }
+          .bwa-gallery { min-height: 480px; max-height: 76vh; }
         }
         @media (min-width: 640px) {
           .sm-role-row { flex-direction: row !important; }
