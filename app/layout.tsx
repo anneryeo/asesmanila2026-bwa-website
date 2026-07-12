@@ -10,6 +10,9 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+// Only the weight/style pairs actually referenced in components/app are
+// loaded here (checked via grep across font-cocogoose usages) — italic is
+// only ever used at weight 100, so the other six italic files are dropped.
 const cocogoose = localFont({
   src: [
     {
@@ -23,24 +26,9 @@ const cocogoose = localFont({
       style: "italic",
     },
     {
-      path: "../public/fonts/Cocogoose-Pro-Ultralight-trial.ttf",
-      weight: "200",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/Cocogoose-Pro-Ultralight-Italic-trial.ttf",
-      weight: "200",
-      style: "italic",
-    },
-    {
       path: "../public/fonts/Cocogoose-Pro-Light-trial.ttf",
       weight: "300",
       style: "normal",
-    },
-    {
-      path: "../public/fonts/Cocogoose-Pro-Light-Italic-trial.ttf",
-      weight: "300",
-      style: "italic",
     },
     {
       path: "../public/fonts/Cocogoose-Pro-Semilight-trial.ttf",
@@ -48,19 +36,9 @@ const cocogoose = localFont({
       style: "normal",
     },
     {
-      path: "../public/fonts/Cocogoose-Pro-Semilight-Italic-trial.ttf",
-      weight: "350",
-      style: "italic",
-    },
-    {
       path: "../public/fonts/Cocogoose-Pro-Regular-trial.ttf",
       weight: "400",
       style: "normal",
-    },
-    {
-      path: "../public/fonts/Cocogoose-Pro-Italic-trial.ttf",
-      weight: "400",
-      style: "italic",
     },
     {
       path: "../public/fonts/Cocogoose-Pro-Bold-trial.ttf",
@@ -68,19 +46,9 @@ const cocogoose = localFont({
       style: "normal",
     },
     {
-      path: "../public/fonts/Cocogoose-Pro-Bold-Italic-trial.ttf",
-      weight: "700",
-      style: "italic",
-    },
-    {
       path: "../public/fonts/Cocogoose-Pro-Darkmode-trial.ttf",
       weight: "900",
       style: "normal",
-    },
-    {
-      path: "../public/fonts/Cocogoose-Pro-Darkmode-Italic-trial.ttf",
-      weight: "900",
-      style: "italic",
     },
   ],
   variable: "--font-cocogoose",
