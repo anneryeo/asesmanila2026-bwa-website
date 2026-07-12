@@ -81,11 +81,10 @@ export function Footer() {
             {/* Mascot — mobile, sits at the bottom flush */}
             <div aria-hidden="true" className="leading-[0]">
               <Image
-                src="/images/ace-broken1.svg"
+                src="/images/ace-broken1.webp"
                 alt=""
                 width={1000}
                 height={1000}
-                unoptimized
                 className="block h-[160px] w-auto -scale-x-100"
               />
             </div>
@@ -135,11 +134,10 @@ export function Footer() {
             {/* Right — Ace mascot, bottom of image touches the footer edge */}
             <div aria-hidden="true" className="leading-[0]">
               <Image
-                src="/images/ace-broken1.svg"
+                src="/images/ace-broken1.webp"
                 alt=""
                 width={1000}
                 height={1000}
-                unoptimized
                 className="block h-[clamp(160px,18vw,260px)] w-auto -scale-x-100"
               />
             </div>

@@ -1741,11 +1741,10 @@ function AceRundown() {
             style={{ position: 'relative', width: 76, overflow: 'hidden', flexShrink: 0 }}
           >
             <Image
-              src="/images/ace-stand.svg"
+              src="/images/ace-stand.webp"
               alt=""
               width={750}
               height={750}
-              unoptimized
               style={{ display: 'block', width: 'auto', height: 122 }}
             />
           </motion.div>
@@ -1811,7 +1810,7 @@ function AceRundown() {
     >
       {/* Ace, sized to the body text and gently floating */}
       <motion.img
-        src="/images/ace-stand.svg"
+        src="/images/ace-stand.webp"
         alt="Ace, the ASES mascot"
         style={{ width: 'auto', height: 'clamp(84px, 22vw, 118px)', flexShrink: 0, alignSelf: 'center' }}
         animate={{ y: [0, -7, 0] }}
