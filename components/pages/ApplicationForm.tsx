@@ -729,7 +729,7 @@ export function ApplicationForm() {
           display: 'flex',
           flexDirection: 'row',
           gap: 'clamp(32px, 5vw, 72px)',
-          alignItems: 'flex-start',
+          alignItems: 'stretch',
         }}
       >
 
@@ -846,6 +846,8 @@ export function ApplicationForm() {
                     <input
                       type="email"
                       autoComplete="email"
+                      required
+                      aria-required="true"
                       value={verifyInput}
                       onChange={e => {
                         setVerifyInput(e.target.value);
@@ -1330,6 +1332,8 @@ export function ApplicationForm() {
                     <input
                       type="text"
                       inputMode="url"
+                      required
+                      aria-required="true"
                       value={presenter.link}
                       onChange={e => {
                         setPresenter(p => ({ ...p, link: e.target.value }));
@@ -1628,6 +1632,8 @@ export function ApplicationForm() {
             position: 'sticky',
             top: 80,
             scrollMarginTop: 96,
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           <div
@@ -1653,17 +1659,21 @@ export function ApplicationForm() {
           from { transform: translate3d(0, 0, 0); }
           to   { transform: translate3d(0, -50%, 0); }
         }
-        /* Gallery fills the viewport height on desktop, capped for ultra-tall screens */
+        /* Gallery stretches to match the form's height (.bwa-layout is
+           align-items: stretch, #gallery is a flex column) — no max-height
+           cap here, since capping it recreates the dead-space bug one level
+           deeper. min-height is just a floor so the marquee still has room
+           to animate when the form is short. */
         .bwa-gallery {
-          height: calc(100vh - 112px);
+          flex: 1 1 auto;
+          height: auto;
           min-height: 560px;
-          max-height: 900px;
         }
         @media (max-width: 960px) {
-          .bwa-layout { flex-direction: column !important; }
+          .bwa-layout { flex-direction: column !important; align-items: stretch !important; }
           .bwa-form { flex: 1 1 auto !important; max-width: none !important; width: 100% !important; }
           .bwa-info { flex: none !important; width: 100% !important; position: static !important; }
-          .bwa-gallery { height: 72vh; min-height: 480px; max-height: 760px; }
+          .bwa-gallery { min-height: 480px; max-height: 76vh; }
         }
         @media (min-width: 640px) {
           .sm-role-row { flex-direction: row !important; }
@@ -1737,11 +1747,10 @@ function AceRundown() {
             style={{ position: 'relative', width: 76, overflow: 'hidden', flexShrink: 0 }}
           >
             <Image
-              src="/images/ace-stand.svg"
+              src="/images/ace-stand.webp"
               alt=""
               width={750}
               height={750}
-              unoptimized
               style={{ display: 'block', width: 'auto', height: 122 }}
             />
           </motion.div>
@@ -1807,7 +1816,7 @@ function AceRundown() {
     >
       {/* Ace, sized to the body text and gently floating */}
       <motion.img
-        src="/images/ace-stand.svg"
+        src="/images/ace-stand.webp"
         alt="Ace, the ASES mascot"
         style={{ width: 'auto', height: 'clamp(84px, 22vw, 118px)', flexShrink: 0, alignSelf: 'center' }}
         animate={{ y: [0, -7, 0] }}
@@ -1823,9 +1832,9 @@ function AceRundown() {
           margin: 0,
         }}>
           <strong style={{ fontWeight: 600 }}>Hey, I&apos;m Ace.</strong> Quick rundown: Build with ASES is our session
-          for people who actually make things. Pick a track below: <strong style={{ fontWeight: 600 }}>present</strong> to
-          put your build in front of the room, or <strong style={{ fontWeight: 600 }}>watch</strong> to see what everyone&apos;s
-          shipping. That&apos;s the whole thing. Go.
+          for people who actually make things. Pick a track below: <strong style={{ fontWeight: 600 }}>present</strong>{' '}
+          to put your build in front of the room, or <strong style={{ fontWeight: 600 }}>watch</strong>{' '}
+          to see what everyone&apos;s shipping. That&apos;s the whole thing. Go.
         </p>
         <button
           type="button"
@@ -2031,7 +2040,8 @@ function GalleryColumn({
             aria-hidden="true"
             width={g.width}
             height={g.height}
-            loading="lazy"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            sizes="(max-width: 960px) 42vw, 300px"
             style={{
               width: '100%',
               height: 'auto',

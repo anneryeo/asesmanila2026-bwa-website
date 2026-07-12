@@ -46,6 +46,14 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
 
+// Static brand assets under /public/images never change in place (a new
+// asset gets a new filename) — a real cache instead of max-age=0 saves the
+// full request on repeat visits. /_next/static is left alone: Next already
+// serves it as immutable in production and overriding it here breaks dev.
+const imageCacheHeaders = [
+  { key: "Cache-Control", value: "public, max-age=31536000, stale-while-revalidate=86400" },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -53,7 +61,10 @@ const nextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/images/:path*", headers: imageCacheHeaders },
+      { source: "/:path*", headers: securityHeaders },
+    ];
   },
 };
 
