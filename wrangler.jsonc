@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "asesmanila-bwa",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2024-12-30",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
+  // Runtime env vars / secrets (e.g. SANITY_API_WRITE_TOKEN) are managed in the
+  // Cloudflare dashboard → Workers & Pages → Settings → Variables, or via
+  // `wrangler secret put`. NEXT_PUBLIC_* vars are inlined at build time and must
+  // be set as Build variables in the Cloudflare Workers Builds settings.
+}
