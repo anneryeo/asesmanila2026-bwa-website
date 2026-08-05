@@ -19,6 +19,9 @@
  *                                   existing ticket (shipped / carried-over).
  *                                   Sanity is the record for status; this
  *                                   keeps the sheet row in sync.
+ *   POST role=builder-profile-edit-request -> doPost() : queues an
+ *                                   owner-email-matched profile change for
+ *                                   manual review by an ASES admin.
  *
  * Consumed by:
  *   app/api/bwa-sessions/route.ts  (GET sessions)
@@ -58,6 +61,7 @@ const SHEETS = {
   watchers: 'Watchers',
   shiptickets: 'ShipTickets',
   mailing: 'MailingList',
+  builderEdits: 'BuilderEditRequests',
 };
 
 const HEADERS = {
@@ -70,6 +74,7 @@ const HEADERS = {
   shiptickets: ['Timestamp', 'Email', 'Name', 'Project', 'Episode', 'Pledge',
                 'Status', 'Shipped episode', 'Updated'],
   mailing:    ['Email', 'Name', 'Role', 'Last session', 'Notify future', 'Updated'],
+  builderEdits: ['Timestamp', 'Email', 'Builder slug', 'Requested changes', 'Status'],
 };
 
 // Anti-spam: max ship tickets per email per rolling 24h.
@@ -135,12 +140,24 @@ function doPost(e) {
     if (d.role === 'watcher')    return handleWatcher(d);
     if (d.role === 'shipticket') return handleShipTicket(d);
     if (d.role === 'shipticket-update') return handleShipTicketUpdate(d);
+    if (d.role === 'builder-profile-edit-request') return handleBuilderProfileEditRequest(d);
     return json({ success: false, message: 'Unknown application type.' });
   } catch (err) {
     return json({ success: false, message: 'Could not read submission: ' + err });
   } finally {
     lock.releaseLock();
   }
+}
+
+/** Queue a builder profile change for admin review; never auto-publishes. */
+function handleBuilderProfileEditRequest(d) {
+  const email = String(d.email || '').trim().toLowerCase();
+  const slug = String(d.slug || '').trim();
+  const changes = d.changes && typeof d.changes === 'object' ? d.changes : {};
+  if (!email || !slug) return json({ success: false, message: 'Email and builder slug are required.' });
+  const sheet = sheetOf(SHEETS.builderEdits, HEADERS.builderEdits);
+  sheet.appendRow([new Date(), email, slug, JSON.stringify(changes), 'Pending']);
+  return json({ success: true });
 }
 
 function handlePresenter(d) {

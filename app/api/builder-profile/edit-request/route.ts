@@ -12,6 +12,7 @@ export async function POST(request: Request) {
   if (!owner) return NextResponse.json({ success: false, message: 'That email does not match this builder profile.' }, { status: 403 });
   const payload = { role: 'builder-profile-edit-request', slug, email, changes: { role: body?.role ?? '', school: body?.school ?? '', bio: body?.bio ?? '', profileUrl: body?.profileUrl ?? '' } };
   const upstream = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), cache: 'no-store' }).catch(() => null);
-  if (!upstream?.ok) return NextResponse.json({ success: false, message: 'Could not queue the request. Please try again.' }, { status: 502 });
+  const result = upstream ? await upstream.json().catch(() => null) as { success?: boolean; message?: string } | null : null;
+  if (!upstream?.ok || result?.success !== true) return NextResponse.json({ success: false, message: result?.message || 'Could not queue the request. Please try again.' }, { status: 502 });
   return NextResponse.json({ success: true, message: 'We matched the owner email and queued the changes for review. Nothing is auto-published.' });
 }
