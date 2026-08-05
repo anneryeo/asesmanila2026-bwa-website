@@ -142,111 +142,15 @@ function PronounSegment({ text, shown, bursting }: { text: string; shown: boolea
   );
 }
 
-// The two head frames Ace glitches between — calm and grinning.
-const FACE_FRAMES = ['/images/ace-parts_5.png', '/images/ace-parts_6.png'] as const;
-
-// Glitch rhythm: hold one face, then a rapid burst of flash cuts (no fades),
-// landing on the other face. Bursts are irregular on purpose.
-const HOLD_MS_MIN = 1600;
-const HOLD_MS_MAX = 3200;
-const BURST_CUTS_MIN = 3;
-const BURST_CUTS_MAX = 6;
-const BURST_STEP_MS = 70;
-
-/**
- * Ace's face flash-cutting between two frames with a broken-signal jitter:
- * hard swaps (never crossfades), plus a clip-sliced RGB-split flicker during
- * each burst so the swap reads as a glitch rather than a blink.
- */
-function GlitchFace() {
-  const [frame, setFrame] = useState(0);
-  const [bursting, setBursting] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const schedule = () => {
-      const hold = HOLD_MS_MIN + Math.random() * (HOLD_MS_MAX - HOLD_MS_MIN);
-      timer.current = setTimeout(() => {
-        if (media.matches) {
-          // Reduced motion: single clean swap, no flicker burst.
-          setFrame(f => (f + 1) % FACE_FRAMES.length);
-          schedule();
-          return;
-        }
-        const cuts = BURST_CUTS_MIN + Math.floor(Math.random() * (BURST_CUTS_MAX - BURST_CUTS_MIN + 1));
-        setBursting(true);
-        let i = 0;
-        const cut = () => {
-          setFrame(f => (f + 1) % FACE_FRAMES.length);
-          i += 1;
-          if (i < cuts) {
-            timer.current = setTimeout(cut, BURST_STEP_MS + Math.random() * 50);
-          } else {
-            setBursting(false);
-            schedule();
-          }
-        };
-        cut();
-      }, hold);
-    };
-
-    schedule();
-    return () => { if (timer.current) clearTimeout(timer.current); };
-  }, []);
-
+/** Illustrated Ace, matching the character treatment used on the main site. */
+function HeroAce() {
   return (
-    <div
-      aria-hidden="true"
-      className={bursting ? 'bwa-glitch-burst' : undefined}
-      style={{ position: 'relative', width: 'clamp(104px, 19vw, 220px)', aspectRatio: '1 / 1' }}
-    >
-      {FACE_FRAMES.map((src, i) => (
-        <Image
-          key={src}
-          src={src}
-          alt=""
-          fill
-          sizes="220px"
-          priority={i === 0}
-          style={{
-            objectFit: 'contain',
-            // Hard cut: visibility swap, no opacity transition anywhere.
-            visibility: frame === i ? 'visible' : 'hidden',
-          }}
-        />
-      ))}
-      {/* Sliced ghost copies only exist mid-burst — the RGB-split flicker. */}
-      {bursting && (
-        <>
-          <Image
-            src={FACE_FRAMES[(frame + 1) % FACE_FRAMES.length]}
-            alt=""
-            fill
-            sizes="220px"
-            style={{
-              objectFit: 'contain',
-              clipPath: 'polygon(0 12%, 100% 12%, 100% 34%, 0 34%)',
-              transform: 'translateX(-6px)',
-              filter: 'drop-shadow(2px 0 0 rgba(211,60,36,0.85))',
-            }}
-          />
-          <Image
-            src={FACE_FRAMES[frame]}
-            alt=""
-            fill
-            sizes="220px"
-            style={{
-              objectFit: 'contain',
-              clipPath: 'polygon(0 58%, 100% 58%, 100% 74%, 0 74%)',
-              transform: 'translateX(7px)',
-              filter: 'drop-shadow(-2px 0 0 rgba(57,78,189,0.85))',
-            }}
-          />
-        </>
-      )}
-    </div>
+    <motion.div aria-hidden="true" className="relative w-[clamp(138px,20vw,230px)]" initial={{ rotate: -2, y: 8 }} animate={{ rotate: [-2, 1, -2], y: [8, 0, 8] }} transition={{ duration: 5.5, ease: 'easeInOut', repeat: Infinity }}>
+      <div className="absolute -left-[38%] top-[12%] rotate-[-8deg] border-2 border-[#0C143F] bg-[#FFE07A] px-3 py-2 font-subhead text-[9px] font-black uppercase tracking-[0.14em] text-[#0C143F] shadow-[4px_4px_0_#D33C24] sm:text-[10px]">Built, not polished</div>
+      <div className="absolute -right-[34%] top-[4%] rotate-[7deg] border border-[#0C143F] bg-white px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#0C143F] shadow-[3px_3px_0_#112F7F]">BWA / MNL<br />Field unit 001</div>
+      <Image src="/images/ace-stand.webp" alt="" width={1000} height={1000} sizes="230px" priority className="relative z-10 block h-auto w-full drop-shadow-[8px_10px_0_rgba(17,47,127,0.18)]" />
+      <span className="absolute bottom-[4%] left-1/2 z-20 h-[18px] w-[72%] -translate-x-1/2 rotate-[-3deg] bg-[rgba(211,60,36,0.82)] opacity-85" />
+    </motion.div>
   );
 }
 
@@ -265,13 +169,15 @@ export const Hero = ({
       data-nav-theme="light"
       className="bwa-surface relative flex min-h-[100svh] w-full flex-col items-center justify-center px-[20px] pb-[72px] pt-[112px] text-center sm:px-[40px] sm:pb-[88px] sm:pt-[120px]"
     >
+      <div aria-hidden="true" className="pointer-events-none absolute left-[5%] top-[22%] hidden rotate-[-7deg] border-2 border-[#112F7F] bg-white px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[#112F7F] shadow-[6px_6px_0_#B9C5E8] md:block">SHOW THE UGLY V1<br />→ GET THE USEFUL NOTE</div>
+      <div aria-hidden="true" className="pointer-events-none absolute right-[5%] top-[28%] hidden rotate-[9deg] rounded-full border-[3px] border-[#D33C24] px-4 py-5 font-subhead text-[10px] font-black uppercase tracking-[0.1em] text-[#D33C24] md:block">No pitch<br />theatre</div>
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: easeOut }}
         className="relative z-10 flex w-full max-w-[1120px] flex-col items-center"
       >
-        <GlitchFace />
+        <HeroAce />
 
         <p className="mb-3 mt-5 font-subhead text-[10px] font-bold uppercase tracking-[0.14em] text-[#D33C24] sm:mb-4 sm:mt-8 sm:text-[12px] sm:tracking-[0.16em]">
           Build with ASES · ASES Manila
@@ -312,7 +218,7 @@ export const Hero = ({
         <div className="mt-8 flex w-full max-w-[420px] flex-col items-stretch justify-center gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <Link
             href="/application"
-            className="button-float-hover inline-flex min-h-[52px] items-center justify-center gap-3 rounded-none bg-[#D33C24] px-[24px] py-[14px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-white no-underline transition-colors hover:bg-[#BF351E] sm:px-[28px] sm:py-[15px]"
+            className="button-float-hover inline-flex min-h-[52px] rotate-[-1deg] items-center justify-center gap-3 rounded-none border-2 border-[#0C143F] bg-[#D33C24] px-[24px] py-[14px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-white no-underline shadow-[5px_5px_0_#0C143F] transition-colors hover:bg-[#BF351E] sm:px-[28px] sm:py-[15px]"
           >
             <span>Apply to build</span>
             <svg aria-hidden="true" viewBox="0 0 16 16" className="block h-[1em] w-[1em] shrink-0">
@@ -321,7 +227,7 @@ export const Hero = ({
           </Link>
           <a
             href="#projects"
-            className="button-float-hover inline-flex min-h-[52px] items-center justify-center gap-3 rounded-none border border-[rgba(12,20,63,0.3)] bg-white/70 px-[24px] py-[13px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-[#0C143F] no-underline transition-colors hover:border-[#0C143F] sm:px-[28px] sm:py-[14px]"
+            className="button-float-hover inline-flex min-h-[52px] rotate-[1deg] items-center justify-center gap-3 rounded-none border-2 border-[#0C143F] bg-white px-[24px] py-[13px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-[#0C143F] no-underline shadow-[5px_5px_0_#B9C5E8] transition-colors sm:px-[28px] sm:py-[14px]"
           >
             See what got built
           </a>

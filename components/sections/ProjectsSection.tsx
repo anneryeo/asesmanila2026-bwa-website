@@ -30,12 +30,12 @@ const ProjectCard = ({ project, tilt }: { project: BwaProject; tilt: number }) =
       rel={isExternal ? 'noopener noreferrer' : undefined}
       aria-label={`${project.title}: check this out`}
       initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0, rotate: tilt * 0.34 }}
       viewport={{ once: true }}
       whileHover={{ rotate: tilt, y: -10, boxShadow: '0 28px 60px rgba(7,31,107,0.18)' }}
       whileTap={{ scale: 0.99 }}
       transition={{ duration: 0.28, ease: easeOut }}
-      className="group flex aspect-[3/4] w-full flex-col overflow-hidden rounded-none border border-[rgba(7,31,107,0.14)] bg-white no-underline shadow-[0_18px_48px_rgba(7,31,107,0.10)]"
+      className="group flex aspect-[3/4] w-full flex-col overflow-hidden rounded-none border-2 border-[#112F7F] bg-white no-underline shadow-[7px_8px_0_rgba(17,47,127,0.16)]"
     >
       {/* Preview image — 55% */}
       <div className="relative basis-[55%] overflow-hidden bg-[#EDF2FB]">
@@ -47,7 +47,7 @@ const ProjectCard = ({ project, tilt }: { project: BwaProject; tilt: number }) =
           className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
         />
         {/* Episode batch tag pinned to the photo */}
-        <span className="absolute left-3 top-3 bg-[#0C143F] px-[10px] py-[5px] font-subhead text-[10px] font-bold uppercase tracking-[0.1em] text-white">
+          <span className="absolute left-3 top-3 rotate-[-2deg] border border-white/50 bg-[#0C143F] px-[10px] py-[5px] font-subhead text-[10px] font-bold uppercase tracking-[0.1em] text-white shadow-[3px_3px_0_#D33C24]">
           {project.batch}
         </span>
       </div>

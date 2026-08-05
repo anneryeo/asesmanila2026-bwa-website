@@ -155,6 +155,8 @@ export const BuildManifesto = ({
       data-nav-theme="light"
       className="bwa-surface relative w-full py-[120px] lg:py-[200px]"
     >
+      <div aria-hidden="true" className="absolute left-0 top-[9%] h-[34px] w-[clamp(120px,24vw,320px)] rotate-[2deg] bg-[#D33C24] opacity-90" />
+      <div aria-hidden="true" className="absolute right-[4%] top-[18%] hidden rotate-[6deg] border-2 border-[#0C143F] bg-[#FFE07A] px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[#0C143F] shadow-[5px_5px_0_#112F7F] sm:block">RULE 01<br />SHIP BEFORE READY</div>
       {/* Left-aligned manifesto lines. Each line holds ONE line: the slot
           holds the longest word's width so nothing ever wraps mid-spin. */}
       <div className="relative z-10 mx-auto w-full max-w-[1280px] px-[24px] sm:px-[48px] lg:px-[80px]">
@@ -163,7 +165,7 @@ export const BuildManifesto = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: easeOut }}
-          className="flex flex-col gap-[22px] text-left font-display text-[clamp(16px,4vw,52px)] font-[350] leading-[1.14] tracking-[-0.015em] text-[#0C143F] sm:gap-[28px]"
+          className="flex -rotate-[0.7deg] flex-col gap-[22px] border-l-[6px] border-[#D33C24] bg-white/75 px-[18px] py-[24px] text-left font-display text-[clamp(16px,4vw,52px)] font-[350] leading-[1.14] tracking-[-0.015em] text-[#0C143F] shadow-[10px_10px_0_rgba(185,197,232,0.55)] sm:gap-[28px] sm:px-[32px]"
         >
           <p className="m-0 whitespace-nowrap">
             Build like <SlotWord words={adjectives} />
@@ -182,7 +184,7 @@ export const BuildManifesto = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: easeOut, delay: 0.15 }}
-          className="mt-[140px] text-center sm:mt-[180px] lg:mt-[240px]"
+          className="mt-[140px] rotate-[0.8deg] text-center sm:mt-[180px] lg:mt-[240px]"
         >
           <h2 className="m-0 font-display text-[clamp(40px,8.5vw,110px)] font-[700] leading-[1.02] tracking-[-0.02em] text-[#0C143F]">
             <FlashCutBuild word="Build" /> with ASES
