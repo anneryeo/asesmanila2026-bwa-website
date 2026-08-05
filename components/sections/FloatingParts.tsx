@@ -34,7 +34,7 @@ export const FloatingParts = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div ref={overlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0 z-[1]">
+    <div ref={overlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0 z-[1] hidden md:block">
       {PARTS.map((part, i) => (
         <FloatingPart key={`${part.src}-${i}`} part={part} progress={scrollYProgress} reduceMotion={!!reduceMotion} />
       ))}
