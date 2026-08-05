@@ -29,7 +29,7 @@ export function BuilderCard({ profile, index = 0 }: { profile: BuilderProgress; 
         </div>
         {profile.bio && <p className="mb-0 mt-5 line-clamp-3 font-body text-[13px] leading-[1.65] text-white/85">{profile.bio}</p>}
         <div className="mt-6 grid grid-cols-3 gap-2 border-y border-white/25 py-4 text-center">
-          <div><strong className="block font-subhead text-[21px] text-white">{profile.projects.length}</strong><span className="font-subhead text-[9px] font-bold uppercase tracking-[0.12em] text-white/65">Projects</span></div>
+          <div><strong className="block font-subhead text-[21px] text-white">{profile.projectNames.length}</strong><span className="font-subhead text-[9px] font-bold uppercase tracking-[0.12em] text-white/65">Projects</span></div>
           <div><strong className="block font-subhead text-[21px] text-white">{profile.shippedCount}</strong><span className="font-subhead text-[9px] font-bold uppercase tracking-[0.12em] text-white/65">Shipped</span></div>
           <div><strong className="block font-subhead text-[21px] text-white">{profile.activeCount}</strong><span className="font-subhead text-[9px] font-bold uppercase tracking-[0.12em] text-white/65">In motion</span></div>
         </div>

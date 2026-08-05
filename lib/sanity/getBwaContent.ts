@@ -10,7 +10,7 @@ import { FALLBACK_CONTENT, type BwaBuilder, type BwaContent, type BwaProject, ty
 const SITE_QUERY = /* groq */ `{
   "settings": *[_type == "bwaSettings"][0],
   "projects": *[_type == "project"] | order(order asc) {
-    title, description, previewImage, url, batch, industry,
+    title, builderName, description, previewImage, url, batch, industry,
     "builders": select(
       count(builderRefs) > 0 => builderRefs[]->{ name, "slug": slug.current, role, school, bio, photo, profileUrl },
       builders[]{ name, "slug": slug.current, role, school, bio, photo, profileUrl }
@@ -72,7 +72,7 @@ export async function getBwaContent(): Promise<BwaContent> {
         heading: pick(s.projectsHeading, f.projects.heading),
         items: data?.projects?.length
           ? data.projects.map((p: {
-              title: string; description: string; previewImage?: unknown;
+              title: string; builderName?: string; description: string; previewImage?: unknown;
               url: string; batch?: string; industry?: string;
               builders?: Array<{
                 name?: string; slug?: string; role?: string; school?: string;
@@ -80,12 +80,13 @@ export async function getBwaContent(): Promise<BwaContent> {
               }>;
             }): BwaProject => ({
               title: p.title,
+              builderName: p.builderName?.trim() || undefined,
               description: p.description,
               previewImage: urlFor(p.previewImage) ?? f.projects.items[0].previewImage,
               url: p.url,
               batch: p.batch?.trim() || 'Earlier episodes',
               industry: p.industry?.trim() || 'Misc',
-              builders: (p.builders ?? [])
+              builders: (p.builders?.length ? p.builders : p.builderName ? [{ name: p.builderName }] : [])
                 .filter(builder => builder.name?.trim())
                 .map((builder): BwaBuilder => ({
                   name: builder.name!.trim(),

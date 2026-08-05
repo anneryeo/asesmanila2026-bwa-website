@@ -20,6 +20,8 @@ export interface BwaBuilder {
 
 export interface BwaProject {
   title: string;
+  /** Public-facing builder or team name when no canonical profile reference exists yet. */
+  builderName?: string;
   description: string;
   /** next/image-compatible src (local path or Sanity CDN URL) */
   previewImage: string;
