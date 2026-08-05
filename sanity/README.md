@@ -8,7 +8,7 @@ they can be dropped into the parent Studio unchanged.
 
 ## To register (one-time, in the parent repo)
 
-1. Copy `shipTicket.ts`, `bwaFaqItem.ts`, and `bwaSettings.ts` into
+1. Copy `shipTicket.ts`, `bwaFaqItem.ts`, `bwaSettings.ts`, and `bwaBuilder.ts` into
    `asesmanila2026-website/sanity/schemaTypes/`.
 2. Add them to `sanity/schemaTypes/index.ts`:
 
@@ -16,8 +16,9 @@ they can be dropped into the parent Studio unchanged.
    import { shipTicket } from './shipTicket';
    import { bwaFaqItem } from './bwaFaqItem';
    import { bwaSettings } from './bwaSettings';
+   import { bwaBuilder } from './bwaBuilder';
 
-   export const schemaTypes = [siteSettings, bwaSettings, project, bwaCard, event, faqItem, bwaFaqItem, shipTicket];
+   export const schemaTypes = [siteSettings, bwaSettings, bwaBuilder, project, bwaCard, event, faqItem, bwaFaqItem, shipTicket];
    ```
 
 3. Add the BWA fields from `project-bwa-fields.ts` to the existing
@@ -33,5 +34,6 @@ they can be dropped into the parent Studio unchanged.
 |---------------|------------------------|----------------------------------------------|
 | `project`     | Projects + builders     | Shared with parent site; + `batch`, `industry`, `builders` |
 | `bwaSettings` | Hero + manifesto copy  | Singleton                                    |
+| `bwaBuilder`  | Builder profile pages   | Canonical identity; referenced by projects/tickets |
 | `bwaFaqItem`  | Home FAQ sticky notes  | Separate from the parent's `faqItem`         |
 | `shipTicket`  | Tickets + progress      | Public pledges; optional project/builder links |

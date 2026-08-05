@@ -11,7 +11,7 @@ const APPLY_HREF = '/application';
 
 const NAV_LINKS = [
   { label: 'Projects',     href: '/#projects' },
-  { label: 'Builders',     href: '/#builders' },
+  { label: 'Builders',     href: '/builders' },
   { label: 'FAQs',         href: '/#faqs' },
   { label: 'Ship Tickets', href: '/shiptickets' },
   // Back to the mothership: the main asesmanila.com site.

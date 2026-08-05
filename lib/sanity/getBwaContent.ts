@@ -11,13 +11,18 @@ const SITE_QUERY = /* groq */ `{
   "settings": *[_type == "bwaSettings"][0],
   "projects": *[_type == "project"] | order(order asc) {
     title, description, previewImage, url, batch, industry,
-    builders[]{ name, "slug": slug.current, role, school, bio, photo, profileUrl }
+    "builders": select(
+      count(builderRefs) > 0 => builderRefs[]->{ name, "slug": slug.current, role, school, bio, photo, profileUrl },
+      builders[]{ name, "slug": slug.current, role, school, bio, photo, profileUrl }
+    )
   },
   "faqItems": *[_type == "bwaFaqItem"] | order(order asc) { question, answer }
 }`;
 
 const TICKETS_QUERY = /* groq */ `*[_type == "shipTicket"] | order(postedAt desc) {
-  "id": _id, name, builderSlug,
+  "id": _id,
+  "name": coalesce(builderRef->name, name),
+  "builderSlug": coalesce(builderRef->slug.current, builderSlug),
   "project": coalesce(projectRef->title, project),
   episode, pledge, status, postedAt, shippedEpisode,
   "carriedCount": count(history[action == "carried-over"])

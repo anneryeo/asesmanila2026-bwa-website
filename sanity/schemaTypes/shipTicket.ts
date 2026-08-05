@@ -32,6 +32,13 @@ export const shipTicket = {
       description: 'Links this ticket to the project card and builder progress profile. Keep the text project field for backwards compatibility.',
     },
     {
+      name: 'builderRef',
+      title: 'Builder profile (recommended)',
+      type: 'reference',
+      to: [{ type: 'bwaBuilder' }],
+      description: 'Canonical profile that owns this ticket.',
+    },
+    {
       name: 'builderSlug',
       title: 'Builder slug',
       type: 'string',

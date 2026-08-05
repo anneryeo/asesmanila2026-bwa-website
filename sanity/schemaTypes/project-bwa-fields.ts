@@ -18,8 +18,15 @@ export const projectBwaFields = [
     description: 'The space the project plays in, e.g. "Fintech", "EdTech". Drives the industry filter on buildwithases.asesmanila.com.',
   },
   {
+    name: 'builderRefs',
+    title: 'Builder profiles',
+    type: 'array',
+    description: 'Canonical builder profiles attached to this project. Use this for new content; the embedded Builders field remains for legacy documents.',
+    of: [{ type: 'reference', to: [{ type: 'bwaBuilder' }] }],
+  },
+  {
     name: 'builders',
-    title: 'Builders',
+    title: 'Builders (legacy embedded profiles)',
     type: 'array',
     description: 'The people building this project. A stable slug links their projects and ship tickets into one public progress profile.',
     of: [
