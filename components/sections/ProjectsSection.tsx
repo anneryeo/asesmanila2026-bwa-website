@@ -64,6 +64,11 @@ const ProjectCard = ({ project, tilt }: { project: BwaProject; tilt: number }) =
           <p className="mb-0 mt-2 line-clamp-3 font-display text-[clamp(12px,1.4vw,13.5px)] font-light leading-[1.5] text-[#0B1F4B]">
             <Emphasis text={project.description} />
           </p>
+          {project.builders.length > 0 && (
+            <p className="mb-0 mt-3 font-subhead text-[11px] font-semibold leading-[1.4] text-[rgba(12,20,63,0.62)]">
+              Built by {project.builders.map(builder => builder.name).join(', ')}
+            </p>
+          )}
         </div>
 
         <div className="flex items-center gap-2 font-display text-[13px] font-[350] tracking-[0.02em] text-[#D33C24]">

@@ -8,6 +8,7 @@ import { ProjectsSection } from '@/components/sections/ProjectsSection';
 import { ShipTicketPreview } from '@/components/sections/ShipTicketPreview';
 import { FaqSection } from '@/components/sections/FaqSection';
 import { CtaSection } from '@/components/sections/CtaSection';
+import { BuilderProfilesSection } from '@/components/sections/BuilderProfilesSection';
 import { getBwaContent, getShipTickets } from '@/lib/sanity/getBwaContent';
 import { siteConfig, siteUrl } from '@/lib/site';
 import type { Metadata } from 'next';
@@ -157,6 +158,11 @@ export default async function BuildWithASESPage() {
           items={content.projects.items}
         />
         <ShipTicketPreview heading={content.ticketsHeading} tickets={tickets} />
+        <BuilderProfilesSection
+          heading={content.buildersHeading}
+          projects={content.projects.items}
+          tickets={tickets}
+        />
         <FaqSection heading={content.faq.heading} items={content.faq.items} />
         <CtaSection />
       </main>

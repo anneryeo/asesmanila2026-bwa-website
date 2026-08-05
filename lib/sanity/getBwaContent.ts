@@ -1,6 +1,6 @@
 import imageUrlBuilder from '@sanity/image-url';
 import { sanityClient } from './client';
-import { FALLBACK_CONTENT, type BwaContent, type BwaProject, type ShipTicket } from '@/content/bwaContent';
+import { FALLBACK_CONTENT, type BwaBuilder, type BwaContent, type BwaProject, type ShipTicket } from '@/content/bwaContent';
 
 // Document types read from the shared asesmanila Sanity project:
 //   project     — shared with the parent site (batch/industry added for BWA)
@@ -9,12 +9,17 @@ import { FALLBACK_CONTENT, type BwaContent, type BwaProject, type ShipTicket } f
 //   shipTicket  — public ship-ticket pledges
 const SITE_QUERY = /* groq */ `{
   "settings": *[_type == "bwaSettings"][0],
-  "projects": *[_type == "project"] | order(order asc) { title, description, previewImage, url, batch, industry },
+  "projects": *[_type == "project"] | order(order asc) {
+    title, description, previewImage, url, batch, industry,
+    builders[]{ name, "slug": slug.current, role, school, bio, photo, profileUrl }
+  },
   "faqItems": *[_type == "bwaFaqItem"] | order(order asc) { question, answer }
 }`;
 
 const TICKETS_QUERY = /* groq */ `*[_type == "shipTicket"] | order(postedAt desc) {
-  "id": _id, name, project, episode, pledge, status, postedAt, shippedEpisode,
+  "id": _id, name, builderSlug,
+  "project": coalesce(projectRef->title, project),
+  episode, pledge, status, postedAt, shippedEpisode,
   "carriedCount": count(history[action == "carried-over"])
 }`;
 
@@ -64,6 +69,10 @@ export async function getBwaContent(): Promise<BwaContent> {
           ? data.projects.map((p: {
               title: string; description: string; previewImage?: unknown;
               url: string; batch?: string; industry?: string;
+              builders?: Array<{
+                name?: string; slug?: string; role?: string; school?: string;
+                bio?: string; photo?: unknown; profileUrl?: string;
+              }>;
             }): BwaProject => ({
               title: p.title,
               description: p.description,
@@ -71,6 +80,17 @@ export async function getBwaContent(): Promise<BwaContent> {
               url: p.url,
               batch: p.batch?.trim() || 'Earlier episodes',
               industry: p.industry?.trim() || 'Misc',
+              builders: (p.builders ?? [])
+                .filter(builder => builder.name?.trim())
+                .map((builder): BwaBuilder => ({
+                  name: builder.name!.trim(),
+                  slug: builder.slug?.trim() || builder.name!.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+                  role: builder.role?.trim() || undefined,
+                  school: builder.school?.trim() || undefined,
+                  bio: builder.bio?.trim() || undefined,
+                  photo: urlFor(builder.photo),
+                  profileUrl: builder.profileUrl?.trim() || undefined,
+                })),
             }))
           : f.projects.items,
       },
@@ -79,6 +99,7 @@ export async function getBwaContent(): Promise<BwaContent> {
         items: data?.faqItems?.length ? data.faqItems : f.faq.items,
       },
       ticketsHeading: pick(s.ticketsHeading, f.ticketsHeading),
+      buildersHeading: pick(s.buildersHeading, f.buildersHeading),
       shipTickets: f.shipTickets,
     };
   } catch (error) {
@@ -96,12 +117,13 @@ export async function getShipTickets(): Promise<ShipTicket[]> {
     if (!rows?.length) return FALLBACK_CONTENT.shipTickets;
 
     return rows.map((t: {
-      id: string; name: string; project?: string; episode?: string;
+      id: string; name: string; builderSlug?: string; project?: string; episode?: string;
       pledge: string; status?: string; postedAt?: string;
       shippedEpisode?: string; carriedCount?: number;
     }): ShipTicket => ({
       id: t.id,
       name: t.name,
+      builderSlug: t.builderSlug?.trim() || undefined,
       project: t.project || undefined,
       episode: t.episode ?? '',
       pledge: t.pledge,

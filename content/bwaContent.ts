@@ -7,6 +7,17 @@
  * as the parent site's content/siteContent.ts.
  */
 
+export interface BwaBuilder {
+  name: string;
+  /** Stable ID shared across projects and ship tickets. */
+  slug: string;
+  role?: string;
+  school?: string;
+  bio?: string;
+  photo?: string;
+  profileUrl?: string;
+}
+
 export interface BwaProject {
   title: string;
   description: string;
@@ -17,6 +28,8 @@ export interface BwaProject {
   batch: string;
   /** Industry/space the project plays in, e.g. "Fintech" */
   industry: string;
+  /** People responsible for the build; multiple projects may share a builder slug. */
+  builders: BwaBuilder[];
 }
 
 export interface FaqNote {
@@ -28,6 +41,8 @@ export interface ShipTicket {
   id: string;
   /** Builder's display name */
   name: string;
+  /** Stable builder ID when linked through Sanity. */
+  builderSlug?: string;
   /** Optional project the pledge belongs to */
   project?: string;
   /** Episode where the ticket was posted, e.g. "Episode 03". Never changes. */
@@ -62,6 +77,7 @@ export interface BwaContent {
     heading: string;
     items: BwaProject[];
   };
+  buildersHeading: string;
   faq: {
     heading: string;
     items: FaqNote[];
@@ -114,6 +130,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 01',
         industry: 'Up for grabs',
+        builders: [{ name: 'Mika R.', slug: 'mika-r', role: 'Builder', bio: 'Turning rough ideas into things people can actually test.' }],
       },
       {
         title: 'The next big thing',
@@ -122,6 +139,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 01',
         industry: 'Up for grabs',
+        builders: [{ name: 'Paolo D.', slug: 'paolo-d', role: 'Builder', bio: 'Building tools that make student work easier to share.' }],
       },
       {
         title: 'Built from scratch',
@@ -130,6 +148,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 02',
         industry: 'Up for grabs',
+        builders: [{ name: 'Ella S.', slug: 'ella-s', role: 'Builder', bio: 'Learning in public and shipping before everything feels ready.' }],
       },
       {
         title: 'A tool you\'ll steal',
@@ -138,6 +157,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 02',
         industry: 'Productivity',
+        builders: [{ name: 'JC V.', slug: 'jc-v', role: 'Builder', bio: 'Obsessed with finding the real problem before polishing the solution.' }],
       },
       {
         title: 'The 2am special',
@@ -146,6 +166,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 02',
         industry: 'EdTech',
+        builders: [{ name: 'Andrea L.', slug: 'andrea-l', role: 'Builder', bio: 'Moving from plans and prototypes toward working software.' }],
       },
       {
         title: 'Problem hunt loot',
@@ -154,6 +175,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 03',
         industry: 'Community',
+        builders: [{ name: 'Ram G.', slug: 'ram-g', role: 'Builder', bio: 'Building from field conversations, then validating with real users.' }],
       },
       {
         title: 'Proof it works',
@@ -162,6 +184,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 03',
         industry: 'Fintech',
+        builders: [{ name: 'Nico P.', slug: 'nico-p', role: 'Builder', bio: 'Testing financial tools with the people they are meant to serve.' }],
       },
       {
         title: 'Version two energy',
@@ -170,6 +193,7 @@ export const FALLBACK_CONTENT: BwaContent = {
         url: 'https://buildwithases.asesmanila.com/application',
         batch: 'Episode 03',
         industry: 'Health',
+        builders: [{ name: 'Sam C.', slug: 'sam-c', role: 'Builder', bio: 'Coming back every episode with a sharper version of the build.' }],
       },
     ],
   },
@@ -221,14 +245,15 @@ export const FALLBACK_CONTENT: BwaContent = {
   },
 
   ticketsHeading: "Say what you'll ship, then come back and prove it.",
+  buildersHeading: 'Follow the people behind the projects, not just the pitch.',
 
   // Dummy tickets until the Sanity shipTicket documents land.
   shipTickets: [
-    { id: 'st-01', name: 'Mika R.', project: 'Presyo', episode: 'Episode 03', pledge: 'Finish the MVP and get it in front of 5 sari-sari store owners.', status: 'pledged', date: 'Jun 2026' },
-    { id: 'st-02', name: 'Paolo D.', project: 'NotaBene', episode: 'Episode 03', pledge: 'Ship the reviewer-sharing feature my blockmates keep asking for.', status: 'pledged', date: 'Jun 2026' },
-    { id: 'st-03', name: 'Ella S.', episode: 'Episode 01', pledge: 'Stop redesigning the landing page and actually launch it.', status: 'shipped', shippedEpisode: 'Episode 03', carriedCount: 1, date: 'May 2026' },
-    { id: 'st-04', name: 'JC V.', project: 'Byahe', episode: 'Episode 02', pledge: 'Interview 10 commuters and kill or confirm the idea.', status: 'shipped', date: 'May 2026' },
-    { id: 'st-05', name: 'Andrea L.', episode: 'Episode 02', pledge: 'Write the first line of code instead of the tenth business plan.', status: 'carried-over', date: 'May 2026' },
-    { id: 'st-06', name: 'Ram G.', project: 'Kita', episode: 'Episode 01', pledge: 'Get one real freelancer to invoice through the prototype.', status: 'shipped', date: 'Apr 2026' },
+    { id: 'st-01', name: 'Mika R.', builderSlug: 'mika-r', project: 'Your project here', episode: 'Episode 03', pledge: 'Finish the MVP and get it in front of 5 sari-sari store owners.', status: 'pledged', date: 'Jun 2026' },
+    { id: 'st-02', name: 'Paolo D.', builderSlug: 'paolo-d', project: 'The next big thing', episode: 'Episode 03', pledge: 'Ship the reviewer-sharing feature my blockmates keep asking for.', status: 'pledged', date: 'Jun 2026' },
+    { id: 'st-03', name: 'Ella S.', builderSlug: 'ella-s', project: 'Built from scratch', episode: 'Episode 01', pledge: 'Stop redesigning the landing page and actually launch it.', status: 'shipped', shippedEpisode: 'Episode 03', carriedCount: 1, date: 'May 2026' },
+    { id: 'st-04', name: 'JC V.', builderSlug: 'jc-v', project: 'A tool you\'ll steal', episode: 'Episode 02', pledge: 'Interview 10 commuters and kill or confirm the idea.', status: 'shipped', date: 'May 2026' },
+    { id: 'st-05', name: 'Andrea L.', builderSlug: 'andrea-l', project: 'The 2am special', episode: 'Episode 02', pledge: 'Write the first line of code instead of the tenth business plan.', status: 'carried-over', date: 'May 2026' },
+    { id: 'st-06', name: 'Ram G.', builderSlug: 'ram-g', project: 'Problem hunt loot', episode: 'Episode 01', pledge: 'Get one real freelancer to invoice through the prototype.', status: 'shipped', date: 'Apr 2026' },
   ],
 };

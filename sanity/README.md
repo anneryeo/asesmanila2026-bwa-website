@@ -20,9 +20,10 @@ they can be dropped into the parent Studio unchanged.
    export const schemaTypes = [siteSettings, bwaSettings, project, bwaCard, event, faqItem, bwaFaqItem, shipTicket];
    ```
 
-3. Add the two BWA fields from `project-bwa-fields.ts` to the existing
-   `project.ts` schema (`batch` + `industry` power this site's project
-   filters). Both are optional, so existing project documents keep working.
+3. Add the BWA fields from `project-bwa-fields.ts` to the existing
+   `project.ts` schema. `batch` + `industry` power project filters, while
+   `builders` powers builder profiles and progress continuity. All are
+   optional, so existing project documents keep working.
 4. Optionally add Studio structure entries (see `sanity.config.ts` in the
    parent) for **BWA settings** (singleton), **BWA FAQ**, and **Ship tickets**.
 
@@ -30,7 +31,7 @@ they can be dropped into the parent Studio unchanged.
 
 | Type          | Used by                | Notes                                        |
 |---------------|------------------------|----------------------------------------------|
-| `project`     | Home projects section  | Shared with parent site; + `batch`, `industry` |
+| `project`     | Projects + builders     | Shared with parent site; + `batch`, `industry`, `builders` |
 | `bwaSettings` | Hero + manifesto copy  | Singleton                                    |
 | `bwaFaqItem`  | Home FAQ sticky notes  | Separate from the parent's `faqItem`         |
-| `shipTicket`  | /shiptickets wall      | Public pledges posted at episodes            |
+| `shipTicket`  | Tickets + progress      | Public pledges; optional project/builder links |

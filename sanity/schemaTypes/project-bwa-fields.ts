@@ -1,5 +1,5 @@
 /**
- * Two optional fields to ADD to the parent repo's existing `project` schema
+ * Optional fields to ADD to the parent repo's existing `project` schema
  * (asesmanila2026-website/sanity/schemaTypes/project.ts). They power this
  * site's project catalogue filters. Optional, so existing project documents
  * keep working untouched.
@@ -16,5 +16,41 @@ export const projectBwaFields = [
     title: 'Industry',
     type: 'string',
     description: 'The space the project plays in, e.g. "Fintech", "EdTech". Drives the industry filter on buildwithases.asesmanila.com.',
+  },
+  {
+    name: 'builders',
+    title: 'Builders',
+    type: 'array',
+    description: 'The people building this project. A stable slug links their projects and ship tickets into one public progress profile.',
+    of: [
+      {
+        type: 'object',
+        name: 'projectBuilder',
+        fields: [
+          {
+            name: 'name',
+            title: 'Builder name',
+            type: 'string',
+            validation: (Rule: { required: () => unknown }) => Rule.required(),
+          },
+          {
+            name: 'slug',
+            title: 'Builder slug',
+            type: 'slug',
+            options: { source: 'name', maxLength: 64 },
+            description: 'Keep this identical for the same builder across projects, e.g. "mika-reyes".',
+            validation: (Rule: { required: () => unknown }) => Rule.required(),
+          },
+          { name: 'role', title: 'Role', type: 'string', description: 'e.g. Founder, Designer, Engineer' },
+          { name: 'school', title: 'School or community', type: 'string' },
+          { name: 'bio', title: 'Short builder bio', type: 'text', rows: 3 },
+          { name: 'photo', title: 'Profile photo', type: 'image', options: { hotspot: true } },
+          { name: 'profileUrl', title: 'Portfolio or profile URL', type: 'url' },
+        ],
+        preview: {
+          select: { title: 'name', subtitle: 'role', media: 'photo' },
+        },
+      },
+    ],
   },
 ];

@@ -11,6 +11,7 @@ const APPLY_HREF = '/application';
 
 const NAV_LINKS = [
   { label: 'Projects',     href: '/#projects' },
+  { label: 'Builders',     href: '/#builders' },
   { label: 'FAQs',         href: '/#faqs' },
   { label: 'Ship Tickets', href: '/shiptickets' },
   // Back to the mothership: the main asesmanila.com site.
@@ -36,13 +37,13 @@ const NAV_SIZES = {
   // Desktop nav text buttons: affects the anchor links only.
   // Raise fontSize for larger text; raise gap to spread the desktop nav items apart.
   desktopTextFontSize: '16px',
-  desktopButtonGap: '50px',
+  desktopButtonGap: '34px',
 
   // Desktop CTA button: change width to scale it.
   desktopCtaWidth: '139px',
 
   // Desktop nav group offset: more negative moves the link group left toward center.
-  desktopGroupOffsetX: '-140px',
+  desktopGroupOffsetX: '-90px',
 
   // Hamburger drawer links: mobileTextFontSize affects the drawer anchor links and Register.
   mobileTextFontSize: '42px',

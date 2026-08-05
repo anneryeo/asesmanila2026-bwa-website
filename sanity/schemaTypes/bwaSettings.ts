@@ -57,6 +57,12 @@ export const bwaSettings = {
       type: 'string',
       description: 'Single line, shown beside the see-more-tickets button on the home page preview.',
     },
+    {
+      name: 'buildersHeading',
+      title: 'Builder profiles heading',
+      type: 'string',
+      description: 'Heading above the builder continuity and progress section.',
+    },
   ],
   preview: {
     prepare: () => ({ title: 'BWA site settings' }),

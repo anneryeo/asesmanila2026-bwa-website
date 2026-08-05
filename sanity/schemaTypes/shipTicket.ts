@@ -25,6 +25,19 @@ export const shipTicket = {
       description: 'The build the pledge belongs to, if any.',
     },
     {
+      name: 'projectRef',
+      title: 'Project reference (recommended)',
+      type: 'reference',
+      to: [{ type: 'project' }],
+      description: 'Links this ticket to the project card and builder progress profile. Keep the text project field for backwards compatibility.',
+    },
+    {
+      name: 'builderSlug',
+      title: 'Builder slug',
+      type: 'string',
+      description: 'Stable builder ID matching the slug on the project builder entry, e.g. "mika-reyes".',
+    },
+    {
       name: 'episode',
       title: 'Pledged at episode',
       type: 'string',
