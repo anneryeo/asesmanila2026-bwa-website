@@ -18,6 +18,12 @@ export const projectBwaFields = [
     description: 'The space the project plays in, e.g. "Fintech", "EdTech". Drives the industry filter on buildwithases.asesmanila.com.',
   },
   {
+    name: 'builderName',
+    title: 'Builder name',
+    type: 'string',
+    description: 'The public-facing builder or team name shown with this project. Add this even when canonical builder profiles are linked below.',
+  },
+  {
     name: 'builderRefs',
     title: 'Builder profiles',
     type: 'array',
