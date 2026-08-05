@@ -1744,14 +1744,25 @@ function AceRundown() {
           <motion.div
             variants={{ rest: { height: 54 }, peek: { height: 96 } }}
             transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-            style={{ position: 'relative', width: 76, overflow: 'hidden', flexShrink: 0 }}
+            style={{ position: 'relative', width: 76, overflow: 'hidden', flex: '0 0 76px' }}
           >
             <Image
               src="/images/ace-stand.webp"
               alt=""
               width={750}
               height={750}
-              style={{ display: 'block', width: 'auto', height: 122 }}
+              sizes="122px"
+              style={{
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                left: '50%',
+                width: 122,
+                height: 122,
+                maxWidth: 'none',
+                objectFit: 'contain',
+                transform: 'translateX(-50%)',
+              }}
             />
           </motion.div>
 
@@ -1818,7 +1829,14 @@ function AceRundown() {
       <motion.img
         src="/images/ace-stand.webp"
         alt="Ace, the ASES mascot"
-        style={{ width: 'auto', height: 'clamp(84px, 22vw, 118px)', flexShrink: 0, alignSelf: 'center' }}
+        style={{
+          width: 'clamp(84px, 22vw, 118px)',
+          height: 'auto',
+          aspectRatio: '1 / 1',
+          objectFit: 'contain',
+          flexShrink: 0,
+          alignSelf: 'center',
+        }}
         animate={{ y: [0, -7, 0] }}
         transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity }}
       />
