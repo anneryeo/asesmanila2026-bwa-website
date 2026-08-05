@@ -155,7 +155,7 @@ export const BuildManifesto = ({
       data-nav-theme="light"
       className="bwa-surface relative w-full py-[120px] lg:py-[200px]"
     >
-      <div aria-hidden="true" className="absolute left-0 top-[9%] h-[34px] w-[clamp(120px,24vw,320px)] rotate-[2deg] bg-[#D33C24] opacity-90" />
+      <div aria-hidden="true" className="absolute left-0 top-[9%] hidden h-[34px] w-[clamp(120px,24vw,320px)] rotate-[2deg] bg-[#D33C24] opacity-90 sm:block" />
       <div aria-hidden="true" className="absolute right-[4%] top-[18%] hidden rotate-[6deg] border-2 border-[#0C143F] bg-[#FFE07A] px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-[#0C143F] shadow-[5px_5px_0_#112F7F] sm:block">RULE 01<br />SHIP BEFORE READY</div>
       {/* Left-aligned manifesto lines. Each line holds ONE line: the slot
           holds the longest word's width so nothing ever wraps mid-spin. */}
