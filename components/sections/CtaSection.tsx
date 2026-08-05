@@ -1,43 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
-/**
- * The apply CTA: the ACE v1.0 blueprint sheet (ace-group-parts_3) is the
- * button. On desktop it arrives covered by piles of loose Ace parts
- * (ace-group-parts_1, mirrored on the right); hovering slides the parts
- * apart, tints the sheet red, and reveals "Apply to build with ASES".
- * On mobile the parts are pushed to the screen edges from the start and the
- * label is always visible.
- */
+/** A responsive, image-led application CTA with accessible live copy. */
 export const CtaSection = () => {
-  const [hovered, setHovered] = useState(false);
-  const [desktop, setDesktop] = useState(false);
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
-    const update = () => setDesktop(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    // Some environments (emulated viewports, older WebKit) don't reliably
-    // fire matchMedia change events — resize is the belt to that braces.
-    window.addEventListener('resize', update, { passive: true });
-    return () => {
-      mq.removeEventListener('change', update);
-      window.removeEventListener('resize', update);
-    };
-  }, []);
-
-  // Parts cover the sheet only on desktop; hover (or keyboard focus) parts them.
-  const parted = !desktop || hovered;
-  const revealed = parted;
-
   return (
     <section
       id="apply"
@@ -56,111 +26,42 @@ export const CtaSection = () => {
           Your seat in the room is one form away
         </motion.h2>
 
-        {/* ── The blueprint button, flanked/covered by loose parts ── */}
+        {/* Clear, responsive campaign image with live HTML copy for accessibility and SEO. */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: easeOut, delay: 0.1 }}
-          className="relative mt-[40px] flex items-center justify-center"
+          className="relative mt-[32px] flex items-center justify-center sm:mt-[40px]"
         >
-          {/* Left cover parts — plain CSS transition (framer's animate prop
-              stalls on these after hydration; inline style updates don't). */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 top-1/2 z-20 w-[38%] max-w-[380px] lg:w-[34%]"
-            style={{
-              transform: `translate(${parted ? '-58%' : '-8%'}, -50%) rotate(${parted ? -10 : -4}deg)`,
-              transition: reduceMotion ? 'none' : 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
-            }}
-          >
-            <Image
-              src="/images/ace-group-parts_1.png"
-              alt=""
-              width={977}
-              height={878}
-              sizes="(max-width: 1024px) 40vw, 380px"
-              style={{ width: '100%', height: 'auto' }}
-            />
-          </div>
-
-          {/* Right cover parts — mirrored copy */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute right-0 top-1/2 z-20 w-[38%] max-w-[380px] lg:w-[34%]"
-            style={{
-              transform: `translate(${parted ? '58%' : '8%'}, -50%) rotate(${parted ? 10 : 4}deg)`,
-              transition: reduceMotion ? 'none' : 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
-            }}
-          >
-            <Image
-              src="/images/ace-group-parts_1.png"
-              alt=""
-              width={977}
-              height={878}
-              sizes="(max-width: 1024px) 40vw, 380px"
-              style={{ width: '100%', height: 'auto', transform: 'scaleX(-1)' }}
-            />
-          </div>
-
-          {/* The button itself */}
           <Link
             href="/application"
-            aria-label="Apply to build with ASES"
-            className="group relative z-10 block w-full max-w-[720px] outline-offset-4"
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            onFocus={() => setHovered(true)}
-            onBlur={() => setHovered(false)}
+            className="group relative z-10 block min-h-[360px] w-full max-w-[960px] overflow-hidden border border-white/15 bg-[#0C143F] shadow-[0_24px_70px_rgba(12,20,63,0.22)] outline-offset-4 sm:min-h-[420px]"
           >
-            <div
-              className="relative overflow-hidden"
-              style={{
-                transform: hovered && !reduceMotion ? 'scale(1.02)' : 'scale(1)',
-                transition: reduceMotion ? 'none' : 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
-              }}
-            >
-              <Image
-                src="/images/ace-group-parts_3.png"
-                alt="ACE v1.0 blueprint sheet"
-                width={1000}
-                height={587}
-                sizes="(max-width: 768px) 92vw, 720px"
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
-
-              {/* Red tint sweeps in on hover */}
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 transition-opacity duration-300"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(211,60,36,0.82) 0%, rgba(154,41,23,0.88) 100%)',
-                  mixBlendMode: 'hard-light',
-                  opacity: hovered ? 1 : 0,
-                }}
-              />
-
-              {/* Label — always on for mobile, revealed on hover for web */}
-              <div
-                className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 text-center transition-opacity duration-300"
-                style={{
-                  opacity: revealed ? 1 : 0,
-                  background: hovered ? 'transparent' : 'rgba(3,14,61,0.45)',
-                }}
+            <Image
+              src="/images/build-with-ases-cta-v2.png"
+              alt="Filipino student builders collaborating on prototypes at a Build with ASES workshop"
+              fill
+              sizes="(max-width: 640px) 92vw, (max-width: 1200px) 88vw, 960px"
+              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
+            />
+            <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,14,61,0.34),rgba(3,14,61,0.62)_34%,rgba(3,14,61,0.72)_50%,rgba(3,14,61,0.62)_66%,rgba(3,14,61,0.34))]" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center sm:px-12">
+              <span className="font-subhead text-[11px] font-bold uppercase tracking-[0.18em] text-white/75 sm:text-[12px]">
+                Applications are open
+              </span>
+              <span
+                className="max-w-[15ch] font-display text-[clamp(30px,6vw,58px)] font-[700] leading-[1.04] tracking-[-0.02em] text-white"
+                style={{ textShadow: '0 4px 24px rgba(0,0,0,0.55)' }}
               >
-                <span
-                  className="font-display text-[clamp(20px,4.5vw,44px)] font-[700] leading-[1.05] tracking-[-0.01em] text-white"
-                  style={{ textShadow: '0 4px 24px rgba(0,0,0,0.55)' }}
-                >
-                  Apply to build with ASES
-                </span>
-                <span className="inline-flex items-center gap-2 font-subhead text-[clamp(10px,1.4vw,13px)] font-bold uppercase tracking-[0.16em] text-[rgba(255,255,255,0.85)]">
-                  <span>Present or watch. Pick your track</span>
-                  <svg aria-hidden="true" viewBox="0 0 16 16" className="block h-[1em] w-[1em] shrink-0 transition-transform duration-300 group-hover:translate-x-[4px]">
-                    <path d="M3 8h8.5M8.5 4l4 4-4 4" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="square" strokeLinejoin="miter" />
-                  </svg>
-                </span>
-              </div>
+                Apply to build with ASES
+              </span>
+              <span className="inline-flex min-h-[48px] items-center gap-2 bg-[#D33C24] px-5 py-3 font-subhead text-[clamp(11px,1.4vw,13px)] font-bold uppercase tracking-[0.14em] text-white transition-colors group-hover:bg-[#BF351E]">
+                <span>Present or watch. Pick your track</span>
+                <svg aria-hidden="true" viewBox="0 0 16 16" className="block h-[1em] w-[1em] shrink-0 transition-transform duration-300 group-hover:translate-x-[4px]">
+                  <path d="M3 8h8.5M8.5 4l4 4-4 4" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="square" strokeLinejoin="miter" />
+                </svg>
+              </span>
             </div>
           </Link>
         </motion.div>

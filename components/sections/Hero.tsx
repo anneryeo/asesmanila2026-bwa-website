@@ -200,7 +200,7 @@ function GlitchFace() {
     <div
       aria-hidden="true"
       className={bursting ? 'bwa-glitch-burst' : undefined}
-      style={{ position: 'relative', width: 'clamp(140px, 22vw, 220px)', aspectRatio: '1 / 1' }}
+      style={{ position: 'relative', width: 'clamp(104px, 19vw, 220px)', aspectRatio: '1 / 1' }}
     >
       {FACE_FRAMES.map((src, i) => (
         <Image
@@ -263,21 +263,21 @@ export const Hero = ({
     <section
       id="top"
       data-nav-theme="light"
-      className="bwa-surface relative flex min-h-[100svh] w-full flex-col items-center justify-center px-[24px] pb-[64px] pt-[96px] text-center sm:px-[40px]"
+      className="bwa-surface relative flex min-h-[100svh] w-full flex-col items-center justify-center px-[20px] pb-[72px] pt-[112px] text-center sm:px-[40px] sm:pb-[88px] sm:pt-[120px]"
     >
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: easeOut }}
-        className="relative z-10 flex flex-col items-center"
+        className="relative z-10 flex w-full max-w-[1120px] flex-col items-center"
       >
         <GlitchFace />
 
-        <p className="mb-4 mt-8 font-subhead text-[12px] font-bold uppercase tracking-[0.16em] text-[#D33C24]">
+        <p className="mb-3 mt-5 font-subhead text-[10px] font-bold uppercase tracking-[0.14em] text-[#D33C24] sm:mb-4 sm:mt-8 sm:text-[12px] sm:tracking-[0.16em]">
           Build with ASES · ASES Manila
         </p>
 
-        <h1 className="m-0 max-w-[16ch] font-display text-[clamp(38px,7.5vw,88px)] font-[350] leading-[1.02] tracking-[-0.02em] text-[#0C143F]">
+        <h1 className="m-0 max-w-[16ch] break-words font-display text-[clamp(32px,10vw,88px)] font-[350] leading-[1.04] tracking-[-0.02em] text-[#0C143F] sm:leading-[1.02]">
           {/* *Starred* span renders bold AND red. "students"/"they're" briefly
               glitch into "you"/"you're" on a timer (usePersonalizeGlitch above). */}
           {heading.split('*').map((part, i) =>
@@ -305,14 +305,14 @@ export const Hero = ({
           )}
         </h1>
 
-        <p className="mt-6 max-w-[52ch] font-body text-[clamp(14px,1.7vw,17px)] font-normal leading-[1.7] text-[rgba(12,20,63,0.75)]">
+        <p className="mt-5 max-w-[52ch] font-body text-[clamp(14px,1.7vw,17px)] font-normal leading-[1.6] text-[rgba(12,20,63,0.75)] sm:mt-6 sm:leading-[1.7]">
           {subheading}
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-8 flex w-full max-w-[420px] flex-col items-stretch justify-center gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <Link
             href="/application"
-            className="button-float-hover inline-flex items-center gap-3 rounded-none bg-[#D33C24] px-[28px] py-[15px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-white no-underline transition-colors hover:bg-[#BF351E]"
+            className="button-float-hover inline-flex min-h-[52px] items-center justify-center gap-3 rounded-none bg-[#D33C24] px-[24px] py-[14px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-white no-underline transition-colors hover:bg-[#BF351E] sm:px-[28px] sm:py-[15px]"
           >
             <span>Apply to build</span>
             <svg aria-hidden="true" viewBox="0 0 16 16" className="block h-[1em] w-[1em] shrink-0">
@@ -321,7 +321,7 @@ export const Hero = ({
           </Link>
           <a
             href="#projects"
-            className="button-float-hover inline-flex items-center gap-3 rounded-none border border-[rgba(12,20,63,0.3)] px-[28px] py-[14px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-[#0C143F] no-underline transition-colors hover:border-[#0C143F]"
+            className="button-float-hover inline-flex min-h-[52px] items-center justify-center gap-3 rounded-none border border-[rgba(12,20,63,0.3)] bg-white/70 px-[24px] py-[13px] font-display text-[clamp(14px,1.6vw,17px)] font-[350] tracking-[0.03em] text-[#0C143F] no-underline transition-colors hover:border-[#0C143F] sm:px-[28px] sm:py-[14px]"
           >
             See what got built
           </a>
