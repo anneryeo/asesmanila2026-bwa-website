@@ -715,7 +715,7 @@ export function ApplicationForm() {
   /* ── main form ── */
   return (
     <div
-      className="bwa-surface"
+      className="bwa-surface bwa-application relative overflow-hidden"
       style={{
         minHeight: '100svh',
         padding: 'clamp(96px, 12vh, 136px) clamp(24px, 6vw, 80px) clamp(64px, 8vh, 96px)',
@@ -736,14 +736,21 @@ export function ApplicationForm() {
         {/* ── LEFT: Form ── */}
         <div className="bwa-form" style={{ flex: '0 1 600px', minWidth: 0 }}>
           <div
+            className="bwa-kicker"
             style={{
               fontFamily: 'var(--font-montserrat)',
               fontSize: 11,
               fontWeight: 700,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              color: '#D33C24',
-              marginBottom: 10,
+              color: '#0C143F',
+              marginBottom: 18,
+              display: 'inline-block',
+              padding: '8px 12px',
+              background: '#FFE07A',
+              border: '2px solid #0C143F',
+              boxShadow: '4px 4px 0 #D33C24',
+              transform: 'rotate(-1.5deg)',
             }}
           >
             {PAGE_COPY.badge}
@@ -780,11 +787,12 @@ export function ApplicationForm() {
 
           {/* The form card: white panel with blueprint corner marks */}
           <div
+            className="bwa-form-card"
             style={{
               position: 'relative',
               background: 'rgba(255,255,255,0.85)',
-              border: '1px solid rgba(7,31,107,0.14)',
-              boxShadow: '0 18px 48px rgba(7,31,107,0.08)',
+              border: '2px solid #112F7F',
+              boxShadow: '10px 10px 0 rgba(17,47,127,0.16)',
               padding: 'clamp(20px, 3.5vw, 32px)',
             }}
           >
@@ -842,7 +850,7 @@ export function ApplicationForm() {
                     {PAGE_COPY.verifyLabel}
                     <span style={{ color: '#D33C24', marginLeft: 3 }}>*</span>
                   </label>
-                  <div style={{ display: 'flex', gap: 8 }}>
+                  <div className="bwa-verify-row" style={{ display: 'flex', gap: 8 }}>
                     <input
                       type="email"
                       autoComplete="email"
@@ -1673,7 +1681,14 @@ export function ApplicationForm() {
           .bwa-layout { flex-direction: column !important; align-items: stretch !important; }
           .bwa-form { flex: 1 1 auto !important; max-width: none !important; width: 100% !important; }
           .bwa-info { flex: none !important; width: 100% !important; position: static !important; }
-          .bwa-gallery { min-height: 480px; max-height: 76vh; }
+          .bwa-gallery { flex: none !important; height: 520px !important; min-height: 520px; max-height: 520px; }
+        }
+        @media (max-width: 520px) {
+          .bwa-application { padding-left: 20px !important; padding-right: 20px !important; }
+          .bwa-form-card { padding: 20px 14px !important; box-shadow: 7px 7px 0 rgba(17,47,127,0.16) !important; }
+          .bwa-ace-rundown { flex-direction: column !important; align-items: flex-start !important; }
+          .bwa-verify-row { flex-direction: column !important; }
+          .bwa-verify-row > button { width: 100%; min-height: 46px; }
         }
         @media (min-width: 640px) {
           .sm-role-row { flex-direction: row !important; }
@@ -1812,6 +1827,7 @@ function AceRundown() {
 
   return (
     <motion.div
+      className="bwa-ace-rundown"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       style={{
@@ -1820,9 +1836,11 @@ function AceRundown() {
         gap: 'clamp(12px, 3vw, 18px)',
         marginBottom: 32,
         padding: 'clamp(14px, 3vw, 18px) clamp(16px, 3.5vw, 20px)',
-        borderRadius: 12,
-        border: '1px solid rgba(7,31,107,0.15)',
-        background: 'rgba(7,31,107,0.04)',
+        borderRadius: 0,
+        border: '2px solid #112F7F',
+        background: '#DDE6FF',
+        boxShadow: '7px 7px 0 rgba(211,60,36,0.22)',
+        transform: 'rotate(0.5deg)',
       }}
     >
       {/* Ace, sized to the body text and gently floating */}
@@ -2064,9 +2082,11 @@ function GalleryColumn({
               width: '100%',
               height: 'auto',
               display: 'block',
-              borderRadius: 12,
+              borderRadius: 0,
               marginBottom: GALLERY_GAP,
-              border: '1px solid rgba(7,31,107,0.12)',
+              border: '2px solid #112F7F',
+              boxShadow: i % 2 === 0 ? '5px 5px 0 rgba(17,47,127,0.15)' : '5px 5px 0 rgba(211,60,36,0.14)',
+              transform: `rotate(${i % 2 === 0 ? -0.8 : 0.8}deg)`,
             }}
           />
         ))}

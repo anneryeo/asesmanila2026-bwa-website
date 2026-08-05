@@ -12,16 +12,16 @@ export const CtaSection = () => {
     <section
       id="apply"
       data-nav-theme="light"
-      className="bwa-surface relative w-full overflow-hidden px-[24px] py-[80px] sm:px-[48px] lg:py-[112px]"
+      className="bwa-surface relative w-full overflow-hidden py-[80px] lg:py-[112px]"
     >
-      <div className="relative z-10 mx-auto w-full max-w-[1152px]">
+      <div className="relative z-10 w-full">
 
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: easeOut }}
-          className="m-0 text-center font-display text-[clamp(24px,4.5vw,44px)] font-[350] leading-[1.15] tracking-[-0.01em] text-[#0C143F]"
+          className="m-0 px-[24px] text-center font-display text-[clamp(24px,4.5vw,44px)] font-[350] leading-[1.15] tracking-[-0.01em] text-[#0C143F] sm:px-[48px]"
         >
           Your seat in the room is one form away
         </motion.h2>
@@ -32,17 +32,17 @@ export const CtaSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: easeOut, delay: 0.1 }}
-          className="relative mt-[32px] flex items-center justify-center sm:mt-[40px]"
+          className="relative mt-[32px] flex w-full items-center justify-center sm:mt-[40px]"
         >
           <Link
             href="/application"
-            className="group relative z-10 block min-h-[360px] w-full max-w-[960px] overflow-hidden border border-white/15 bg-[#0C143F] shadow-[0_24px_70px_rgba(12,20,63,0.22)] outline-offset-4 sm:min-h-[420px]"
+            className="group relative z-10 block min-h-[360px] w-full overflow-hidden border-y-2 border-[#0C143F] bg-[#0C143F] shadow-[0_24px_70px_rgba(12,20,63,0.22)] outline-offset-4 sm:min-h-[460px] lg:min-h-[540px]"
           >
             <Image
               src="/images/build-with-ases-cta-v2.png"
               alt="Filipino student builders collaborating on prototypes at a Build with ASES workshop"
               fill
-              sizes="(max-width: 640px) 92vw, (max-width: 1200px) 88vw, 960px"
+              sizes="100vw"
               className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
             />
             <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,14,61,0.34),rgba(3,14,61,0.62)_34%,rgba(3,14,61,0.72)_50%,rgba(3,14,61,0.62)_66%,rgba(3,14,61,0.34))]" />
@@ -72,7 +72,7 @@ export const CtaSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: easeOut, delay: 0.2 }}
-          className="mt-[64px] flex flex-col items-center gap-4 text-center"
+          className="mt-[64px] flex flex-col items-center gap-4 px-[24px] text-center sm:px-[48px]"
         >
           <p className="m-0 font-display text-[clamp(16px,2.4vw,24px)] font-light leading-[1.4] text-[#0C143F]">
             Liked the room?
