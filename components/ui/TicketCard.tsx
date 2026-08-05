@@ -25,8 +25,8 @@ export const TicketCard = ({ ticket, index }: { ticket: ShipTicket; index: numbe
       viewport={{ once: true }}
       whileHover={{ rotate: -tilt * 0.5, y: -6, scale: 1.01 }}
       transition={{ duration: 0.35, ease: easeOut, delay: (index % 3) * 0.05 }}
-      className="flex overflow-hidden bg-white shadow-[0_14px_36px_rgba(7,31,107,0.14)]"
-      style={{ border: '1px solid rgba(7,31,107,0.16)' }}
+      className="flex overflow-hidden bg-white shadow-[8px_8px_0_rgba(17,47,127,0.16)]"
+      style={{ border: '2px solid #112F7F' }}
     >
       {/* Main body */}
       <div className="min-w-0 flex-1 px-[22px] py-[18px]">
@@ -77,7 +77,7 @@ export const TicketCard = ({ ticket, index }: { ticket: ShipTicket; index: numbe
         className="flex w-[112px] shrink-0 flex-col items-center justify-center gap-2 px-2"
         style={{
           borderLeft: '2px dashed rgba(7,31,107,0.25)',
-          background: 'rgba(7,31,107,0.03)',
+          background: index % 2 === 0 ? '#FFF2A8' : '#E9EDF8',
         }}
       >
         <span

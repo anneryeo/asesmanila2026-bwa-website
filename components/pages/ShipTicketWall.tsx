@@ -100,9 +100,9 @@ const StampPanel = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, ease: easeOut }}
-      className="mt-[72px] border border-[rgba(7,31,107,0.2)] bg-white px-6 py-8 shadow-[0_14px_36px_rgba(7,31,107,0.1)] sm:px-8"
+      className="mt-[72px] border-2 border-[#112F7F] bg-white px-5 py-8 shadow-[10px_10px_0_rgba(17,47,127,0.16)] sm:px-8"
     >
-      <p className="m-0 font-subhead text-[11px] font-bold uppercase tracking-[0.16em] text-[rgba(12,20,63,0.5)]">
+      <p className="m-0 inline-block rotate-[-1deg] border-2 border-[#112F7F] bg-[#FFE07A] px-3 py-2 font-subhead text-[11px] font-bold uppercase tracking-[0.16em] text-[#0C143F] shadow-[4px_4px_0_#D33C24]">
         Back with receipts?
       </p>
       <h2 className="mb-0 mt-2 font-display text-[clamp(18px,2.6vw,26px)] font-[350] leading-[1.3] text-[#0C143F]">
@@ -152,7 +152,7 @@ const StampPanel = () => {
             return (
               <div
                 key={t.id}
-                className="flex flex-col gap-3 border border-[rgba(12,20,63,0.15)] bg-[rgba(7,31,107,0.02)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-3 border-2 border-[#112F7F]/45 bg-[#F6F7FC] px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
                   <p className="m-0 font-display text-[14px] font-[350] leading-[1.5] text-[#0C143F]">
@@ -239,7 +239,7 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
           transition={{ duration: 0.55, ease: easeOut }}
         >
           <div>
-            <p className="mb-3 font-subhead text-[13px] font-normal uppercase tracking-[0.18em] text-navy-700 opacity-70">
+            <p className="mb-5 inline-block rotate-[-1.5deg] border-2 border-[#112F7F] bg-[#FFE07A] px-4 py-2 font-subhead text-[11px] font-bold uppercase tracking-[0.18em] text-[#0C143F] shadow-[5px_5px_0_#D33C24]">
               The wall
             </p>
             <h1 className="m-0 font-display text-[clamp(28px,5vw,52px)] font-[350] leading-[1.05] tracking-[-0.02em] text-[#0C143F]">
@@ -253,7 +253,7 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
           </div>
 
           {/* Count line — numerals in Montserrat per brand rule */}
-          <p className="mt-6 font-subhead text-[13px] font-semibold text-[rgba(12,20,63,0.55)]">
+          <p className="mt-7 inline-block border-2 border-[#112F7F] bg-white px-4 py-3 font-subhead text-[13px] font-semibold text-[#0C143F] shadow-[5px_5px_0_rgba(17,47,127,0.16)]">
             {shippedCount} of {tickets.length} tickets stamped shipped so far.
           </p>
         </motion.div>
@@ -305,7 +305,7 @@ export const ShipTicketWall = ({ tickets }: { tickets: ShipTicket[] }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: easeOut }}
-          className="mt-[72px] flex flex-col items-center gap-4 border border-dashed border-[rgba(211,60,36,0.5)] bg-[rgba(211,60,36,0.03)] px-6 py-10 text-center"
+          className="mt-[72px] flex flex-col items-center gap-4 border-2 border-dashed border-[#D33C24] bg-[#FFF7D6] px-6 py-10 text-center shadow-[10px_10px_0_rgba(211,60,36,0.14)]"
         >
           <p className="m-0 font-display text-[clamp(17px,2.4vw,24px)] font-[350] leading-[1.4] text-[#0C143F]">
             Got something you keep saying you&apos;ll finish?
@@ -342,11 +342,12 @@ const FilterPill = ({
   <button
     type="button"
     onClick={onClick}
-    className="cursor-pointer rounded-none border px-[14px] py-[7px] font-subhead text-[12px] font-semibold tracking-[0.02em] transition-colors"
+    className="cursor-pointer rounded-none border-2 px-[14px] py-[7px] font-subhead text-[12px] font-semibold tracking-[0.02em] transition-[color,background-color,transform,box-shadow] hover:-translate-y-0.5"
     style={{
-      borderColor: active ? '#D33C24' : 'rgba(12,20,63,0.25)',
+      borderColor: active ? '#D33C24' : '#112F7F',
       background: active ? '#D33C24' : 'transparent',
       color: active ? '#ffffff' : 'rgba(12,20,63,0.75)',
+      boxShadow: active ? '4px 4px 0 rgba(17,47,127,0.18)' : 'none',
     }}
   >
     {label}
